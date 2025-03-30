@@ -55,5 +55,3 @@ public class PlayerMoveState : IPlayerState
         movement.SetAnimBool("isMoving", false);
     }
 }
-
-
