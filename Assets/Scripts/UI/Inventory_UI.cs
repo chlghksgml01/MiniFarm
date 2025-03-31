@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inventory_UI : MonoBehaviour
 {
-    [SerializeField] GameObject inventoryPanel;
+    GameObject inventoryPanel;
     [SerializeField] List<Slot_UI> slots = new List<Slot_UI>();
 
     Player player;
 
-
     private void Awake()
     {
+        inventoryPanel = transform.Find("Background").gameObject;
         inventoryPanel.SetActive(false);
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
