@@ -1,6 +1,5 @@
-using System;
 using System.Collections.Generic;
-using static UnityEditor.Timeline.Actions.MenuPriority;
+using UnityEngine;
 
 [System.Serializable]
 public class Inventory
@@ -11,6 +10,8 @@ public class Inventory
         public CollectableType type;
         public int count;
         public int maxAllowed;
+
+        public Sprite icon;
 
         public Slot()
         {
@@ -26,9 +27,10 @@ public class Inventory
             return false;
         }
 
-        public void AddItem(CollectableType _type)
+        public void AddItem(Collectable item)
         {
-            type = _type;
+            type = item.type;
+            icon = item.icon;
             count++;
         }
     }
@@ -44,13 +46,13 @@ public class Inventory
         }
     }
 
-    public void AddItem(CollectableType _type)
+    public void AddItem(Collectable item)
     {
         foreach (Slot slot in slots)
         {
-            if (slot.type == _type && slot.CanAddItem())
+            if (slot.type == item.type && slot.CanAddItem())
             {
-                slot.AddItem(_type);
+                slot.AddItem(item);
                 return;
             }
         }
@@ -59,7 +61,7 @@ public class Inventory
         {
             if (slot.type == CollectableType.NONE)
             {
-                slot.AddItem(_type);
+                slot.AddItem(item);
                 return;
             }
         }
