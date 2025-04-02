@@ -3,8 +3,8 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public Inventory inventory;
-    private void Awake()
+    private void Start()
     {
-        inventory = new Inventory(27);
+        inventory = new Inventory(Inventory_UI.Instance.inventorySlotCount);
     }
 }

@@ -44256,7 +44256,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1181806050291174987, guid: 446870934bb189b429e30cf2622dff97, type: 3}
       propertyPath: m_text
-      value: 
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1578700553172858315, guid: 446870934bb189b429e30cf2622dff97, type: 3}
       propertyPath: m_Pivot.x

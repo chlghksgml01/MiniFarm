@@ -22,6 +22,7 @@ public class Inventory_UI : MonoBehaviour
 
     GameObject inventoryPanel;
     [SerializeField] List<Slot_UI> slots = new List<Slot_UI>();
+    public int inventorySlotCount = 0;
 
     Player player;
 
@@ -36,6 +37,8 @@ public class Inventory_UI : MonoBehaviour
 
         inventoryPanel = transform.Find("Background").gameObject;
         inventoryPanel.SetActive(false);
+
+        inventorySlotCount = slots.Count;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
