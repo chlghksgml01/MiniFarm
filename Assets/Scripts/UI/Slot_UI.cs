@@ -1,11 +1,16 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Inventory;
 
 public class Slot_UI : MonoBehaviour
 {
     Image itemIcon;
     TextMeshProUGUI quantityText;
+
+    public Image ItemIcon { get { return itemIcon; } }
+
+    public int itemCount = 0;
 
     private void Awake()
     {
@@ -30,14 +35,16 @@ public class Slot_UI : MonoBehaviour
         }
     }
 
-    public void SetItem(Inventory.Slot slot)
+    public void SetItem(Inventory.Slot _slot)
     {
-        if (slot != null)
+        if (_slot != null)
         {
-            itemIcon.sprite = slot.icon;
+            itemIcon.sprite = _slot.icon;
             itemIcon.color = new Color(1, 1, 1, 1);
-            if (slot.count != 1)
-                quantityText.text = slot.count.ToString();
+            if (_slot.count != 1)
+                quantityText.text = _slot.count.ToString();
+
+            itemCount = _slot.count;
         }
     }
 
@@ -46,5 +53,6 @@ public class Slot_UI : MonoBehaviour
         itemIcon.sprite = null;
         itemIcon.color = new Color(1, 1, 1, 0);
         quantityText.text = "";
+        itemCount = 0;
     }
 }

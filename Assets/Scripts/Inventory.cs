@@ -33,6 +33,16 @@ public class Inventory
             icon = item.icon;
             count++;
         }
+
+        public void RemoveItem()
+        {
+            if(count > 0)
+            {
+                count--;
+                icon = null;
+                type = CollectableType.NONE;
+            }
+        }
     }
 
     public List<Slot> slots = new List<Slot>();
