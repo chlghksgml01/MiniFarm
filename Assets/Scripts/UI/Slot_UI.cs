@@ -9,6 +9,7 @@ public class Slot_UI : MonoBehaviour
     TextMeshProUGUI quantityText;
 
     public Image ItemIcon { get { return itemIcon; } }
+    public TextMeshProUGUI QuantityText { get { return quantityText; } }
 
     public int itemCount = 0;
 

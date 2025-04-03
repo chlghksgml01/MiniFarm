@@ -1444,6 +1444,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ce8eb43b90f1504b8fe94ee386c00bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvas: {fileID: 207774835}
   slots:
   - {fileID: 712342276}
   - {fileID: 1185484979}
@@ -1472,6 +1473,7 @@ MonoBehaviour:
   - {fileID: 17316351}
   - {fileID: 691788067}
   - {fileID: 1244231933}
+  selectedItemPrefab: {fileID: 5910328362028004357, guid: c010ca95a40cca74f8fa216ba13b0e0c, type: 3}
   inventorySlotCount: 0
 --- !u!114 &691788067 stripped
 MonoBehaviour:
@@ -51463,6 +51465,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 446870934bb189b429e30cf2622dff97, type: 3}
+--- !u!1001 &1624342808
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 66480898167699907, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_Name
+      value: CarrotSeed (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194134174828060832, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.5570416
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194134174828060832, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.384331
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194134174828060832, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194134174828060832, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194134174828060832, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194134174828060832, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194134174828060832, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194134174828060832, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194134174828060832, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4194134174828060832, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4bfdeb9b9d038fa41b56bfb576e8a2f8, type: 3}
 --- !u!114 &1644118566 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 322919968833071363, guid: 446870934bb189b429e30cf2622dff97, type: 3}
@@ -53006,3 +53065,4 @@ SceneRoots:
   - {fileID: 207774836}
   - {fileID: 476412767}
   - {fileID: 2097292369}
+  - {fileID: 1624342808}

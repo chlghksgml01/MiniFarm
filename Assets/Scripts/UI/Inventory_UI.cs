@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.EditorTools;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SubsystemsImplementation;
 using UnityEngine.UI;
 
 public class Inventory_UI : MonoBehaviour
 {
+    [SerializeField] Canvas canvas;
+
     private static Inventory_UI instance;
     public static Inventory_UI Instance
     {
@@ -24,6 +24,7 @@ public class Inventory_UI : MonoBehaviour
     }
 
     [SerializeField] List<Slot_UI> slots = new List<Slot_UI>();
+    [SerializeField] GameObject selectedItemPrefab;
 
     public int inventorySlotCount = 0;
 
@@ -36,9 +37,9 @@ public class Inventory_UI : MonoBehaviour
 
     private void Awake()
     {
-        selectedItem = new GameObject();
-        selectedItem.AddComponent<Image>();
-
+        selectedItem = Instantiate(selectedItemPrefab);
+        selectedItem.transform.SetParent(canvas.transform, false);
+        selectedItem.SetActive(false);
         pointerData = new PointerEventData(EventSystem.current);
 
         if (instance && instance != this)
@@ -59,11 +60,8 @@ public class Inventory_UI : MonoBehaviour
     {
         KeyInput();
 
-        if(isDragging && selectedItem != null)
-        {
-            pointerData.position = Input.mousePosition;
-            selectedItem.transform.position = pointerData.position;
-        }
+        if (isDragging)
+            DragItem();
     }
 
     void KeyInput()
@@ -94,19 +92,43 @@ public class Inventory_UI : MonoBehaviour
                     if (_slotUI.itemCount > 0)
                     {
                         isDragging = true;
-                        selectedItem.GetComponent<Image>().sprite = _slotUI.ItemIcon.sprite;
+                        selectedItem.SetActive(true);
+
+                        // Icon 이미지 가져오기
+                        GameObject _icon = _slotUI.gameObject.transform.Find("Icon").gameObject;
+                        Image iconImage = selectedItem.transform.Find("Icon").gameObject.GetComponent<Image>();
+                        if (iconImage != null)
+                        {
+                            iconImage.sprite = _slotUI.ItemIcon.sprite;
+                            iconImage.color = new Color(1, 1, 1, 1);
+                        }
+
+                        // Text 가져오기
+                        GameObject _quantity = _slotUI.gameObject.transform.Find("Quantity").gameObject;
+                        TextMeshProUGUI quantityText = selectedItem.transform.Find("Quantity").GetComponent<TextMeshProUGUI>();
+                        if (quantityText != null)
+                        {
+                            quantityText.text = _slotUI.QuantityText.text;
+                        }
+
                         selectedItem.transform.SetParent(transform.root); // UI 최상위로 이동
                         selectedItem.transform.position = pointerData.position;
 
                         _slotUI.SetEmtpy();
                     }
                 }
-
             }
         }
     }
 
-
+    void DragItem()
+    {
+        if (isDragging)
+        {
+            pointerData.position = Input.mousePosition;
+            selectedItem.transform.position = pointerData.position;
+        }
+    }
 
     public void ToggleInventory()
     {
@@ -116,7 +138,14 @@ public class Inventory_UI : MonoBehaviour
             Refresh();
         }
         else
+        {
             inventoryPanel.SetActive(false);
+            if (isDragging)
+            {
+                isDragging = false;
+                selectedItem.SetActive(false);
+            }
+        }
     }
 
     void Refresh()
