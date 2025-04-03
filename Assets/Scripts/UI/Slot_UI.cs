@@ -7,11 +7,17 @@ public class Slot_UI : MonoBehaviour
 {
     Image itemIcon;
     TextMeshProUGUI quantityText;
+    public int slotIdx = 0;
 
     public Image ItemIcon { get { return itemIcon; } }
     public TextMeshProUGUI QuantityText { get { return quantityText; } }
 
     public int itemCount = 0;
+
+    public void InitializeSlot(int _slotIdx)
+    {
+        slotIdx = _slotIdx;
+    }
 
     private void Awake()
     {
@@ -44,6 +50,8 @@ public class Slot_UI : MonoBehaviour
             itemIcon.color = new Color(1, 1, 1, 1);
             if (_slot.count != 1)
                 quantityText.text = _slot.count.ToString();
+            else
+                quantityText.text = "";
 
             itemCount = _slot.count;
         }

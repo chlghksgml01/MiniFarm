@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static Inventory;
 
 public class Inventory_UI : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class Inventory_UI : MonoBehaviour
     {
         get
         {
-            if (!instance)
+            if (instance == null)
             {
                 GameObject go = new GameObject("Inventory_UI");
                 instance = go.AddComponent<Inventory_UI>();
@@ -32,6 +33,9 @@ public class Inventory_UI : MonoBehaviour
     GameObject selectedItem;
     Player player;
     bool isDragging = false;
+    bool isClick = false;
+    List<RaycastResult> results;
+    int dragItemIdx = 0;
 
     PointerEventData pointerData;
 
@@ -52,6 +56,11 @@ public class Inventory_UI : MonoBehaviour
         inventoryPanel = transform.Find("Background").gameObject;
         inventoryPanel.SetActive(false);
 
+        for (int i = 0; i < slots.Count; i++)
+        {
+            slots[i].InitializeSlot(i); // 각 슬롯에 인덱스 설정
+        }
+
         inventorySlotCount = slots.Count;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
@@ -64,6 +73,11 @@ public class Inventory_UI : MonoBehaviour
             DragItem();
     }
 
+    private void LateUpdate()
+    {
+        isClick = false;
+    }
+
     void KeyInput()
     {
         if (Input.GetKeyDown(KeyCode.Tab))
@@ -71,17 +85,9 @@ public class Inventory_UI : MonoBehaviour
             ToggleInventory();
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (!isClick && !isDragging && Input.GetMouseButtonDown(0))
         {
-            // Unity에서 UI 입력을 관리하는 시스템을 가져와서 현재 UI의 입력 이벤트를 처리하려는 변수
-            pointerData = new PointerEventData(EventSystem.current);
-            // 마우스 커서 위치 저장
-            pointerData.position = Input.mousePosition;
-
-            // 레이캐스트 결과 저장용 변수
-            List<RaycastResult> results = new List<RaycastResult>();
-            // pointerData에 있는 마우스 커서 위치를 기준으로 UI 요소를 검사하고 충돌한 요소를 results에 저장
-            EventSystem.current.RaycastAll(pointerData, results);
+            DetectUIUnderCursor();
 
             foreach (var result in results)
             {
@@ -91,8 +97,10 @@ public class Inventory_UI : MonoBehaviour
                 {
                     if (_slotUI.itemCount > 0)
                     {
+                        isClick = true;
                         isDragging = true;
                         selectedItem.SetActive(true);
+                        dragItemIdx = _slotUI.slotIdx;
 
                         // Icon 이미지 가져오기
                         GameObject _icon = _slotUI.gameObject.transform.Find("Icon").gameObject;
@@ -123,10 +131,28 @@ public class Inventory_UI : MonoBehaviour
 
     void DragItem()
     {
-        if (isDragging)
+        pointerData.position = Input.mousePosition;
+        selectedItem.transform.position = pointerData.position;
+
+        if (!isClick && Input.GetMouseButtonDown(0))
         {
-            pointerData.position = Input.mousePosition;
-            selectedItem.transform.position = pointerData.position;
+            isClick = true;
+            DetectUIUnderCursor();
+
+            // 슬롯 바꾸기
+            foreach (var result in results)
+            {
+                Slot_UI _slotUI = result.gameObject.GetComponent<Slot_UI>();
+                if (_slotUI != null)
+                {
+                    isDragging = false;
+                    selectedItem.SetActive(false);
+
+                    List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
+                    (_slots[dragItemIdx], _slots[_slotUI.slotIdx]) = (_slots[_slotUI.slotIdx], _slots[dragItemIdx]);
+                    Refresh();
+                }
+            }
         }
     }
 
@@ -165,10 +191,23 @@ public class Inventory_UI : MonoBehaviour
             else
             {
                 slots[i].SetEmtpy();
-
             }
         }
     }
+
+    void DetectUIUnderCursor()
+    {
+        // Unity에서 UI 입력을 관리하는 시스템을 가져와서 현재 UI의 입력 이벤트를 처리하려는 변수
+        pointerData = new PointerEventData(EventSystem.current);
+        // 마우스 커서 위치 저장
+        pointerData.position = Input.mousePosition;
+
+        // 레이캐스트 결과 저장용 변수
+        results = new List<RaycastResult>();
+        // pointerData에 있는 마우스 커서 위치를 기준으로 UI 요소를 검사하고 충돌한 요소를 results에 저장
+        EventSystem.current.RaycastAll(pointerData, results);
+    }
+
 
     public int GetInventoryCount()
     {
