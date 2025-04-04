@@ -1,9 +1,7 @@
+using System;
 using System.Collections.Generic;
-using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using static Inventory;
 
 public class Inventory_UI : MonoBehaviour
@@ -72,10 +70,10 @@ public class Inventory_UI : MonoBehaviour
 
     void Update()
     {
-        KeyInput();
-
-        if (isDragging)
-            DragItem();
+        if (!isDragging)
+            KeyInput();
+        else
+            DragKeyInput();
     }
 
     private void LateUpdate()
@@ -90,27 +88,27 @@ public class Inventory_UI : MonoBehaviour
             ToggleInventory();
         }
 
-        if (!isClick && !isDragging && Input.GetMouseButtonDown(0))
+        if (!isClick && Input.GetMouseButtonDown(0))
         {
             List<RaycastResult> results = DetectUIUnderCursor();
-            GetSlotUI(results, SelectionMode.SelectAll);
+            SelectItemFromSlot(results, SelectionMode.SelectAll);
         }
 
-        else if (!isClick && !isDragging && Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
+        else if (!isClick && Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
         {
             List<RaycastResult> results = DetectUIUnderCursor();
-            GetSlotUI(results, SelectionMode.SelectHalf);
+            SelectItemFromSlot(results, SelectionMode.SelectHalf);
         }
 
-        else if (!isClick && !isDragging && Input.GetMouseButtonDown(1))
+        else if (!isClick && Input.GetMouseButtonDown(1))
         {
             List<RaycastResult> results = DetectUIUnderCursor();
-            GetSlotUI(results, SelectionMode.SelectOne);
+            SelectItemFromSlot(results, SelectionMode.SelectOne);
         }
 
     }
 
-    void GetSlotUI(List<RaycastResult> results, SelectionMode selectionMode)
+    void SelectItemFromSlot(List<RaycastResult> results, SelectionMode selectionMode)
     {
         foreach (var result in results)
         {
@@ -119,12 +117,12 @@ public class Inventory_UI : MonoBehaviour
             {
                 if (_slotUI.quantity > 0)
                 {
+                    selectedItem.gameObject.SetActive(true);
                     isClick = true;
                     isDragging = true;
-                    selectedItem.gameObject.SetActive(true);
 
                     // 클릭한 슬롯 저장
-                    List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
+                    List<Slot> _slots = player.inventory.slots;
                     sourceSlot = _slots[_slotUI.slotIdx];
 
                     // SelectedItem 설정
@@ -133,19 +131,18 @@ public class Inventory_UI : MonoBehaviour
                     switch (selectionMode)
                     {
                         case SelectionMode.SelectAll:
-                            selectedItem.textUI.text = sourceSlot.quantity.ToString();
+                            selectedItem.Quantity = sourceSlot.quantity;
                             sourceSlot.quantity = 0;
                             break;
 
                         case SelectionMode.SelectOne:
-                            selectedItem.textUI.text = "1";
+                            selectedItem.Quantity = 1;
                             sourceSlot.quantity -= 1;
-
                             break;
 
                         case SelectionMode.SelectHalf:
-                            selectedItem.textUI.text = (sourceSlot.quantity / 2).ToString();
-                            sourceSlot.quantity -= int.Parse(selectedItem.textUI.text);
+                            selectedItem.Quantity = (int)Math.Ceiling(sourceSlot.quantity / 2f);
+                            sourceSlot.quantity -= selectedItem.Quantity;
                             break;
                     }
 
@@ -160,13 +157,15 @@ public class Inventory_UI : MonoBehaviour
         }
     }
 
-    void DragItem()
+    void DragKeyInput()
     {
         pointerData.position = Input.mousePosition;
         selectedItem.transform.position = pointerData.position;
 
-        if (isDragging && !isClick && Input.GetMouseButtonDown(0))
+        if (!isClick && Input.GetMouseButtonDown(0))
             MoveItem();
+        else if (!isClick && Input.GetMouseButtonDown(1))
+            MoveItemOneOrHalf();
     }
 
     void MoveItem()
@@ -184,20 +183,15 @@ public class Inventory_UI : MonoBehaviour
                 List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
                 Slot _slot = _slots[_slotUI.slotIdx];
 
-                int _quantity;
-                if (selectedItem.textUI.text == "")
-                    _quantity = 1;
-                else
-                    _quantity = int.Parse(selectedItem.textUI.text);
-
                 // 슬롯 비어있을 경우
                 if (_slot.type == CollectableType.NONE)
                 {
-                    isDragging = false;
-                    selectedItem.gameObject.SetActive(false);
-
                     // 슬롯 값 설정
-                    _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, _quantity);
+                    _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, selectedItem.Quantity);
+
+                    isDragging = false;
+                    selectedItem.Quantity = 0;
+                    selectedItem.gameObject.SetActive(false);
                 }
 
                 // 다른 아이템 있을 경우
@@ -206,8 +200,9 @@ public class Inventory_UI : MonoBehaviour
                     if (_slot.type == selectedItem.type)
                     {
                         isDragging = false;
+                        _slot.quantity += selectedItem.Quantity;
+                        selectedItem.Quantity = 0;
                         selectedItem.gameObject.SetActive(false);
-                        _slot.quantity += _quantity;
                     }
                     else
                     {
@@ -216,14 +211,49 @@ public class Inventory_UI : MonoBehaviour
                         tempslot.icon = _slot.icon;
                         tempslot.quantity = _slot.quantity;
 
-                        _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, _quantity);
+                        _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, selectedItem.Quantity);
 
                         selectedItem.type = tempslot.type;
                         selectedItem.iconImage.sprite = tempslot.icon;
-                        selectedItem.textUI.text = tempslot.quantity.ToString();
+                        selectedItem.Quantity = tempslot.quantity;
                     }
-
                 }
+                Refresh();
+            }
+        }
+    }
+
+    void MoveItemOneOrHalf()
+    {
+        isClick = true;
+        List<RaycastResult> results = DetectUIUnderCursor();
+
+        foreach (var result in results)
+        {
+            Slot_UI _slotUI = result.gameObject.GetComponent<Slot_UI>();
+            if (_slotUI != null)
+            {
+                List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
+                Slot _slot = _slots[_slotUI.slotIdx];
+
+                if (_slot.type != CollectableType.NONE && _slot.type != selectedItem.type)
+                    return;
+
+                // LeftShift + 우클릭
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    int tempquantity = selectedItem.Quantity; 
+                    selectedItem.Quantity = (int)Math.Ceiling(selectedItem.Quantity / 2f); 
+                    _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, _slot.quantity + (tempquantity - selectedItem.Quantity));
+                }
+
+                // 우클릭
+                else
+                {
+                    selectedItem.Quantity -= 1;
+                    _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, 1);
+                }
+
                 Refresh();
             }
         }
