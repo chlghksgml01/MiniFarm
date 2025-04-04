@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -24,26 +25,33 @@ public class Inventory_UI : MonoBehaviour
         }
     }
 
-    [SerializeField] List<Slot_UI> slots = new List<Slot_UI>();
+    enum SelectionMode
+    {
+        SelectAll,
+        SelectOne,
+        SelectHalf
+    }
+
+    [SerializeField] List<Slot_UI> slotsUI = new List<Slot_UI>();
     [SerializeField] GameObject selectedItemPrefab;
 
-    public int inventorySlotCount = 0;
+    public int slotCount = 0;
 
     GameObject inventoryPanel;
-    GameObject selectedItem;
     Player player;
     bool isDragging = false;
     bool isClick = false;
-    List<RaycastResult> results;
-    int dragItemIdx = 0;
+
+    GameObject selectedItemUI;
+    Slot sourceSlot;
 
     PointerEventData pointerData;
 
     private void Awake()
     {
-        selectedItem = Instantiate(selectedItemPrefab);
-        selectedItem.transform.SetParent(canvas.transform, false);
-        selectedItem.SetActive(false);
+        selectedItemUI = Instantiate(selectedItemPrefab);
+        selectedItemUI.transform.SetParent(canvas.transform, false);
+        selectedItemUI.SetActive(false);
         pointerData = new PointerEventData(EventSystem.current);
 
         if (instance && instance != this)
@@ -56,12 +64,12 @@ public class Inventory_UI : MonoBehaviour
         inventoryPanel = transform.Find("Background").gameObject;
         inventoryPanel.SetActive(false);
 
-        for (int i = 0; i < slots.Count; i++)
+        for (int i = 0; i < slotsUI.Count; i++)
         {
-            slots[i].InitializeSlot(i); // 각 슬롯에 인덱스 설정
+            slotsUI[i].InitializeSlot(i); // 각 슬롯에 인덱스 설정
         }
 
-        inventorySlotCount = slots.Count;
+        slotCount = slotsUI.Count;
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
@@ -87,43 +95,88 @@ public class Inventory_UI : MonoBehaviour
 
         if (!isClick && !isDragging && Input.GetMouseButtonDown(0))
         {
-            DetectUIUnderCursor();
+            List<RaycastResult> results = DetectUIUnderCursor();
+            GetSlotUI(results, SelectionMode.SelectAll);
+        }
 
-            foreach (var result in results)
+        else if (!isClick && !isDragging && Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
+        {
+            List<RaycastResult> results = DetectUIUnderCursor();
+            GetSlotUI(results, SelectionMode.SelectHalf);
+        }
+
+        else if (!isClick && !isDragging && Input.GetMouseButtonDown(1))
+        {
+            List<RaycastResult> results = DetectUIUnderCursor();
+            GetSlotUI(results, SelectionMode.SelectOne);
+        }
+
+    }
+
+    void GetSlotUI(List<RaycastResult> results, SelectionMode selectionMode)
+    {
+        foreach (var result in results)
+        {
+            Slot_UI _slotUI = result.gameObject.GetComponent<Slot_UI>();
+            if (_slotUI != null)
             {
-                // 클릭한 UI에서 Slot_UI 가져오기
-                Slot_UI _slotUI = result.gameObject.GetComponent<Slot_UI>();
-                if (_slotUI != null)
+                if (_slotUI.quantity > 0)
                 {
-                    if (_slotUI.itemCount > 0)
+                    isClick = true;
+                    isDragging = true;
+                    selectedItemUI.SetActive(true);
+
+                    // 선택한 슬롯 저장
+                    List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
+                    sourceSlot = _slots[_slotUI.slotIdx];
+
+                    // Icon 이미지 가져오기
+                    GameObject _icon = _slotUI.gameObject.transform.Find("Icon").gameObject;
+                    Image selectedIcon = selectedItemUI.transform.Find("Icon").gameObject.GetComponent<Image>();
+                    if (selectedIcon != null)
                     {
-                        isClick = true;
-                        isDragging = true;
-                        selectedItem.SetActive(true);
-                        dragItemIdx = _slotUI.slotIdx;
-
-                        // Icon 이미지 가져오기
-                        GameObject _icon = _slotUI.gameObject.transform.Find("Icon").gameObject;
-                        Image iconImage = selectedItem.transform.Find("Icon").gameObject.GetComponent<Image>();
-                        if (iconImage != null)
-                        {
-                            iconImage.sprite = _slotUI.ItemIcon.sprite;
-                            iconImage.color = new Color(1, 1, 1, 1);
-                        }
-
-                        // Text 가져오기
-                        GameObject _quantity = _slotUI.gameObject.transform.Find("Quantity").gameObject;
-                        TextMeshProUGUI quantityText = selectedItem.transform.Find("Quantity").GetComponent<TextMeshProUGUI>();
-                        if (quantityText != null)
-                        {
-                            quantityText.text = _slotUI.QuantityText.text;
-                        }
-
-                        selectedItem.transform.SetParent(transform.root); // UI 최상위로 이동
-                        selectedItem.transform.position = pointerData.position;
-
-                        _slotUI.SetEmtpy();
+                        selectedIcon.sprite = _slotUI.ItemIcon.sprite;
+                        selectedIcon.color = new Color(1, 1, 1, 1);
                     }
+
+                    // Text 가져오기
+                    GameObject _quantity = _slotUI.gameObject.transform.Find("Quantity").gameObject;
+                    TextMeshProUGUI selectedQuantityText = selectedItemUI.transform.Find("Quantity").GetComponent<TextMeshProUGUI>();
+
+                    if (selectedQuantityText != null)
+                    {
+                        switch (selectionMode)
+                        {
+                            case SelectionMode.SelectAll:
+                                selectedQuantityText.text = sourceSlot.quantity.ToString();
+                                sourceSlot.quantity = 0;
+                                break;
+
+                            case SelectionMode.SelectOne:
+                                selectedQuantityText.text = "1";
+                                sourceSlot.quantity -= 1;
+
+                                break;
+
+                            case SelectionMode.SelectHalf:
+                                selectedQuantityText.text = (sourceSlot.quantity / 2).ToString();
+                                sourceSlot.quantity -= (sourceSlot.quantity / 2);
+                                break;
+                        }
+                    }
+
+                    slotCount = int.Parse(selectedQuantityText.text);
+
+                    if (sourceSlot.quantity == 0)
+                        sourceSlot.type = CollectableType.NONE;
+                    Refresh();
+
+                    selectedItemUI.transform.SetParent(transform.root); // UI 최상위로 이동
+                    selectedItemUI.transform.position = pointerData.position;
+
+                    if (_slotUI.quantity == 0)
+                        _slotUI.SetEmtpy();
+
                 }
             }
         }
@@ -132,12 +185,12 @@ public class Inventory_UI : MonoBehaviour
     void DragItem()
     {
         pointerData.position = Input.mousePosition;
-        selectedItem.transform.position = pointerData.position;
+        selectedItemUI.transform.position = pointerData.position;
 
         if (!isClick && Input.GetMouseButtonDown(0))
         {
             isClick = true;
-            DetectUIUnderCursor();
+            List<RaycastResult> results = DetectUIUnderCursor();
 
             // 슬롯 바꾸기
             foreach (var result in results)
@@ -146,11 +199,13 @@ public class Inventory_UI : MonoBehaviour
                 if (_slotUI != null)
                 {
                     isDragging = false;
-                    selectedItem.SetActive(false);
 
+                    // 슬롯 설정
                     List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
-                    (_slots[dragItemIdx], _slots[_slotUI.slotIdx]) = (_slots[_slotUI.slotIdx], _slots[dragItemIdx]);
+                    //_slots[_slotUI.slotIdx].Refresh(sourceSlot.type, selectedQuantity, sourceSlot.icon);
+
                     Refresh();
+                    selectedItemUI.SetActive(false);
                 }
             }
         }
@@ -169,34 +224,36 @@ public class Inventory_UI : MonoBehaviour
             if (isDragging)
             {
                 isDragging = false;
-                selectedItem.SetActive(false);
+                selectedItemUI.SetActive(false);
             }
         }
     }
 
     void Refresh()
     {
-        if (slots.Count != player.inventory.slots.Count)
+        if (slotsUI.Count != player.inventory.slots.Count)
         {
             Debug.Log("인벤UI, 인벤 개수 다름");
             return;
         }
 
-        for (int i = 0; i < slots.Count; i++)
+        for (int i = 0; i < slotsUI.Count; i++)
         {
             if (player.inventory.slots[i].type != CollectableType.NONE)
             {
-                slots[i].SetItem(player.inventory.slots[i]);
+                slotsUI[i].SetItem(player.inventory.slots[i]);
             }
             else
             {
-                slots[i].SetEmtpy();
+                slotsUI[i].SetEmtpy();
             }
         }
     }
 
-    void DetectUIUnderCursor()
+    List<RaycastResult> DetectUIUnderCursor()
     {
+        List<RaycastResult> results;
+
         // Unity에서 UI 입력을 관리하는 시스템을 가져와서 현재 UI의 입력 이벤트를 처리하려는 변수
         pointerData = new PointerEventData(EventSystem.current);
         // 마우스 커서 위치 저장
@@ -206,11 +263,12 @@ public class Inventory_UI : MonoBehaviour
         results = new List<RaycastResult>();
         // pointerData에 있는 마우스 커서 위치를 기준으로 UI 요소를 검사하고 충돌한 요소를 results에 저장
         EventSystem.current.RaycastAll(pointerData, results);
-    }
 
+        return results;
+    }
 
     public int GetInventoryCount()
     {
-        return slots.Count;
+        return slotsUI.Count;
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro.Examples;
 using UnityEngine;
 
 [System.Serializable]
@@ -8,21 +9,20 @@ public class Inventory
     public class Slot
     {
         public CollectableType type;
-        public int count;
+        public int quantity;
         public int maxAllowed;
-
         public Sprite icon;
 
         public Slot()
         {
             type = CollectableType.NONE;
-            count = 0;
+            quantity = 0;
             maxAllowed = 999;
         }
 
         public bool CanAddItem()
         {
-            if (count < maxAllowed)
+            if (quantity < maxAllowed)
                 return true;
             return false;
         }
@@ -31,17 +31,21 @@ public class Inventory
         {
             type = item.type;
             icon = item.icon;
-            count++;
+            quantity++;
         }
 
-        public void RemoveItem()
+        public void SetEmpty()
         {
-            if(count > 0)
-            {
-                count--;
-                icon = null;
-                type = CollectableType.NONE;
-            }
+            quantity = 0;
+            icon = null;
+            type = CollectableType.NONE;
+        }
+
+        public void Refresh(CollectableType _type, int _count, Sprite _icon)
+        {
+            type = _type;
+            quantity = _count;
+            icon = _icon;
         }
     }
 
