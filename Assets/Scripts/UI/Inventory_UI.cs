@@ -33,7 +33,6 @@ public class Inventory_UI : MonoBehaviour
     }
 
     [SerializeField] List<Slot_UI> slotsUI = new List<Slot_UI>();
-    [SerializeField] GameObject selectedItemPrefab;
 
     public int slotCount = 0;
 
@@ -42,19 +41,14 @@ public class Inventory_UI : MonoBehaviour
     bool isDragging = false;
     bool isClick = false;
 
-    GameObject selectedItemUI;
+    [SerializeField] SelectedItem selectedItem;
     Slot sourceSlot;
-    Sprite sourceSlotIcon;
-    CollectableType selectedSlotType;
-    int seletedSlotCount;
 
     PointerEventData pointerData;
 
     private void Awake()
     {
-        selectedItemUI = Instantiate(selectedItemPrefab);
-        selectedItemUI.transform.SetParent(canvas.transform, false);
-        selectedItemUI.SetActive(false);
+        selectedItem.gameObject.SetActive(false);
         pointerData = new PointerEventData(EventSystem.current);
 
         if (instance && instance != this)
@@ -127,64 +121,40 @@ public class Inventory_UI : MonoBehaviour
                 {
                     isClick = true;
                     isDragging = true;
-                    selectedItemUI.SetActive(true);
+                    selectedItem.gameObject.SetActive(true);
 
                     // 선택한 슬롯 저장
                     List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
                     sourceSlot = _slots[_slotUI.slotIdx];
 
-                    // Icon 이미지 가져오기
-                    GameObject _icon = _slotUI.gameObject.transform.Find("Icon").gameObject;
-                    Image selectedIcon = selectedItemUI.transform.Find("Icon").gameObject.GetComponent<Image>();
-                    if (selectedIcon != null)
+                    // SelectedItem 설정
+                    selectedItem.type = sourceSlot.type;
+                    selectedItem.iconImage.sprite = sourceSlot.icon;
+                    switch (selectionMode)
                     {
-                        selectedIcon.sprite = _slotUI.ItemIcon.sprite;
-                        selectedIcon.color = new Color(1, 1, 1, 1);
+                        case SelectionMode.SelectAll:
+                            selectedItem.textUI.text = sourceSlot.quantity.ToString();
+                            sourceSlot.quantity = 0;
+                            break;
+
+                        case SelectionMode.SelectOne:
+                            selectedItem.textUI.text = "1";
+                            sourceSlot.quantity -= 1;
+
+                            break;
+
+                        case SelectionMode.SelectHalf:
+                            selectedItem.textUI.text = (sourceSlot.quantity / 2).ToString();
+                            sourceSlot.quantity -= int.Parse(selectedItem.textUI.text);
+                            break;
                     }
-
-                    // Text 가져오기
-                    GameObject _quantity = _slotUI.gameObject.transform.Find("Quantity").gameObject;
-                    TextMeshProUGUI selectedQuantityText = selectedItemUI.transform.Find("Quantity").GetComponent<TextMeshProUGUI>();
-
-                    if (selectedQuantityText != null)
-                    {
-                        selectedSlotType = sourceSlot.type;
-                        sourceSlotIcon = sourceSlot.icon;
-
-                        Debug.Log("SourceCount : " + sourceSlot.quantity);
-
-                        switch (selectionMode)
-                        {
-                            case SelectionMode.SelectAll:
-                                seletedSlotCount = sourceSlot.quantity;
-                                sourceSlot.quantity = 0;
-                                break;
-
-                            case SelectionMode.SelectOne:
-                                seletedSlotCount = 1;
-                                sourceSlot.quantity -= 1;
-
-                                break;
-
-                            case SelectionMode.SelectHalf:
-                                seletedSlotCount = sourceSlot.quantity / 2;
-                                sourceSlot.quantity -= seletedSlotCount;
-                                break;
-                        }
-                    }
-
-                    selectedQuantityText.text = seletedSlotCount.ToString();
 
                     if (sourceSlot.quantity == 0)
                         sourceSlot.type = CollectableType.NONE;
                     Refresh();
 
-                    selectedItemUI.transform.SetParent(transform.root); // UI 최상위로 이동
-                    selectedItemUI.transform.position = pointerData.position;
-
-                    if (_slotUI.quantity == 0)
-                        _slotUI.SetEmtpy();
-
+                    selectedItem.transform.SetParent(transform.root); // UI 최상위로 이동
+                    selectedItem.transform.position = pointerData.position;
                 }
             }
         }
@@ -193,28 +163,50 @@ public class Inventory_UI : MonoBehaviour
     void DragItem()
     {
         pointerData.position = Input.mousePosition;
-        selectedItemUI.transform.position = pointerData.position;
+        selectedItem.transform.position = pointerData.position;
 
         if (!isClick && Input.GetMouseButtonDown(0))
+            MoveItem();
+    }
+
+    void MoveItem()
+    {
+        isClick = true;
+        List<RaycastResult> results = DetectUIUnderCursor();
+
+        // 슬롯재설정
+        foreach (var result in results)
         {
-            isClick = true;
-            List<RaycastResult> results = DetectUIUnderCursor();
-
-            // 슬롯 바꾸기
-            foreach (var result in results)
+            Slot_UI _slotUI = result.gameObject.GetComponent<Slot_UI>();
+            if (_slotUI != null)
             {
-                Slot_UI _slotUI = result.gameObject.GetComponent<Slot_UI>();
-                if (_slotUI != null)
-                {
-                    isDragging = false;
+                //// 다른 슬롯으로 이동
+                //List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
+                //Slot _slot = _slots[_slotUI.slotIdx];
 
-                    // 슬롯 설정
-                    List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
-                    _slots[_slotUI.slotIdx].Refresh(selectedSlotType, seletedSlotCount, sourceSlotIcon);
+                //if (_slot.type == CollectableType.NONE)
+                //{
+                //    _slots[_slotUI.slotIdx].Refresh(selectedSlotType, seletedSlotCount, sourceSlotIcon);
+                //    Refresh();
+                //    selectedItem.gameObject.SetActive(false);
+                //}
 
-                    Refresh();
-                    selectedItemUI.SetActive(false);
-                }
+                //// 다른 아이템 있었다면 바꾸기
+                //// sourceSlot이 selecteSlot으로
+                //else
+                //{
+                //    Slot tempslot = _slot;
+
+                //    Image selectedIcon = selectedItem.transform.Find("Icon").gameObject.GetComponent<Image>();
+                //    _slot.icon = selectedIcon.sprite;
+                //    _slot.quantity = seletedSlotCount;
+                //    _slot.type = selectedSlotType;
+
+                //    selectedIcon.sprite = tempslot.icon;
+                //    seletedSlotCount = tempslot.quantity;
+                //    selectedSlotType = tempslot.type;
+                //    Refresh();
+                //}
             }
         }
     }
@@ -232,7 +224,7 @@ public class Inventory_UI : MonoBehaviour
             if (isDragging)
             {
                 isDragging = false;
-                selectedItemUI.SetActive(false);
+                selectedItem.gameObject.SetActive(false);
             }
         }
     }
