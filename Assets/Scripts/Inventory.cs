@@ -9,9 +9,9 @@ public class Inventory
     public class Slot
     {
         public CollectableType type;
+        public Sprite icon;
         public int quantity;
         public int maxAllowed;
-        public Sprite icon;
 
         public Slot()
         {
@@ -41,11 +41,11 @@ public class Inventory
             type = CollectableType.NONE;
         }
 
-        public void Refresh(CollectableType _type, int _count, Sprite _icon)
+        public void Refresh(CollectableType _type, Sprite _icon, int _count)
         {
             type = _type;
-            quantity = _count;
             icon = _icon;
+            quantity = _count;
         }
     }
 
