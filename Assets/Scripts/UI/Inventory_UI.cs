@@ -44,6 +44,9 @@ public class Inventory_UI : MonoBehaviour
 
     GameObject selectedItemUI;
     Slot sourceSlot;
+    Sprite sourceSlotIcon;
+    CollectableType selectedSlotType;
+    int seletedSlotCount;
 
     PointerEventData pointerData;
 
@@ -145,27 +148,32 @@ public class Inventory_UI : MonoBehaviour
 
                     if (selectedQuantityText != null)
                     {
+                        selectedSlotType = sourceSlot.type;
+                        sourceSlotIcon = sourceSlot.icon;
+
+                        Debug.Log("SourceCount : " + sourceSlot.quantity);
+
                         switch (selectionMode)
                         {
                             case SelectionMode.SelectAll:
-                                selectedQuantityText.text = sourceSlot.quantity.ToString();
+                                seletedSlotCount = sourceSlot.quantity;
                                 sourceSlot.quantity = 0;
                                 break;
 
                             case SelectionMode.SelectOne:
-                                selectedQuantityText.text = "1";
+                                seletedSlotCount = 1;
                                 sourceSlot.quantity -= 1;
 
                                 break;
 
                             case SelectionMode.SelectHalf:
-                                selectedQuantityText.text = (sourceSlot.quantity / 2).ToString();
-                                sourceSlot.quantity -= (sourceSlot.quantity / 2);
+                                seletedSlotCount = sourceSlot.quantity / 2;
+                                sourceSlot.quantity -= seletedSlotCount;
                                 break;
                         }
                     }
 
-                    slotCount = int.Parse(selectedQuantityText.text);
+                    selectedQuantityText.text = seletedSlotCount.ToString();
 
                     if (sourceSlot.quantity == 0)
                         sourceSlot.type = CollectableType.NONE;
@@ -202,7 +210,7 @@ public class Inventory_UI : MonoBehaviour
 
                     // ½½·Ô ¼³Á¤
                     List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
-                    //_slots[_slotUI.slotIdx].Refresh(sourceSlot.type, selectedQuantity, sourceSlot.icon);
+                    _slots[_slotUI.slotIdx].Refresh(selectedSlotType, seletedSlotCount, sourceSlotIcon);
 
                     Refresh();
                     selectedItemUI.SetActive(false);
