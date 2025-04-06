@@ -1856,6 +1856,7 @@ MonoBehaviour:
   - {fileID: 691788067}
   - {fileID: 1244231933}
   slotCount: 0
+  dropItem: {fileID: 66480898167699907, guid: d44e5fc15c4cf9f43a0c4cf25c1eff50, type: 3}
   selectedItem: {fileID: 1362442400}
 --- !u!114 &691788067 stripped
 MonoBehaviour:

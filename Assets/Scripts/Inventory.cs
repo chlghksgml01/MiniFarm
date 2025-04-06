@@ -27,10 +27,10 @@ public class Inventory
             return false;
         }
 
-        public void AddItem(Collectable item)
+        public void AddItem(CollectableItem item)
         {
-            type = item.type;
-            icon = item.icon;
+            type = item.Type;
+            icon = item.Icon;
             quantity++;
         }
 
@@ -60,11 +60,11 @@ public class Inventory
         }
     }
 
-    public void AddItem(Collectable item)
+    public void AddItem(CollectableItem item)
     {
         foreach (Slot slot in slots)
         {
-            if (slot.type == item.type && slot.CanAddItem())
+            if (slot.type == item.Type && slot.CanAddItem())
             {
                 slot.AddItem(item);
                 return;

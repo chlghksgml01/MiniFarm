@@ -1,14 +1,29 @@
 using UnityEngine;
 
-public class Collectable : MonoBehaviour
+public class CollectableItem : MonoBehaviour
 {
-    public CollectableType type;
-    public Sprite icon;
+    [SerializeField] CollectableType type;
+    Sprite icon;
+
+    public CollectableType Type
+    {
+        get { return type; }
+        set { type = value; }
+    }
+    public Sprite Icon
+    {
+        get { return icon; }
+        set { icon = value; }
+    }
 
     private void Awake()
     {
         SpriteRenderer sprite = GetComponent<SpriteRenderer>();
         icon = sprite.sprite;
+    }
+
+    public void Initialize()
+    {
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

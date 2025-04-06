@@ -38,7 +38,9 @@ public class Inventory_UI : MonoBehaviour
     Player player;
     bool isDragging = false;
     bool isClick = false;
+    bool isBackground = false;
 
+    [SerializeField] GameObject dropItem;
     [SerializeField] SelectedItem selectedItem;
     Slot sourceSlot;
 
@@ -190,6 +192,7 @@ public class Inventory_UI : MonoBehaviour
             Slot_UI _slotUI = result.gameObject.GetComponent<Slot_UI>();
             if (_slotUI != null)
             {
+                isBackground = true;
                 // 클릭한 슬롯 가져오기
                 List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
                 Slot _slot = _slots[_slotUI.slotIdx];
@@ -238,6 +241,25 @@ public class Inventory_UI : MonoBehaviour
                 Refresh();
             }
         }
+
+        if (!isBackground)
+        {
+            selectedItem.Quantity = 0;
+            isDragging = false;
+
+            CollectableItem _dropItem = dropItem.GetComponent<CollectableItem>();
+            if (_dropItem == null)
+                return;
+            SpriteRenderer _dropSprite = _dropItem.GetComponent<SpriteRenderer>();
+            _dropSprite.sprite = selectedItem.iconImage.sprite;
+            _dropItem.Type = selectedItem.type;
+
+            Vector2 _pos = new Vector3(player.transform.position.x + 1f, player.transform.position.y);
+            Instantiate(_dropItem, _pos, Quaternion.identity);
+        }
+
+        else
+            isBackground = false;
     }
 
     void SwapItemWithSlot(List<Slot> _slots, Slot _slot, Slot_UI _slotUI, int _slotQuantity)
@@ -309,14 +331,10 @@ public class Inventory_UI : MonoBehaviour
     {
         List<RaycastResult> results;
 
-        // Unity에서 UI 입력을 관리하는 시스템을 가져와서 현재 UI의 입력 이벤트를 처리하려는 변수
         pointerData = new PointerEventData(EventSystem.current);
-        // 마우스 커서 위치 저장
         pointerData.position = Input.mousePosition;
 
-        // 레이캐스트 결과 저장용 변수
         results = new List<RaycastResult>();
-        // pointerData에 있는 마우스 커서 위치를 기준으로 UI 요소를 검사하고 충돌한 요소를 results에 저장
         EventSystem.current.RaycastAll(pointerData, results);
 
         return results;
