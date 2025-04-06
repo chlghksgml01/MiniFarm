@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    float speed = 1f;
+    [SerializeField] float speed = 5f;
 
     Animator anim;
 

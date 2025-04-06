@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TMPro.Examples;
 using UnityEngine;
 
 [System.Serializable]
@@ -77,6 +76,52 @@ public class Inventory
             {
                 slot.AddItem(item);
                 return;
+            }
+        }
+    }
+
+    //int CompareSlotsByType(Slot a, Slot b)
+    //{
+    //    // None이 제일 뒤로가도록
+    //    bool aIsNone = a.type == CollectableType.NONE;
+    //    bool bIsNone = b.type == CollectableType.NONE;
+
+    //    if (aIsNone && !bIsNone) return 1;
+    //    if (aIsNone && !bIsNone) return -1;
+
+    //    // a.type < b.type : 음수
+    //    // a.type == b.type : 0
+    //    // a.type > b.type : 양수
+    //    return a.type.CompareTo(b.type);
+    //}
+
+    public void SortInventory()
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            for (int j = i + 1; j < slots.Count; j++)
+            {
+                // none이 앞에 있으면 뒤로 보내기
+                if (slots[i].type == CollectableType.NONE)
+                {
+                    var temp = slots[i];
+                    slots[i] = slots[j];
+                    slots[j] = temp;
+                }
+
+                else if (slots[i].type > slots[j].type && slots[j].type != CollectableType.NONE)
+                {
+                    var temp = slots[i];
+                    slots[i] = slots[j];
+                    slots[j] = temp;
+                }
+
+                // 같은거라면 묶어주기
+                else if (slots[i].type.CompareTo(slots[j].type) == 0)
+                {
+                    slots[i].quantity += slots[j].quantity;
+                    slots[j].SetEmpty();
+                }
             }
         }
     }

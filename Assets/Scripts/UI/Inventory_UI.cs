@@ -333,7 +333,7 @@ public class Inventory_UI : MonoBehaviour
         }
     }
 
-    void Refresh()
+    public void Refresh()
     {
         if (slotsUI.Count != player.PlayerInventory.slots.Count)
         {
@@ -370,5 +370,12 @@ public class Inventory_UI : MonoBehaviour
     public int GetInventoryCount()
     {
         return slotsUI.Count;
+    }
+
+    // 버튼 함수
+    public void SortInventory()
+    {
+        player.PlayerInventory.SortInventory();
+        Refresh();
     }
 }
