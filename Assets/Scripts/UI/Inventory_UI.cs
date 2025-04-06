@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Unity.Loading;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UIElements;
 using static Inventory;
 
 public class Inventory_UI : MonoBehaviour
@@ -40,11 +41,10 @@ public class Inventory_UI : MonoBehaviour
     Player player;
     bool isDragging = false;
     bool isClick = false;
-    bool isBackground = false;
+    bool isInventoryAreaClicked = false;
 
     [SerializeField] GameObject dropItem;
     [SerializeField] SelectedItem selectedItem;
-    Slot sourceSlot;
 
     PointerEventData pointerData;
 
@@ -126,7 +126,7 @@ public class Inventory_UI : MonoBehaviour
 
                     // 클릭한 슬롯 저장
                     List<Slot> _slots = player.PlayerInventory.slots;
-                    sourceSlot = _slots[_slotUI.slotIdx];
+                    Slot sourceSlot = _slots[_slotUI.slotIdx];
 
                     // SelectedItem 설정
                     selectedItem.type = sourceSlot.type;
@@ -150,7 +150,9 @@ public class Inventory_UI : MonoBehaviour
                     }
 
                     if (sourceSlot.quantity == 0)
-                        sourceSlot.type = CollectableType.NONE;
+                    {
+                        sourceSlot.SetEmpty();
+                    }
                     Refresh();
 
                     selectedItem.transform.SetParent(transform.root); // UI 최상위로 이동
@@ -191,10 +193,15 @@ public class Inventory_UI : MonoBehaviour
         // 슬롯재설정
         foreach (var result in results)
         {
+            // 쓰레기통, 정리버튼이라면
+            if (result.gameObject.name == "Sort_Button" || result.gameObject.name == "TrashBin")
+                return;
+
             Slot_UI _slotUI = result.gameObject.GetComponent<Slot_UI>();
             if (_slotUI != null)
             {
-                isBackground = true;
+                isInventoryAreaClicked = true;
+
                 // 클릭한 슬롯 가져오기
                 List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().PlayerInventory.slots;
                 Slot _slot = _slots[_slotUI.slotIdx];
@@ -209,6 +216,7 @@ public class Inventory_UI : MonoBehaviour
                             _slotQuantity = selectedItem.Quantity;
                             selectedItem.Quantity = 0;
                             _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, _slotQuantity);
+                            selectedItem.SetEmpty();
                         }
 
                         // 다른 아이템 있을 경우
@@ -239,18 +247,21 @@ public class Inventory_UI : MonoBehaviour
                 }
 
                 if (selectedItem.Quantity == 0)
+                {
                     isDragging = false;
+                    selectedItem.SetEmpty();
+                }
                 Refresh();
             }
         }
 
-        if (!isBackground)
+        if (!isInventoryAreaClicked)
         {
             DropItem(selectionMode);
         }
 
         else
-            isBackground = false;
+            isInventoryAreaClicked = false;
     }
 
     void SwapItemWithSlot(List<Slot> _slots, Slot _slot, Slot_UI _slotUI, int _slotQuantity)
@@ -261,6 +272,7 @@ public class Inventory_UI : MonoBehaviour
             _slotQuantity = _slot.quantity + selectedItem.Quantity;
             selectedItem.Quantity = 0;
             _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, _slotQuantity);
+            selectedItem.SetEmpty();
         }
         // 다른 아이템
         else
@@ -312,7 +324,10 @@ public class Inventory_UI : MonoBehaviour
         _dropItem.IsBouncing = true;
 
         if (selectedItem.Quantity == 0)
+        {
             isDragging = false;
+            selectedItem.SetEmpty();
+        }
     }
 
     public void ToggleInventory()
@@ -367,15 +382,49 @@ public class Inventory_UI : MonoBehaviour
         return results;
     }
 
-    public int GetInventoryCount()
+    void PlaceItem()
     {
-        return slotsUI.Count;
+        isDragging = false;
+        bool hasSameItem = false;
+
+        foreach (Slot slot in player.PlayerInventory.slots)
+        {
+            if (selectedItem.type == slot.type)
+            {
+                hasSameItem = true;
+                slot.quantity += selectedItem.Quantity;
+                selectedItem.SetEmpty();
+            }
+        }
+
+        if (!hasSameItem)
+        {
+            foreach (Slot slot in player.PlayerInventory.slots)
+            {
+                if (slot.type == CollectableType.NONE)
+                {
+                    slot.Refresh(selectedItem.type, selectedItem.iconImage.sprite, selectedItem.Quantity);
+                    selectedItem.SetEmpty();
+                }
+            }
+        }
     }
 
     // 버튼 함수
     public void SortInventory()
     {
+        if (isDragging)
+        {
+            PlaceItem();
+        }
+
         player.PlayerInventory.SortInventory();
         Refresh();
+    }
+
+    public void TrashBin()
+    {
+        selectedItem.SetEmpty();
+        isDragging = false;
     }
 }

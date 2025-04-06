@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.U2D;
+using UnityEngine.UI;
 
 public class CollectableItem : MonoBehaviour
 {
@@ -94,6 +95,7 @@ public class CollectableItem : MonoBehaviour
         {
             player.PlayerInventory.AddItem(this);
             Destroy(gameObject);
+            Inventory_UI.Instance.Refresh();
         }
     }
 }

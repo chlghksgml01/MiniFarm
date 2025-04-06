@@ -40,11 +40,11 @@ public class Inventory
             type = CollectableType.NONE;
         }
 
-        public void Refresh(CollectableType _type, Sprite _icon, int _count)
+        public void Refresh(CollectableType _type, Sprite _icon, int _quantity)
         {
             type = _type;
             icon = _icon;
-            quantity = _count;
+            quantity = _quantity;
         }
     }
 

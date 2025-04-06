@@ -17,9 +17,20 @@ public class SelectedItem : MonoBehaviour
                 textUI.text = quantity.ToString();
             else
                 textUI.text = "";
-            if (quantity == 0)
-                gameObject.SetActive(false);
         }
     }
     public CollectableType type;
+
+    private void Awake()
+    {
+        iconImage.raycastTarget = false;
+    }
+
+    public void SetEmpty()
+    {
+        quantity = 0;
+        type = CollectableType.NONE;
+        iconImage.sprite = null;
+        gameObject.SetActive(false);
+    }
 }
