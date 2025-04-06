@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -245,7 +246,7 @@ public class Inventory_UI : MonoBehaviour
 
         if (!isBackground)
         {
-            DropItem();
+            DropItem(selectionMode);
         }
 
         else
@@ -278,11 +279,28 @@ public class Inventory_UI : MonoBehaviour
         }
     }
 
-    void DropItem()
+    void DropItem(SelectionMode selectionMode)
     {
         CollectableItem _dropItem = dropItem.GetComponent<CollectableItem>();
         if (_dropItem == null)
             return;
+
+        int _dropItemQuantity = 0;
+        switch (selectionMode)
+        {
+            case SelectionMode.All:
+                _dropItemQuantity = selectedItem.Quantity;
+                selectedItem.Quantity = 0;
+                break;
+            case SelectionMode.Half:
+                _dropItemQuantity = (int)Math.Ceiling(selectedItem.Quantity / 2f);
+                selectedItem.Quantity -= _dropItemQuantity;
+                break;
+            case SelectionMode.One:
+                _dropItemQuantity = 1;
+                selectedItem.Quantity--;
+                break;
+        }
 
         Vector3 bounceBasePos = new Vector3(player.transform.position.x + 0.5f, player.transform.position.y - 0.5f);
         _dropItem = Instantiate(_dropItem, bounceBasePos, Quaternion.identity);
@@ -290,11 +308,11 @@ public class Inventory_UI : MonoBehaviour
         _dropItem.BounceBasePos = bounceBasePos;
         _dropItem.GetComponent<SpriteRenderer>().sprite = selectedItem.iconImage.sprite;
         _dropItem.Type = selectedItem.type;
-        _dropItem.Quantity = selectedItem.Quantity;
+        _dropItem.Quantity = _dropItemQuantity;
         _dropItem.IsBouncing = true;
 
-        selectedItem.Quantity = 0;
-        isDragging = false;
+        if (selectedItem.Quantity == 0)
+            isDragging = false;
     }
 
     public void ToggleInventory()
