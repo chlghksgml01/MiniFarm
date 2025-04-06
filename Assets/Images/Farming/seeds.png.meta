@@ -408,7 +408,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: wheatsed
+      name: wheatseed
       rect:
         serializedVersion: 2
         x: 32
@@ -1073,7 +1073,7 @@ TextureImporter:
       strawberryseed: -7100280429707273417
       tomatoseed: 1530993877042961689
       watermelonseed: -2735866498999463491
-      wheatsed: 8812169861478436503
+      wheatseed: 8812169861478436503
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

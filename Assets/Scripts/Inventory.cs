@@ -31,7 +31,7 @@ public class Inventory
         {
             type = item.Type;
             icon = item.Icon;
-            quantity++;
+            quantity += item.Quantity;
         }
 
         public void SetEmpty()

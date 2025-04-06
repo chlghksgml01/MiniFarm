@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 using static Inventory;
 
 public class Inventory_UI : MonoBehaviour
@@ -123,7 +124,7 @@ public class Inventory_UI : MonoBehaviour
                     isDragging = true;
 
                     // 클릭한 슬롯 저장
-                    List<Slot> _slots = player.inventory.slots;
+                    List<Slot> _slots = player.PlayerInventory.slots;
                     sourceSlot = _slots[_slotUI.slotIdx];
 
                     // SelectedItem 설정
@@ -194,7 +195,7 @@ public class Inventory_UI : MonoBehaviour
             {
                 isBackground = true;
                 // 클릭한 슬롯 가져오기
-                List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().inventory.slots;
+                List<Slot> _slots = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().PlayerInventory.slots;
                 Slot _slot = _slots[_slotUI.slotIdx];
 
                 int _slotQuantity = 0;
@@ -244,18 +245,7 @@ public class Inventory_UI : MonoBehaviour
 
         if (!isBackground)
         {
-            selectedItem.Quantity = 0;
-            isDragging = false;
-
-            CollectableItem _dropItem = dropItem.GetComponent<CollectableItem>();
-            if (_dropItem == null)
-                return;
-            SpriteRenderer _dropSprite = _dropItem.GetComponent<SpriteRenderer>();
-            _dropSprite.sprite = selectedItem.iconImage.sprite;
-            _dropItem.Type = selectedItem.type;
-
-            Vector2 _pos = new Vector3(player.transform.position.x + 1f, player.transform.position.y);
-            Instantiate(_dropItem, _pos, Quaternion.identity);
+            DropItem();
         }
 
         else
@@ -288,6 +278,25 @@ public class Inventory_UI : MonoBehaviour
         }
     }
 
+    void DropItem()
+    {
+        CollectableItem _dropItem = dropItem.GetComponent<CollectableItem>();
+        if (_dropItem == null)
+            return;
+
+        Vector3 bounceBasePos = new Vector3(player.transform.position.x + 0.5f, player.transform.position.y - 0.5f);
+        _dropItem = Instantiate(_dropItem, bounceBasePos, Quaternion.identity);
+
+        _dropItem.BounceBasePos = bounceBasePos;
+        _dropItem.GetComponent<SpriteRenderer>().sprite = selectedItem.iconImage.sprite;
+        _dropItem.Type = selectedItem.type;
+        _dropItem.Quantity = selectedItem.Quantity;
+        _dropItem.IsBouncing = true;
+
+        selectedItem.Quantity = 0;
+        isDragging = false;
+    }
+
     public void ToggleInventory()
     {
         if (!inventoryPanel.activeSelf)
@@ -308,7 +317,7 @@ public class Inventory_UI : MonoBehaviour
 
     void Refresh()
     {
-        if (slotsUI.Count != player.inventory.slots.Count)
+        if (slotsUI.Count != player.PlayerInventory.slots.Count)
         {
             Debug.Log("인벤UI, 인벤 개수 다름");
             return;
@@ -316,9 +325,9 @@ public class Inventory_UI : MonoBehaviour
 
         for (int i = 0; i < slotsUI.Count; i++)
         {
-            if (player.inventory.slots[i].type != CollectableType.NONE)
+            if (player.PlayerInventory.slots[i].type != CollectableType.NONE)
             {
-                slotsUI[i].SetItem(player.inventory.slots[i]);
+                slotsUI[i].SetItem(player.PlayerInventory.slots[i]);
             }
             else
             {
