@@ -11,6 +11,7 @@ public class CollectableItem : MonoBehaviour
     Sprite icon;
     int quantity = 1;
 
+    #region DropItemBounce
     bool isBouncing = false;
     Vector3 bounceBasePos;
     float bounceY = 0f;
@@ -18,6 +19,7 @@ public class CollectableItem : MonoBehaviour
     float bounceVelocityY = 2f;
     float gravity = 9f;
     float bounceDamping = 0.8f;
+    #endregion
 
     public int Quantity { get { return quantity; } set { quantity = value; } }
     public bool IsBouncing { set { isBouncing = value; } }

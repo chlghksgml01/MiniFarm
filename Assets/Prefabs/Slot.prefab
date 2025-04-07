@@ -226,6 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7210017e52036dc4a858cf8fb8547362, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemIcon: {fileID: 3840452459606760417}
+  quantityText: {fileID: 1181806050291174987}
   slotIdx: 0
   quantity: 0
 --- !u!1 &7365806317587373442

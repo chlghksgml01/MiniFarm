@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static Inventory;
@@ -34,8 +35,6 @@ public class Inventory_UI : MonoBehaviour
 
     GameObject inventoryPanel;
     Player player;
-    bool isDragging = false;
-    bool isClick = false;
     bool isInventoryAreaClicked = false;
 
     [SerializeField] GameObject dropItem;
@@ -43,9 +42,31 @@ public class Inventory_UI : MonoBehaviour
 
     PointerEventData pointerData;
 
+
+
+    // 디자인패턴
+    ISelectionStrategy selectionStrategy;
+    private LeftClickStrategy leftClick;
+    private RightClickStrategy rightClick;
+    private ShiftRightClickStrategy shiftRightClick;
+
+
+    public class DragState
+    {
+        public bool isClick = false;
+        public bool isDragging = false;
+    }
+    DragState dragState = new DragState();
+
     private void Awake()
     {
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         selectedItem.gameObject.SetActive(false);
+
+        leftClick = new LeftClickStrategy(selectedItem, player, dragState);
+        rightClick = new RightClickStrategy(selectedItem, player, dragState);
+        shiftRightClick = new ShiftRightClickStrategy(selectedItem, player, dragState);
+
         pointerData = new PointerEventData(EventSystem.current);
 
         if (instance && instance != this)
@@ -64,20 +85,20 @@ public class Inventory_UI : MonoBehaviour
         }
 
         slotCount = slotsUI.Count;
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
     void Update()
     {
-        if (!isDragging)
+        if (!dragState.isDragging)
             KeyInput();
         else
             DragKeyInput();
+
     }
 
     private void LateUpdate()
     {
-        isClick = false;
+        dragState.isClick = false;
     }
 
     void KeyInput()
@@ -87,74 +108,30 @@ public class Inventory_UI : MonoBehaviour
             ToggleInventory();
         }
 
-        if (!isClick && Input.GetMouseButtonDown(0))
+        if (!inventoryPanel.activeSelf)
+            return;
+
+        if (!dragState.isClick && Input.GetMouseButtonDown(0))
         {
-            List<RaycastResult> results = DetectUIUnderCursor();
-            SelectItemFromSlot(results, SelectionMode.All);
+            SetStrategy(leftClick);
+            selectionStrategy.ClickHandle();
         }
 
-        else if (!isClick && Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
+        else if (!dragState.isClick && Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
         {
-            List<RaycastResult> results = DetectUIUnderCursor();
-            SelectItemFromSlot(results, SelectionMode.Half);
+            SetStrategy(shiftRightClick);
+            selectionStrategy.ClickHandle();
         }
 
-        else if (!isClick && Input.GetMouseButtonDown(1))
+        else if (!dragState.isClick && Input.GetMouseButtonDown(1))
         {
-            List<RaycastResult> results = DetectUIUnderCursor();
-            SelectItemFromSlot(results, SelectionMode.One);
+            SetStrategy(rightClick);
+            selectionStrategy.ClickHandle();
         }
     }
-
-    void SelectItemFromSlot(List<RaycastResult> results, SelectionMode selectionMode)
+    public void SetStrategy(ISelectionStrategy currentStrategy)
     {
-        foreach (var result in results)
-        {
-            Slot_UI _slotUI = result.gameObject.GetComponent<Slot_UI>();
-            if (_slotUI != null)
-            {
-                if (_slotUI.quantity > 0)
-                {
-                    selectedItem.gameObject.SetActive(true);
-                    isClick = true;
-                    isDragging = true;
-
-                    // 클릭한 슬롯 저장
-                    List<Slot> _slots = player.PlayerInventory.slots;
-                    Slot sourceSlot = _slots[_slotUI.slotIdx];
-
-                    // SelectedItem 설정
-                    selectedItem.type = sourceSlot.type;
-                    selectedItem.Icon = sourceSlot.icon;
-                    switch (selectionMode)
-                    {
-                        case SelectionMode.All:
-                            selectedItem.Quantity = sourceSlot.quantity;
-                            sourceSlot.quantity = 0;
-                            break;
-
-                        case SelectionMode.Half:
-                            selectedItem.Quantity = (int)Math.Ceiling(sourceSlot.quantity / 2f);
-                            sourceSlot.quantity -= selectedItem.Quantity;
-                            break;
-
-                        case SelectionMode.One:
-                            selectedItem.Quantity = 1;
-                            sourceSlot.quantity -= 1;
-                            break;
-                    }
-
-                    if (sourceSlot.quantity == 0)
-                    {
-                        sourceSlot.SetEmpty();
-                    }
-                    Refresh();
-
-                    selectedItem.transform.SetParent(transform.root); // UI 최상위로 이동
-                    selectedItem.transform.position = pointerData.position;
-                }
-            }
-        }
+        selectionStrategy = currentStrategy;
     }
 
     void DragKeyInput()
@@ -162,19 +139,19 @@ public class Inventory_UI : MonoBehaviour
         pointerData.position = Input.mousePosition;
         selectedItem.transform.position = pointerData.position;
 
-        if (!isClick && Input.GetMouseButtonDown(0))
+        if (!dragState.isClick && Input.GetMouseButtonDown(0))
         {
             List<RaycastResult> results = DetectUIUnderCursor();
             MoveItem(results, SelectionMode.All);
         }
 
-        else if (!isClick && Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
+        else if (!dragState.isClick && Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
         {
             List<RaycastResult> results = DetectUIUnderCursor();
             MoveItem(results, SelectionMode.Half);
         }
 
-        else if (!isClick && Input.GetMouseButtonDown(1))
+        else if (!dragState.isClick && Input.GetMouseButtonDown(1))
         {
             List<RaycastResult> results = DetectUIUnderCursor();
             MoveItem(results, SelectionMode.One);
@@ -183,7 +160,7 @@ public class Inventory_UI : MonoBehaviour
 
     void MoveItem(List<RaycastResult> results, SelectionMode selectionMode)
     {
-        isClick = true;
+        dragState.isClick = true;
 
         // 슬롯재설정
         foreach (var result in results)
@@ -243,7 +220,7 @@ public class Inventory_UI : MonoBehaviour
 
                 if (selectedItem.Quantity == 0)
                 {
-                    isDragging = false;
+                    dragState.isDragging = false;
                     selectedItem.SetEmpty();
                 }
                 Refresh();
@@ -320,7 +297,7 @@ public class Inventory_UI : MonoBehaviour
 
         if (selectedItem.Quantity == 0)
         {
-            isDragging = false;
+            dragState.isDragging = false;
             selectedItem.SetEmpty();
         }
     }
@@ -335,9 +312,9 @@ public class Inventory_UI : MonoBehaviour
         else
         {
             inventoryPanel.SetActive(false);
-            if (isDragging)
+            if (dragState.isDragging)
             {
-                isDragging = false;
+                dragState.isDragging = false;
                 selectedItem.gameObject.SetActive(false);
             }
         }
@@ -380,7 +357,7 @@ public class Inventory_UI : MonoBehaviour
     // 버튼 함수
     public void SortInventory()
     {
-        if (isDragging)
+        if (dragState.isDragging)
         {
             PlaceItem();
         }
@@ -391,7 +368,7 @@ public class Inventory_UI : MonoBehaviour
 
     void PlaceItem()
     {
-        isDragging = false;
+        dragState.isDragging = false;
         bool hasSameItem = false;
 
         foreach (Slot slot in player.PlayerInventory.slots)
@@ -420,6 +397,6 @@ public class Inventory_UI : MonoBehaviour
     public void TrashBin()
     {
         selectedItem.SetEmpty();
-        isDragging = false;
+        dragState.isDragging = false;
     }
 }

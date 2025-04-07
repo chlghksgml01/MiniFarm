@@ -5,8 +5,8 @@ using static Inventory;
 
 public class Slot_UI : MonoBehaviour
 {
-    Image itemIcon;
-    TextMeshProUGUI quantityText;
+    [SerializeField] Image itemIcon;
+    [SerializeField] TextMeshProUGUI quantityText;
     public int slotIdx = 0;
 
     public Image ItemIcon { get { return itemIcon; } }
@@ -19,30 +19,7 @@ public class Slot_UI : MonoBehaviour
         slotIdx = _slotIdx;
     }
 
-    private void Awake()
-    {
-        Transform quantityTransform = transform.Find("Quantity");
-        if (quantityTransform != null)
-        {
-            quantityText = quantityTransform.GetComponent<TextMeshProUGUI>();
-        }
-        else
-        {
-            Debug.Log("QuantityText 없음");
-        }
-
-        Transform image = transform.Find("Icon");
-        if (image != null)
-        {
-            itemIcon = image.GetComponent<Image>();
-        }
-        else
-        {
-            Debug.Log("Icon 없음");
-        }
-    }
-
-    public void SetItem(Inventory.Slot _slot)
+    public void SetItem(Slot _slot)
     {
         if (_slot != null)
         {
