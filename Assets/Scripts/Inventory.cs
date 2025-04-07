@@ -80,7 +80,6 @@ public class Inventory
         }
     }
 
-
     public void SortInventory()
     {
         for (int i = 0; i < slots.Count; i++)

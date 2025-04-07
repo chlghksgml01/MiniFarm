@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Unity.Loading;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 using static Inventory;
 
 public class Inventory_UI : MonoBehaviour
 {
-    [SerializeField] Canvas canvas;
-
     private static Inventory_UI instance;
     public static Inventory_UI Instance
     {
@@ -44,7 +39,7 @@ public class Inventory_UI : MonoBehaviour
     bool isInventoryAreaClicked = false;
 
     [SerializeField] GameObject dropItem;
-    [SerializeField] SelectedItem selectedItem;
+    [SerializeField] SelectedItem_UI selectedItem;
 
     PointerEventData pointerData;
 
@@ -130,7 +125,7 @@ public class Inventory_UI : MonoBehaviour
 
                     // SelectedItem 설정
                     selectedItem.type = sourceSlot.type;
-                    selectedItem.iconImage.sprite = sourceSlot.icon;
+                    selectedItem.Icon = sourceSlot.icon;
                     switch (selectionMode)
                     {
                         case SelectionMode.All:
@@ -215,7 +210,7 @@ public class Inventory_UI : MonoBehaviour
                         {
                             _slotQuantity = selectedItem.Quantity;
                             selectedItem.Quantity = 0;
-                            _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, _slotQuantity);
+                            _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, _slotQuantity);
                             selectedItem.SetEmpty();
                         }
 
@@ -233,7 +228,7 @@ public class Inventory_UI : MonoBehaviour
                         int tempquantity = selectedItem.Quantity;
                         selectedItem.Quantity = (int)(selectedItem.Quantity / 2f);
                         _slotQuantity = _slot.quantity + (tempquantity - selectedItem.Quantity);
-                        _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, _slotQuantity);
+                        _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, _slotQuantity);
                         break;
 
                     case SelectionMode.One:
@@ -242,7 +237,7 @@ public class Inventory_UI : MonoBehaviour
 
                         selectedItem.Quantity -= 1;
                         _slotQuantity = _slot.quantity + 1;
-                        _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, _slotQuantity);
+                        _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, _slotQuantity);
                         break;
                 }
 
@@ -271,7 +266,7 @@ public class Inventory_UI : MonoBehaviour
         {
             _slotQuantity = _slot.quantity + selectedItem.Quantity;
             selectedItem.Quantity = 0;
-            _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, _slotQuantity);
+            _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, _slotQuantity);
             selectedItem.SetEmpty();
         }
         // 다른 아이템
@@ -283,10 +278,10 @@ public class Inventory_UI : MonoBehaviour
             tempslot.quantity = _slot.quantity;
 
             _slotQuantity = selectedItem.Quantity;
-            _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.iconImage.sprite, selectedItem.Quantity);
+            _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, selectedItem.Quantity);
 
             selectedItem.type = tempslot.type;
-            selectedItem.iconImage.sprite = tempslot.icon;
+            selectedItem.Icon = tempslot.icon;
             selectedItem.Quantity = tempslot.quantity;
         }
     }
@@ -318,7 +313,7 @@ public class Inventory_UI : MonoBehaviour
         _dropItem = Instantiate(_dropItem, bounceBasePos, Quaternion.identity);
 
         _dropItem.BounceBasePos = bounceBasePos;
-        _dropItem.GetComponent<SpriteRenderer>().sprite = selectedItem.iconImage.sprite;
+        _dropItem.GetComponent<SpriteRenderer>().sprite = selectedItem.Icon;
         _dropItem.Type = selectedItem.type;
         _dropItem.Quantity = _dropItemQuantity;
         _dropItem.IsBouncing = true;
@@ -415,7 +410,7 @@ public class Inventory_UI : MonoBehaviour
             {
                 if (slot.type == CollectableType.NONE)
                 {
-                    slot.Refresh(selectedItem.type, selectedItem.iconImage.sprite, selectedItem.Quantity);
+                    slot.Refresh(selectedItem.type, selectedItem.Icon, selectedItem.Quantity);
                     selectedItem.SetEmpty();
                 }
             }

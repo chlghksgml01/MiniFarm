@@ -2,11 +2,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SelectedItem : MonoBehaviour
+public class SelectedItem_UI : MonoBehaviour
 {
-    public Image iconImage;
+    [SerializeField] Image iconImage;
     [SerializeField] TextMeshProUGUI textUI;
+
+    public CollectableType type;
+    public Sprite Icon
+    {
+        get { return iconImage.sprite; }
+        set { iconImage.sprite = value; }
+    }
     private int quantity;
+
     public int Quantity
     {
         get { return quantity; }
@@ -19,7 +27,6 @@ public class SelectedItem : MonoBehaviour
                 textUI.text = "";
         }
     }
-    public CollectableType type;
 
     private void Awake()
     {
