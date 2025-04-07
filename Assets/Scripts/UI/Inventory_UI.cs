@@ -382,6 +382,18 @@ public class Inventory_UI : MonoBehaviour
         return results;
     }
 
+    // 버튼 함수
+    public void SortInventory()
+    {
+        if (isDragging)
+        {
+            PlaceItem();
+        }
+
+        player.PlayerInventory.SortInventory();
+        Refresh();
+    }
+
     void PlaceItem()
     {
         isDragging = false;
@@ -408,18 +420,6 @@ public class Inventory_UI : MonoBehaviour
                 }
             }
         }
-    }
-
-    // 버튼 함수
-    public void SortInventory()
-    {
-        if (isDragging)
-        {
-            PlaceItem();
-        }
-
-        player.PlayerInventory.SortInventory();
-        Refresh();
     }
 
     public void TrashBin()

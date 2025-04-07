@@ -80,20 +80,6 @@ public class Inventory
         }
     }
 
-    //int CompareSlotsByType(Slot a, Slot b)
-    //{
-    //    // None이 제일 뒤로가도록
-    //    bool aIsNone = a.type == CollectableType.NONE;
-    //    bool bIsNone = b.type == CollectableType.NONE;
-
-    //    if (aIsNone && !bIsNone) return 1;
-    //    if (aIsNone && !bIsNone) return -1;
-
-    //    // a.type < b.type : 음수
-    //    // a.type == b.type : 0
-    //    // a.type > b.type : 양수
-    //    return a.type.CompareTo(b.type);
-    //}
 
     public void SortInventory()
     {
