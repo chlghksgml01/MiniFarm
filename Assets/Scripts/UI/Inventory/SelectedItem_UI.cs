@@ -8,21 +8,21 @@ public class SelectedItem_UI : MonoBehaviour
     [SerializeField] TextMeshProUGUI textUI;
 
     public CollectableType type;
-    private int quantity;
+    private int count;
 
     public Sprite Icon
     {
         get { return iconImage.sprite; }
         set { iconImage.sprite = value; }
     }
-    public int Quantity
+    public int Count
     {
-        get { return quantity; }
+        get { return count; }
         set
         {
-            quantity = value;
-            if (quantity > 1)
-                textUI.text = quantity.ToString();
+            count = value;
+            if (count > 1)
+                textUI.text = count.ToString();
             else
                 textUI.text = "";
         }
@@ -35,7 +35,7 @@ public class SelectedItem_UI : MonoBehaviour
 
     public void SetEmpty()
     {
-        quantity = 0;
+        count = 0;
         type = CollectableType.NONE;
         iconImage.sprite = null;
         gameObject.SetActive(false);

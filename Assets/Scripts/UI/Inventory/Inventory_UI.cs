@@ -7,6 +7,7 @@ using static Inventory;
 
 public class Inventory_UI : MonoBehaviour
 {
+    public string inventoryName;
     private static Inventory_UI instance;
     public static Inventory_UI Instance
     {
@@ -14,9 +15,13 @@ public class Inventory_UI : MonoBehaviour
         {
             if (instance == null)
             {
-                GameObject go = new GameObject("Inventory_UI");
-                instance = go.AddComponent<Inventory_UI>();
-                DontDestroyOnLoad(go);
+                // 무조건 씬에 있으니까 씬에서 찾기
+                // 새로 만들면 유니티에서 설정한거 날라감
+                instance = FindFirstObjectByType<Inventory_UI>();
+                if (instance == null)
+                {
+                    Debug.LogError("씬에 Inventory_UI 없음");
+                }
             }
             return instance;
         }
@@ -33,21 +38,17 @@ public class Inventory_UI : MonoBehaviour
 
     public int slotCount = 0;
 
-    public GameObject inventoryPanel { get; private set; }
-    Player player;
-    bool isInventoryAreaClicked = false;
 
     public GameObject dropItem;
     [SerializeField] SelectedItem_UI selectedItem;
 
-    PointerEventData pointerData;
+    Inventory inventory;
 
     // 디자인패턴
     ISelectionStrategy selectionStrategy;
     private LeftClickStrategy leftClick;
     private RightClickStrategy rightClick;
     private ShiftRightClickStrategy shiftRightClick;
-
 
     public class DragState
     {
@@ -58,24 +59,28 @@ public class Inventory_UI : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+        }
+        instance = this;
+
+        DontDestroyOnLoad(this);
+
         selectedItem.gameObject.SetActive(false);
 
-        leftClick = new LeftClickStrategy(selectedItem, player, dragState);
-        rightClick = new RightClickStrategy(selectedItem, player, dragState);
-        shiftRightClick = new ShiftRightClickStrategy(selectedItem, player, dragState);
+        leftClick = new LeftClickStrategy(selectedItem, inventory, dragState);
+        rightClick = new RightClickStrategy(selectedItem, inventory, dragState);
+        shiftRightClick = new ShiftRightClickStrategy(selectedItem, inventory, dragState);
 
-        pointerData = new PointerEventData(EventSystem.current);
 
         if (instance && instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
 
-        inventoryPanel = transform.Find("Background").gameObject;
-        inventoryPanel.SetActive(false);
+        GameManager.Instance.uiManager.inventoryPanel.SetActive(false);
 
         for (int i = 0; i < slotsUI.Count; i++)
         {
@@ -85,12 +90,16 @@ public class Inventory_UI : MonoBehaviour
         slotCount = slotsUI.Count;
     }
 
+    private void Start()
+    {
+        inventory = GameManager.Instance.player.inventoryManager.GetInventoryByName(inventoryName);
+    }
+
     void Update()
     {
         KeyInput();
         if (dragState.isDragging)
         {
-            pointerData = new PointerEventData(EventSystem.current);
             selectedItem.transform.position = Input.mousePosition;
         }
     }
@@ -102,12 +111,7 @@ public class Inventory_UI : MonoBehaviour
 
     void KeyInput()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            ToggleInventory();
-        }
-
-        if (!inventoryPanel.activeSelf)
+        if (!GameManager.Instance.uiManager.inventoryPanel.activeSelf)
             return;
 
         if (!dragState.isClick && Input.GetMouseButtonDown(0))
@@ -133,43 +137,35 @@ public class Inventory_UI : MonoBehaviour
         selectionStrategy = currentStrategy;
     }
 
-    public void ToggleInventory()
-    {
-        if (!inventoryPanel.activeSelf)
-        {
-            inventoryPanel.SetActive(true);
-            Refresh();
-        }
-        else
-        {
-            inventoryPanel.SetActive(false);
-            if (dragState.isDragging)
-            {
-                dragState.isDragging = false;
-                selectedItem.gameObject.SetActive(false);
-            }
-        }
-    }
-
     public void Refresh()
     {
-        if (slotsUI.Count != player.PlayerInventory.slots.Count)
+        if(inventory == null)
         {
-            Debug.Log("인벤UI, 인벤 개수 다름");
+            inventory = GameManager.Instance.player.inventoryManager.GetInventoryByName(inventoryName);
+        }
+
+        if (slotsUI.Count != inventory.slots.Count)
+        {
+            Debug.Log("Inventory_UI - 인벤UI, 인벤 개수 다름");
             return;
         }
 
         for (int i = 0; i < slotsUI.Count; i++)
         {
-            if (player.PlayerInventory.slots[i].type != CollectableType.NONE)
+            if (inventory.slots[i].type != CollectableType.NONE)
             {
-                slotsUI[i].SetItem(player.PlayerInventory.slots[i]);
+                slotsUI[i].SetItem(inventory.slots[i]);
             }
             else
             {
                 slotsUI[i].SetEmtpy();
             }
         }
+    }
+
+    public void Remove(int slotId)
+    {
+
     }
 
     // 버튼 함수
@@ -180,7 +176,7 @@ public class Inventory_UI : MonoBehaviour
             PlaceItem();
         }
 
-        player.PlayerInventory.SortInventory();
+        inventory.SortInventory();
         Refresh();
     }
 
@@ -189,23 +185,23 @@ public class Inventory_UI : MonoBehaviour
         dragState.isDragging = false;
         bool hasSameItem = false;
 
-        foreach (Slot slot in player.PlayerInventory.slots)
+        foreach (Slot slot in inventory.slots)
         {
             if (selectedItem.type == slot.type)
             {
                 hasSameItem = true;
-                slot.quantity += selectedItem.Quantity;
+                slot.count += selectedItem.Count;
                 selectedItem.SetEmpty();
             }
         }
 
         if (!hasSameItem)
         {
-            foreach (Slot slot in player.PlayerInventory.slots)
+            foreach (Slot slot in inventory.slots)
             {
                 if (slot.type == CollectableType.NONE)
                 {
-                    slot.Refresh(selectedItem.type, selectedItem.Icon, selectedItem.Quantity);
+                    slot.Refresh(selectedItem.type, selectedItem.Icon, selectedItem.Count);
                     selectedItem.SetEmpty();
                 }
             }

@@ -12,7 +12,7 @@ public class Slot_UI : MonoBehaviour
     public Image ItemIcon { get { return itemIcon; } }
     public TextMeshProUGUI QuantityText { get { return quantityText; } }
 
-    public int quantity = 0;
+    public int count = 0;
 
     public void InitializeSlot(int _slotIdx)
     {
@@ -23,17 +23,17 @@ public class Slot_UI : MonoBehaviour
     {
         if (_slot != null)
         {
-            if (_slot.quantity == 0)
+            if (_slot.count == 0)
                 return;
 
             itemIcon.sprite = _slot.icon;
             itemIcon.color = new Color(1, 1, 1, 1);
-            if (_slot.quantity != 1)
-                quantityText.text = _slot.quantity.ToString();
+            if (_slot.count != 1)
+                quantityText.text = _slot.count.ToString();
             else
                 quantityText.text = "";
 
-            quantity = _slot.quantity;
+            count = _slot.count;
         }
     }
 
@@ -42,6 +42,6 @@ public class Slot_UI : MonoBehaviour
         itemIcon.sprite = null;
         itemIcon.color = new Color(1, 1, 1, 0);
         quantityText.text = "";
-        quantity = 0;
+        count = 0;
     }
 }

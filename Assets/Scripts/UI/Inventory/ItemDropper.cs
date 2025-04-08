@@ -17,13 +17,4 @@ public class ItemDropper : MonoBehaviour
         }
     }
 
-    public void DropItem(CollectableItem itemPrefab, Vector3 position, Sprite icon, CollectableType type, int quantity)
-    {
-        var item = Instantiate(itemPrefab, position, Quaternion.identity);
-        item.BounceBasePos = position;
-        item.GetComponent<SpriteRenderer>().sprite = icon;
-        item.Type = type;
-        item.Quantity = quantity;
-        item.IsBouncing = true;
-    }
 }

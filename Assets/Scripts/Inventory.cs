@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading;
+using Unity.VisualScripting.AssemblyQualifiedNameParser;
 using UnityEngine;
 
 [System.Serializable]
@@ -9,33 +11,33 @@ public class Inventory
     {
         public CollectableType type;
         public Sprite icon;
-        public int quantity;
+        public int count;
         public int maxAllowed;
 
         public Slot()
         {
             type = CollectableType.NONE;
-            quantity = 0;
+            count = 0;
             maxAllowed = 999;
         }
 
         public bool CanAddItem()
         {
-            if (quantity < maxAllowed)
+            if (count < maxAllowed)
                 return true;
             return false;
         }
 
-        public void AddItem(CollectableItem item)
+        public void AddItem(Item item)
         {
-            type = item.Type;
-            icon = item.Icon;
-            quantity += item.Quantity;
+            type = item.itemData.type;
+            icon = item.itemData.icon;
+            count += item.itemData.count;
         }
 
         public void SetEmpty()
         {
-            quantity = 0;
+            count = 0;
             icon = null;
             type = CollectableType.NONE;
         }
@@ -44,7 +46,7 @@ public class Inventory
         {
             type = _type;
             icon = _icon;
-            quantity = _quantity;
+            count = _quantity;
         }
     }
 
@@ -59,11 +61,11 @@ public class Inventory
         }
     }
 
-    public void AddItem(CollectableItem item)
+    public void AddItem(Item item)
     {
         foreach (Slot slot in slots)
         {
-            if (slot.type == item.Type && slot.CanAddItem())
+            if (slot.type == item.itemData.type && slot.CanAddItem())
             {
                 slot.AddItem(item);
                 return;
@@ -104,10 +106,15 @@ public class Inventory
                 // 같은거라면 묶어주기
                 else if (slots[i].type.CompareTo(slots[j].type) == 0)
                 {
-                    slots[i].quantity += slots[j].quantity;
+                    slots[i].count += slots[j].count;
                     slots[j].SetEmpty();
                 }
             }
         }
+    }
+
+    public void Remove(int index)
+    {
+        //if();
     }
 }

@@ -1,13 +1,21 @@
+using NUnit.Framework.Interfaces;
 using TMPro;
 using UnityEngine;
 
-public class CollectableItem : MonoBehaviour
+public class ItemData
 {
+    public CollectableType type;
+    public Sprite icon = null;
+    public int count = 0;
+}
+
+public class Item : MonoBehaviour
+{
+    public ItemData itemData = new ItemData();
+
     [SerializeField] CollectableType type;
     SpriteRenderer sprite;
     TextMeshProUGUI textUI;
-    Sprite icon;
-    int quantity = 1;
 
     #region DropItemBounce
     bool isBouncing = false;
@@ -19,31 +27,22 @@ public class CollectableItem : MonoBehaviour
     float bounceDamping = 0.8f;
     #endregion
 
-    public int Quantity { get { return quantity; } set { quantity = value; } }
     public bool IsBouncing { set { isBouncing = value; } }
     public Vector3 BounceBasePos { get { return bounceBasePos; } set { bounceBasePos = value; } }
-
-    public CollectableType Type
-    {
-        get { return type; }
-        set { type = value; }
-    }
-    public Sprite Icon
-    {
-        get { return icon; }
-        set { icon = value; }
-    }
 
     void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
         textUI = GetComponentInChildren<TextMeshProUGUI>();
+
+        itemData.type = type;
+        itemData.icon = sprite.sprite;
+        itemData.count = 1;
     }
 
     private void Start()
     {
         bounceVelocityX = Random.Range(0.4f, 0.6f);
-        icon = sprite.sprite;
 
         SetTextUI();
     }
@@ -56,10 +55,10 @@ public class CollectableItem : MonoBehaviour
 
     void SetTextUI()
     {
-        if (quantity <= 1)
+        if (itemData.count <= 1)
             textUI.text = "";
         else
-            textUI.text = quantity.ToString();
+            textUI.text = itemData.count.ToString();
     }
 
     void BounceItem()
@@ -93,9 +92,9 @@ public class CollectableItem : MonoBehaviour
         Player player = collision.GetComponent<Player>();
         if (player)
         {
-            player.PlayerInventory.AddItem(this);
+            // 인벤 메니저에서 backpack 이름의 인벤토리에 아이템(this) 넣기
+            player.inventoryManager.Add("backpack", this);
             Destroy(gameObject);
-            Inventory_UI.Instance.Refresh();
         }
     }
 }

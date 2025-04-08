@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static Inventory;
@@ -15,10 +13,10 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 {
     PointerEventData pointerData;
     bool isInventoryAreaClicked = false;
-    CollectableItem dropItem;
+    Item dropItem;
 
     protected SelectedItem_UI selectedItem;
-    protected Player player;
+    protected Inventory inventory;
     protected Slot slot;
     protected DragState dragState;
     protected List<Slot> _slots;
@@ -27,10 +25,10 @@ public abstract class BaseClickStrategy : ISelectionStrategy
     protected int _slotQuantity = 0;
     protected int dropItemQuantity = 0;
 
-    public BaseClickStrategy(SelectedItem_UI _selectedItem, Player _player, DragState _dragState)
+    public BaseClickStrategy(SelectedItem_UI _selectedItem, Inventory _inventory, DragState _dragState)
     {
         selectedItem = _selectedItem;
-        player = _player;
+        inventory = _inventory;
         dragState = _dragState;
     }
 
@@ -79,16 +77,25 @@ public abstract class BaseClickStrategy : ISelectionStrategy
             CompleteStartDrag();
         }
 
-        if (Instance.inventoryPanel.activeSelf && !isInventoryAreaClicked)
+        if (GameManager.Instance.uiManager.inventoryPanel.activeSelf && !isInventoryAreaClicked)
         {
-            dropItem = Instance.dropItem.GetComponent<CollectableItem>();
+            dropItem = Instance.dropItem.GetComponent<Item>();
             if (selectedItem.type == CollectableType.NONE)
                 return;
 
             dropItemQuantity = 0;
 
             DropItem();
-            CompleteDropItem();
+            GameManager.Instance.player.CreateDropItem(dropItem, selectedItem.Icon, selectedItem.type, dropItemQuantity);
+
+            dropItem.itemData.count = 0;
+            dropItem.itemData.type = CollectableType.NONE;
+
+            if (selectedItem.Count == 0)
+            {
+                dragState.isDragging = false;
+                selectedItem.SetEmpty();
+            }
         }
 
         else
@@ -115,7 +122,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
     void GetSlot(Slot_UI slotUI)
     {
         // 클릭한 슬롯 저장
-        _slots = player.PlayerInventory.slots;
+        _slots = inventory.slots;
         slot = _slots[slotUI.slotIdx];
     }
 
@@ -134,7 +141,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
         if (slot == null)
             return;
 
-        if (slot.quantity == 0)
+        if (slot.count == 0)
         {
             slot.SetEmpty();
         }
@@ -147,7 +154,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
     protected void CompleteEndDrag()
     {
-        if (selectedItem.Quantity == 0)
+        if (selectedItem.Count == 0)
         {
             dragState.isDragging = false;
             selectedItem.SetEmpty();
@@ -155,36 +162,20 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
         Instance.Refresh();
     }
-
-    void CompleteDropItem()
-    {
-        Vector3 bounceBasePos = new Vector3(player.transform.position.x + 0.5f, player.transform.position.y - 0.5f);
-
-        ItemDropper.Instance.DropItem(dropItem, bounceBasePos, selectedItem.Icon, selectedItem.type, dropItemQuantity);
-
-        dropItem.Quantity = 0;
-        dropItem.Type = CollectableType.NONE;
-
-        if (selectedItem.Quantity == 0)
-        {
-            dragState.isDragging = false;
-            selectedItem.SetEmpty();
-        }
-    }
 }
 
 public class LeftClickStrategy : BaseClickStrategy
 {
-    public LeftClickStrategy(SelectedItem_UI selectedItem, Player player, DragState dragState)
-        : base(selectedItem, player, dragState)
+    public LeftClickStrategy(SelectedItem_UI selectedItem, Inventory inventory, DragState dragState)
+        : base(selectedItem, inventory, dragState)
     { }
 
     protected override void DragStart_SetItemQuantity()
     {
         if (dragState.isDragging)
         {
-            selectedItem.Quantity = slot.quantity;
-            slot.quantity = 0;
+            selectedItem.Count = slot.count;
+            slot.count = 0;
         }
     }
 
@@ -193,8 +184,8 @@ public class LeftClickStrategy : BaseClickStrategy
         // 슬롯 비어있을 경우
         if (slot.type == CollectableType.NONE)
         {
-            _slotQuantity = selectedItem.Quantity;
-            selectedItem.Quantity = 0;
+            _slotQuantity = selectedItem.Count;
+            selectedItem.Count = 0;
             _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, _slotQuantity);
             selectedItem.SetEmpty();
         }
@@ -208,8 +199,8 @@ public class LeftClickStrategy : BaseClickStrategy
 
     protected override void DropItem()
     {
-        dropItemQuantity = selectedItem.Quantity;
-        selectedItem.Quantity = 0;
+        dropItemQuantity = selectedItem.Count;
+        selectedItem.Count = 0;
     }
 
     void SwapItemWithSlot(List<Slot> _slots, Slot _slot, Slot_UI _slotUI, int _slotQuantity)
@@ -217,8 +208,8 @@ public class LeftClickStrategy : BaseClickStrategy
         // 같은 아이템
         if (_slot.type == selectedItem.type)
         {
-            _slotQuantity = _slot.quantity + selectedItem.Quantity;
-            selectedItem.Quantity = 0;
+            _slotQuantity = _slot.count + selectedItem.Count;
+            selectedItem.Count = 0;
             _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, _slotQuantity);
             selectedItem.SetEmpty();
         }
@@ -228,30 +219,31 @@ public class LeftClickStrategy : BaseClickStrategy
             Slot tempslot = new Slot();
             tempslot.type = _slot.type;
             tempslot.icon = _slot.icon;
-            tempslot.quantity = _slot.quantity;
+            tempslot.count = _slot.count;
 
-            _slotQuantity = selectedItem.Quantity;
-            _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, selectedItem.Quantity);
+            _slotQuantity = selectedItem.Count;
+            _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, selectedItem.Count);
 
             selectedItem.type = tempslot.type;
             selectedItem.Icon = tempslot.icon;
-            selectedItem.Quantity = tempslot.quantity;
+            selectedItem.Count = tempslot.count;
         }
     }
 }
 
 public class RightClickStrategy : BaseClickStrategy
 {
-    public RightClickStrategy(SelectedItem_UI selectedItem, Player player, DragState dragState)
-        : base(selectedItem, player, dragState)
+
+    public RightClickStrategy(SelectedItem_UI selectedItem, Inventory inventory, DragState dragState)
+        : base(selectedItem, inventory, dragState)
     { }
 
     protected override void DragStart_SetItemQuantity()
     {
         if (dragState.isDragging)
         {
-            selectedItem.Quantity = 1;
-            slot.quantity -= 1;
+            selectedItem.Count = 1;
+            slot.count -= 1;
         }
     }
 
@@ -260,31 +252,31 @@ public class RightClickStrategy : BaseClickStrategy
         if (slot.type != CollectableType.NONE && slot.type != selectedItem.type)
             return;
 
-        selectedItem.Quantity -= 1;
-        _slotQuantity = slot.quantity + 1;
+        selectedItem.Count -= 1;
+        _slotQuantity = slot.count + 1;
         _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, _slotQuantity);
     }
 
     protected override void DropItem()
     {
         dropItemQuantity = 1;
-        selectedItem.Quantity--;
+        selectedItem.Count--;
     }
 }
 
 
 public class ShiftRightClickStrategy : BaseClickStrategy
 {
-    public ShiftRightClickStrategy(SelectedItem_UI selectedItem, Player player, DragState dragState)
-        : base(selectedItem, player, dragState)
+    public ShiftRightClickStrategy(SelectedItem_UI selectedItem, Inventory inventory, DragState dragState)
+        : base(selectedItem, inventory, dragState)
     { }
 
     protected override void DragStart_SetItemQuantity()
     {
         if (dragState.isDragging)
         {
-            selectedItem.Quantity = (int)Mathf.Ceil(slot.quantity / 2f);
-            slot.quantity -= selectedItem.Quantity;
+            selectedItem.Count = (int)Mathf.Ceil(slot.count / 2f);
+            slot.count -= selectedItem.Count;
         }
     }
 
@@ -293,15 +285,15 @@ public class ShiftRightClickStrategy : BaseClickStrategy
         if (slot.type != CollectableType.NONE && slot.type != selectedItem.type)
             return;
 
-        int tempquantity = selectedItem.Quantity;
-        selectedItem.Quantity = (int)(selectedItem.Quantity / 2f);
-        _slotQuantity = slot.quantity + (tempquantity - selectedItem.Quantity);
+        int tempquantity = selectedItem.Count;
+        selectedItem.Count = (int)(selectedItem.Count / 2f);
+        _slotQuantity = slot.count + (tempquantity - selectedItem.Count);
         _slots[_slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, _slotQuantity);
     }
 
     protected override void DropItem()
     {
-        dropItemQuantity = (int)Mathf.Ceil(selectedItem.Quantity / 2f);
-        selectedItem.Quantity -= dropItemQuantity;
+        dropItemQuantity = (int)Mathf.Ceil(selectedItem.Count / 2f);
+        selectedItem.Count -= dropItemQuantity;
     }
 }
