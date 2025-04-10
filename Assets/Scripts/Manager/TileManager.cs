@@ -4,7 +4,9 @@ using UnityEngine.Tilemaps;
 public class TileManager : MonoBehaviour
 {
     [SerializeField] public Tilemap interactableMap;
+
     [SerializeField] Tile hiddenInteractableTile;
+    [SerializeField] Tile interactedTile;
 
     void Start()
     {
@@ -32,5 +34,15 @@ public class TileManager : MonoBehaviour
             return true;
         else
             return false;
+    }
+
+    public void SetInteracted(Vector3Int position)
+    {
+        if(interactedTile == null)
+        {
+            Debug.Log("TileMananger - interactedTile ¾øÀ½");
+            return;
+        }    
+        interactableMap.SetTile(position, interactedTile);
     }
 }

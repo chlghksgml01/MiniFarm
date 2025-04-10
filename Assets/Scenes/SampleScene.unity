@@ -6017,6 +6017,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactableMap: {fileID: 356956701}
   hiddenInteractableTile: {fileID: 11400000, guid: 1bbedb399c9cdb24d9945d698123c599, type: 2}
+  interactedTile: {fileID: 11400000, guid: 94252f4cf489ba74cb6598844e8abb03, type: 2}
 --- !u!1 &657148321
 GameObject:
   m_ObjectHideFlags: 0
@@ -6637,11 +6638,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4194134174828060832, guid: 5ff6edeb19ced0b488932c73dd6e75d0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 4194134174828060832, guid: 5ff6edeb19ced0b488932c73dd6e75d0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 4194134174828060832, guid: 5ff6edeb19ced0b488932c73dd6e75d0, type: 3}
       propertyPath: m_LocalPosition.z
