@@ -5,6 +5,8 @@ public class GameManager : MonoBehaviour
     static GameManager instance;
     public ItemManager itemManager;
     public UI_Manager uiManager;
+    public TileManager tileManager;
+
     public Player player;
 
     public static GameManager Instance
@@ -35,6 +37,7 @@ public class GameManager : MonoBehaviour
 
         itemManager = gameObject.GetComponent<ItemManager>();
         uiManager = gameObject.GetComponent<UI_Manager>();
+        tileManager = gameObject.GetComponent<TileManager>();
 
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
