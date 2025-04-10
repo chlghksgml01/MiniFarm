@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UI_Manager : MonoBehaviour
 {
-    public Dictionary<string, Inventory_UI> inventoryDict = new Dictionary<string, Inventory_UI>();
+    public Dictionary<string, Inventory_UI> inventoryUIDict = new Dictionary<string, Inventory_UI>();
     public List<Inventory_UI> inventoryUIs;
     public GameObject inventoryPanel;
 
@@ -11,9 +11,9 @@ public class UI_Manager : MonoBehaviour
     {
         foreach (Inventory_UI ui in inventoryUIs)
         {
-            if (!inventoryDict.ContainsKey(ui.inventoryName))
+            if (!inventoryUIDict.ContainsKey(ui.inventoryName))
             {
-                inventoryDict.Add(ui.inventoryName, ui);
+                inventoryUIDict.Add(ui.inventoryName, ui);
             }
         }
     }
@@ -43,24 +43,35 @@ public class UI_Manager : MonoBehaviour
         {
             inventoryPanel.SetActive(false);
 
-            // 보류
-            //if (dragState.isDragging)
-            //{
-            //    dragState.isDragging = false;
-            //    selectedItem.gameObject.SetActive(false);
-            //}
+            if (GetInventoryUIByName("backpack").dragState.isDragging)
+            {
+                GetInventoryUIByName("backpack").CloseInventoryUI();
+            }
         }
     }
 
-    public void RefreshInventoryUI(string inventoryName)
+    public Inventory_UI GetInventoryUIByName(string _name)
     {
-        if (inventoryDict.ContainsKey(inventoryName))
+        if (inventoryUIDict.ContainsKey(_name))
         {
-            inventoryDict[inventoryName].Refresh();
+            return inventoryUIDict[_name];
         }
         else
         {
-            Debug.Log("UI_Manager - Inventory Dictionary에 " + inventoryName + "없음");
+            Debug.Log("UI_Manager - Inventory Dictionary에 " + _name + "없음");
+            return null;
+        }
+    }
+
+    public void RefreshInventoryUI(string _name)
+    {
+        if (inventoryUIDict.ContainsKey(_name))
+        {
+            inventoryUIDict[_name].Refresh();
+        }
+        else
+        {
+            Debug.Log("UI_Manager - Inventory Dictionary에 " + _name + "없음");
             return;
         }
     }

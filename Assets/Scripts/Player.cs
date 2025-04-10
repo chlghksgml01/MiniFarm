@@ -1,14 +1,13 @@
 using UnityEngine;
-using UnityEngine.UIElements;
-using static Inventory_UI;
 
 public class Player : MonoBehaviour
 {
     public InventoryManager inventoryManager;
+    [SerializeField] GameObject dropItem;
 
-    public void CreateDropItem(Item itemPrefab, Sprite icon, CollectableType type, int count)
+    public void CreateDropItem(SelectedItem_UI selectedItem)
     {
-        if(itemPrefab == null || icon == null || type == CollectableType.NONE || count == 0)
+        if (dropItem == null || selectedItem == null)
         {
             Debug.Log("Player - CreateDropItem ½ÇÆÐ");
             return;
@@ -16,11 +15,12 @@ public class Player : MonoBehaviour
 
         Vector3 bounceBasePos = new Vector3(transform.position.x + 0.5f, transform.position.y - 0.5f);
 
-        var item = Instantiate(itemPrefab, bounceBasePos, Quaternion.identity);
-        item.BounceBasePos = bounceBasePos;
-        item.GetComponent<SpriteRenderer>().sprite = icon;
-        item.itemData.type = type;
-        item.itemData.count = count;
-        item.IsBouncing = true;
+        var item = Instantiate(dropItem, bounceBasePos, Quaternion.identity);
+        Item _item = item.GetComponent<Item>();
+        _item.BounceBasePos = bounceBasePos;
+        _item.GetComponent<SpriteRenderer>().sprite = selectedItem.Icon;
+        _item.itemData.type = selectedItem.type;
+        _item.itemData.count = selectedItem.Count;
+        _item.IsBouncing = true;
     }
 }

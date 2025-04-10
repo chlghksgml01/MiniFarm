@@ -8,7 +8,7 @@ public class InventoryManager : MonoBehaviour
 
     void Awake()
     {
-        backpack = new Inventory(Inventory_UI.Instance.slotCount);
+        backpack = new Inventory(GameManager.Instance.uiManager.GetInventoryUIByName("backpack").slotsUIs.Count);
         inventoryDict.Add("backpack", backpack);
     }
 

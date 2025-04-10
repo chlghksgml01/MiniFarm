@@ -7,87 +7,39 @@ using static Inventory;
 
 public class Inventory_UI : MonoBehaviour
 {
+    private Inventory inventory;
     public string inventoryName;
-    private static Inventory_UI instance;
-    public static Inventory_UI Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                // 무조건 씬에 있으니까 씬에서 찾기
-                // 새로 만들면 유니티에서 설정한거 날라감
-                instance = FindFirstObjectByType<Inventory_UI>();
-                if (instance == null)
-                {
-                    Debug.LogError("씬에 Inventory_UI 없음");
-                }
-            }
-            return instance;
-        }
-    }
 
-    enum SelectionMode
-    {
-        All,
-        Half,
-        One,
-    }
+    public List<Slot_UI> slotsUIs = new List<Slot_UI>();
 
-    [SerializeField] List<Slot_UI> slotsUI = new List<Slot_UI>();
+    public SelectedItem_UI selectedItem;
 
-    public int slotCount = 0;
-
-
-    public GameObject dropItem;
-    [SerializeField] SelectedItem_UI selectedItem;
-
-    Inventory inventory;
-
-    // 디자인패턴
     ISelectionStrategy selectionStrategy;
-    private LeftClickStrategy leftClick;
-    private RightClickStrategy rightClick;
-    private ShiftRightClickStrategy shiftRightClick;
+    LeftClickStrategy leftClick;
+    RightClickStrategy rightClick;
+    ShiftRightClickStrategy shiftRightClick;
 
+    public DragState dragState = new DragState();
     public class DragState
     {
         public bool isClick = false;
         public bool isDragging = false;
     }
-    DragState dragState = new DragState();
 
     private void Awake()
     {
-        if (instance != null && instance != this)
-        {
-            Destroy(gameObject);
-        }
-        instance = this;
-
-        DontDestroyOnLoad(this);
-
         selectedItem.gameObject.SetActive(false);
 
-        leftClick = new LeftClickStrategy(selectedItem, inventory, dragState);
-        rightClick = new RightClickStrategy(selectedItem, inventory, dragState);
-        shiftRightClick = new ShiftRightClickStrategy(selectedItem, inventory, dragState);
-
-
-        if (instance && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        leftClick = new LeftClickStrategy(selectedItem, dragState);
+        rightClick = new RightClickStrategy(selectedItem, dragState);
+        shiftRightClick = new ShiftRightClickStrategy(selectedItem, dragState);
 
         GameManager.Instance.uiManager.inventoryPanel.SetActive(false);
 
-        for (int i = 0; i < slotsUI.Count; i++)
+        for (int i = 0; i < slotsUIs.Count; i++)
         {
-            slotsUI[i].InitializeSlot(i); // 각 슬롯에 인덱스 설정
+            slotsUIs[i].InitializeSlot(i); // 각 슬롯에 인덱스 설정
         }
-
-        slotCount = slotsUI.Count;
     }
 
     private void Start()
@@ -139,33 +91,28 @@ public class Inventory_UI : MonoBehaviour
 
     public void Refresh()
     {
-        if(inventory == null)
+        if (inventory == null)
         {
             inventory = GameManager.Instance.player.inventoryManager.GetInventoryByName(inventoryName);
         }
 
-        if (slotsUI.Count != inventory.slots.Count)
+        if (slotsUIs.Count != inventory.slots.Count)
         {
             Debug.Log("Inventory_UI - 인벤UI, 인벤 개수 다름");
             return;
         }
 
-        for (int i = 0; i < slotsUI.Count; i++)
+        for (int i = 0; i < slotsUIs.Count; i++)
         {
             if (inventory.slots[i].type != CollectableType.NONE)
             {
-                slotsUI[i].SetItem(inventory.slots[i]);
+                slotsUIs[i].SetItem(inventory.slots[i]);
             }
             else
             {
-                slotsUI[i].SetEmtpy();
+                slotsUIs[i].SetEmtpy();
             }
         }
-    }
-
-    public void Remove(int slotId)
-    {
-
     }
 
     // 버튼 함수
@@ -206,6 +153,19 @@ public class Inventory_UI : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void CloseInventoryUI()
+    {
+        dragState.isDragging = false;
+        selectedItem.gameObject.SetActive(false);
+
+        DropItem();
+    }
+
+    void DropItem()
+    {
+        GameManager.Instance.player.CreateDropItem(selectedItem);
     }
 
     public void TrashBin()

@@ -15,6 +15,7 @@ public class SelectedItem_UI : MonoBehaviour
         get { return iconImage.sprite; }
         set { iconImage.sprite = value; }
     }
+
     public int Count
     {
         get { return count; }

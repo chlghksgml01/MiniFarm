@@ -9,9 +9,6 @@ public class Slot_UI : MonoBehaviour
     [SerializeField] TextMeshProUGUI quantityText;
     public int slotIdx = 0;
 
-    public Image ItemIcon { get { return itemIcon; } }
-    public TextMeshProUGUI QuantityText { get { return quantityText; } }
-
     public int count = 0;
 
     public void InitializeSlot(int _slotIdx)
