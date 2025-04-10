@@ -28,8 +28,6 @@ public class Inventory_UI : MonoBehaviour
 
     private void Awake()
     {
-        selectedItem.gameObject.SetActive(false);
-
         leftClick = new LeftClickStrategy(selectedItem, dragState);
         rightClick = new RightClickStrategy(selectedItem, dragState);
         shiftRightClick = new ShiftRightClickStrategy(selectedItem, dragState);
@@ -44,6 +42,12 @@ public class Inventory_UI : MonoBehaviour
 
     private void Start()
     {
+        if (selectedItem == null)
+        {
+            Debug.Log("Inventory_UI - selectedItem ¾øÀ½");
+            return;
+        }
+        selectedItem.gameObject.SetActive(false);
         inventory = GameManager.Instance.player.inventoryManager.GetInventoryByName(inventoryName);
     }
 
@@ -69,24 +73,22 @@ public class Inventory_UI : MonoBehaviour
         if (!dragState.isClick && Input.GetMouseButtonDown(0))
         {
             SetStrategy(leftClick);
-            selectionStrategy.ClickHandle();
         }
 
         else if (!dragState.isClick && Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
         {
             SetStrategy(shiftRightClick);
-            selectionStrategy.ClickHandle();
         }
 
         else if (!dragState.isClick && Input.GetMouseButtonDown(1))
         {
             SetStrategy(rightClick);
-            selectionStrategy.ClickHandle();
         }
     }
     public void SetStrategy(ISelectionStrategy currentStrategy)
     {
         selectionStrategy = currentStrategy;
+        selectionStrategy.ClickHandle();
     }
 
     public void Refresh()
@@ -130,42 +132,39 @@ public class Inventory_UI : MonoBehaviour
     void PlaceItem()
     {
         dragState.isDragging = false;
-        bool hasSameItem = false;
 
         foreach (Slot slot in inventory.slots)
         {
             if (selectedItem.type == slot.type)
             {
-                hasSameItem = true;
                 slot.count += selectedItem.Count;
                 selectedItem.SetEmpty();
+                return;
             }
         }
 
-        if (!hasSameItem)
+        foreach (Slot slot in inventory.slots)
         {
-            foreach (Slot slot in inventory.slots)
+            if (slot.type == CollectableType.NONE)
             {
-                if (slot.type == CollectableType.NONE)
-                {
-                    slot.Refresh(selectedItem.type, selectedItem.Icon, selectedItem.Count);
-                    selectedItem.SetEmpty();
-                }
+                slot.Refresh(selectedItem.type, selectedItem.Icon, selectedItem.Count);
+                selectedItem.SetEmpty();
             }
         }
     }
 
     public void CloseInventoryUI()
     {
+        if (dragState.isDragging)
+            DropItem();
+
         dragState.isDragging = false;
         selectedItem.gameObject.SetActive(false);
-
-        DropItem();
     }
 
     void DropItem()
     {
-        GameManager.Instance.player.CreateDropItem(selectedItem);
+        GameManager.Instance.player.CreateDropItem(selectedItem, selectedItem.Count);
     }
 
     public void TrashBin()

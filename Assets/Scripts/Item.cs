@@ -1,20 +1,11 @@
-using NUnit.Framework.Interfaces;
 using TMPro;
 using UnityEngine;
 
-public class ItemData
-{
-    public CollectableType type;
-    public Sprite icon = null;
-    public int count = 0;
-}
-
 public class Item : MonoBehaviour
 {
-    public ItemData itemData = new ItemData();
-
-    [SerializeField] CollectableType type;
-    SpriteRenderer sprite;
+    public Sprite icon = null;
+    public CollectableType type;
+    public int count = 0;
     TextMeshProUGUI textUI;
 
     #region DropItemBounce
@@ -32,18 +23,15 @@ public class Item : MonoBehaviour
 
     void Awake()
     {
-        sprite = GetComponent<SpriteRenderer>();
+        icon = GetComponent<SpriteRenderer>().sprite;
         textUI = GetComponentInChildren<TextMeshProUGUI>();
 
-        itemData.type = type;
-        itemData.icon = sprite.sprite;
-        itemData.count = 1;
+        count = 1;
     }
 
     private void Start()
     {
         bounceVelocityX = Random.Range(0.4f, 0.6f);
-
         SetTextUI();
     }
 
@@ -55,10 +43,10 @@ public class Item : MonoBehaviour
 
     void SetTextUI()
     {
-        if (itemData.count <= 1)
+        if (count <= 1)
             textUI.text = "";
         else
-            textUI.text = itemData.count.ToString();
+            textUI.text = count.ToString();
     }
 
     void BounceItem()
@@ -94,6 +82,7 @@ public class Item : MonoBehaviour
         {
             // 인벤 메니저에서 backpack 이름의 인벤토리에 아이템(this) 넣기
             player.inventoryManager.Add("backpack", this);
+            GameManager.Instance.uiManager.RefreshInventoryUI("backpack");
             Destroy(gameObject);
         }
     }

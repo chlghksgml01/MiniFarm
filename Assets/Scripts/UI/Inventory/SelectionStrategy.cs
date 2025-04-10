@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Unity.Loading;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static Inventory;
@@ -14,7 +12,6 @@ public interface ISelectionStrategy
 public abstract class BaseClickStrategy : ISelectionStrategy
 {
     PointerEventData pointerData;
-    bool isInventoryAreaClicked = false;
 
     protected SelectedItem_UI selectedItem;
     protected Slot selectedSlot;
@@ -53,7 +50,6 @@ public abstract class BaseClickStrategy : ISelectionStrategy
                     slots = GameManager.Instance.player.inventoryManager.GetInventoryByName("backpack").slots;
                 selectedSlot = slots[slotUI.slotIdx];
 
-                isInventoryAreaClicked = true;
                 dragState.isClick = true;
 
                 // 드래깅상태가 아니라면 
@@ -84,15 +80,16 @@ public abstract class BaseClickStrategy : ISelectionStrategy
         }
 
         // 인벤창 켜있는데 인벤말고 다른거 클릭 -> 아이템 드랍
-        if (GameManager.Instance.uiManager.inventoryPanel.activeSelf && !isInventoryAreaClicked)
+        if (GameManager.Instance.uiManager.inventoryPanel.activeSelf && !EventSystem.current.IsPointerOverGameObject())
         {
             if (selectedItem.type == CollectableType.NONE)
                 return;
 
             dropItemQuantity = 0;
 
+            int slotCount = selectedItem.Count;
             DropItem();
-            GameManager.Instance.player.CreateDropItem(selectedItem);
+            GameManager.Instance.player.CreateDropItem(selectedItem, slotCount);
 
             if (selectedItem.Count == 0)
             {
@@ -100,9 +97,6 @@ public abstract class BaseClickStrategy : ISelectionStrategy
                 selectedItem.SetEmpty();
             }
         }
-
-        else
-            isInventoryAreaClicked = false;
     }
 
     protected abstract void DragStart_SetItemQuantity();

@@ -28,7 +28,7 @@ public class InventoryManager : MonoBehaviour
             Debug.Log("InventoryManager - Inventory Dictionary 비어있음");
             return;
         }
-
+            
         if (inventoryDict.ContainsKey(name))
             inventoryDict[name].AddItem(item);
         else

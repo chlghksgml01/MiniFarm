@@ -30,9 +30,9 @@ public class Inventory
 
         public void AddItem(Item item)
         {
-            type = item.itemData.type;
-            icon = item.itemData.icon;
-            count += item.itemData.count;
+            type = item.type;
+            icon = item.icon;
+            count += item.count;
         }
 
         public void SetEmpty()
@@ -65,7 +65,7 @@ public class Inventory
     {
         foreach (Slot slot in slots)
         {
-            if (slot.type == item.itemData.type && slot.CanAddItem())
+            if (slot.type == item.type && slot.CanAddItem())
             {
                 slot.AddItem(item);
                 return;
