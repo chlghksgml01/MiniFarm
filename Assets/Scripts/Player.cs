@@ -25,14 +25,14 @@ public class Player : MonoBehaviour
             return;
         }
 
-        Vector3 bounceBasePos = new Vector3(transform.position.x + 1f, transform.position.y - 1f);
+        Vector3 bounceBasePos = new Vector3(transform.position.x + 1.3f, transform.position.y - 1.3f);
 
         var item = Instantiate(dropItem, bounceBasePos, Quaternion.identity);
         Item _item = item.GetComponent<Item>();
         _item.BounceBasePos = bounceBasePos;
         _item.GetComponent<SpriteRenderer>().sprite = selectedItem.Icon;
-        _item.type = selectedItem.type;
-        _item.icon = selectedItem.Icon;
+        _item.itemData.itemName = selectedItem.itemName;
+        _item.itemData.icon = selectedItem.Icon;
         _item.count = count;
         _item.IsBouncing = true;
     }

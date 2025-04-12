@@ -3,9 +3,8 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public Sprite icon = null;
-    public CollectableType type;
-    public int count = 0;
+    public ItemData itemData;
+    public int count = 1;
     TextMeshProUGUI textUI;
 
     #region DropItemBounce
@@ -13,9 +12,9 @@ public class Item : MonoBehaviour
     Vector3 bounceBasePos;
     float bounceY = 0f;
     float bounceVelocityX = 0.5f;
-    float bounceVelocityY = 2f;
+    float bounceVelocityY = 3f;
     float gravity = 9f;
-    float bounceDamping = 0.8f;
+    float bounceDamping = 0.7f;
     #endregion
 
     public bool IsBouncing { set { isBouncing = value; } }
@@ -23,10 +22,7 @@ public class Item : MonoBehaviour
 
     void Awake()
     {
-        icon = GetComponent<SpriteRenderer>().sprite;
         textUI = GetComponentInChildren<TextMeshProUGUI>();
-
-        count = 1;
     }
 
     private void Start()
@@ -64,7 +60,7 @@ public class Item : MonoBehaviour
             bounceVelocityY *= -bounceDamping;
 
             // 작게 튀면 정지
-            if (Mathf.Abs(bounceVelocityY) < 1f)
+            if (Mathf.Abs(bounceVelocityY) < 1.5f)
             {
                 bounceVelocityY = 0f;
                 isBouncing = false;
@@ -86,9 +82,4 @@ public class Item : MonoBehaviour
             Destroy(gameObject);
         }
     }
-}
-
-public enum CollectableType
-{
-    NONE, CARROT_SEED, CORN_SEED, EGGPLANT_SEED, LETTUCE_SEED, POTATO_SEED, PUMPKIN_SEED, RADISH_SEED, STRAWBERRY_SEED, TOMATO_SEED, WATERMELON_SEED, WHEAT_SEED
 }

@@ -9,14 +9,14 @@ public class Inventory
     [System.Serializable]
     public class Slot
     {
-        public CollectableType type;
+        public string itemName;
         public Sprite icon;
         public int count;
         public int maxAllowed;
 
         public Slot()
         {
-            type = CollectableType.NONE;
+            itemName = "";
             count = 0;
             maxAllowed = 999;
         }
@@ -30,21 +30,28 @@ public class Inventory
 
         public void AddItem(Item item)
         {
-            type = item.type;
-            icon = item.icon;
+            itemName = item.itemData.itemName;
+            icon = item.itemData.icon;
             count += item.count;
         }
 
         public void SetEmpty()
         {
+            itemName = "";
             count = 0;
             icon = null;
-            type = CollectableType.NONE;
         }
 
-        public void Refresh(CollectableType _type, Sprite _icon, int _quantity)
+        public bool IsEmpty()
         {
-            type = _type;
+            if (itemName == "")
+                return true;
+            return false;
+        }
+
+        public void Refresh(string _name, Sprite _icon, int _quantity)
+        {
+            itemName = _name;
             icon = _icon;
             count = _quantity;
         }
@@ -65,7 +72,7 @@ public class Inventory
     {
         foreach (Slot slot in slots)
         {
-            if (slot.type == item.type && slot.CanAddItem())
+            if (slot.itemName == item.itemData.itemName && slot.CanAddItem())
             {
                 slot.AddItem(item);
                 return;
@@ -74,7 +81,7 @@ public class Inventory
 
         foreach (Slot slot in slots)
         {
-            if (slot.type == CollectableType.NONE)
+            if (slot.IsEmpty())
             {
                 slot.AddItem(item);
                 return;
@@ -88,15 +95,16 @@ public class Inventory
         {
             for (int j = i + 1; j < slots.Count; j++)
             {
-                // none이 앞에 있으면 뒤로 보내기
-                if (slots[i].type == CollectableType.NONE)
+                // 아무것도 없으면 뒤로 보내기
+                if (slots[i].IsEmpty())
                 {
                     var temp = slots[i];
                     slots[i] = slots[j];
                     slots[j] = temp;
                 }
 
-                else if (slots[i].type > slots[j].type && slots[j].type != CollectableType.NONE)
+                // j가 i보다 뒤에 있으면
+                else if (slots[j].itemName.CompareTo(slots[i].itemName) > 0 && slots[j].IsEmpty())
                 {
                     var temp = slots[i];
                     slots[i] = slots[j];
@@ -104,17 +112,12 @@ public class Inventory
                 }
 
                 // 같은거라면 묶어주기
-                else if (slots[i].type.CompareTo(slots[j].type) == 0)
+                else if (slots[i].itemName.CompareTo(slots[j].itemName) == 0)
                 {
                     slots[i].count += slots[j].count;
                     slots[j].SetEmpty();
                 }
             }
         }
-    }
-
-    public void Remove(int index)
-    {
-        //if();
     }
 }

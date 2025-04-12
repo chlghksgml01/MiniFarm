@@ -106,7 +106,7 @@ public class Inventory_UI : MonoBehaviour
 
         for (int i = 0; i < slotsUIs.Count; i++)
         {
-            if (inventory.slots[i].type != CollectableType.NONE)
+            if (!inventory.slots[i].IsEmpty())
             {
                 slotsUIs[i].SetItem(inventory.slots[i]);
             }
@@ -135,7 +135,7 @@ public class Inventory_UI : MonoBehaviour
 
         foreach (Slot slot in inventory.slots)
         {
-            if (selectedItem.type == slot.type)
+            if (selectedItem.itemName == slot.itemName)
             {
                 slot.count += selectedItem.Count;
                 selectedItem.SetEmpty();
@@ -145,10 +145,11 @@ public class Inventory_UI : MonoBehaviour
 
         foreach (Slot slot in inventory.slots)
         {
-            if (slot.type == CollectableType.NONE)
+            if (slot.IsEmpty())
             {
-                slot.Refresh(selectedItem.type, selectedItem.Icon, selectedItem.Count);
+                slot.Refresh(selectedItem.itemName, selectedItem.Icon, selectedItem.Count);
                 selectedItem.SetEmpty();
+                return;
             }
         }
     }

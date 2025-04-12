@@ -16,8 +16,8 @@ public class TileManager : MonoBehaviour
         // 타일맵 안의 모든 셀 좌표 하나씩 가져오기
         foreach (var position in interactableMap.cellBounds.allPositionsWithin)
         {
-            TileBase existingTile = interactableMap.GetTile(position);
-            if (existingTile != null)
+            TileBase tile = interactableMap.GetTile(position);
+            if (tile != null && tile.name == "Visible_InteractableTile")
             {
                 interactableMap.SetTile(position, hiddenInteractableTile);
 

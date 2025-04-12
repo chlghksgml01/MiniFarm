@@ -7,7 +7,7 @@ public class SelectedItem_UI : MonoBehaviour
     [SerializeField] Image iconImage;
     [SerializeField] TextMeshProUGUI textUI;
 
-    public CollectableType type;
+    public string itemName;
     private int count;
 
     public Sprite Icon
@@ -37,8 +37,16 @@ public class SelectedItem_UI : MonoBehaviour
     public void SetEmpty()
     {
         count = 0;
-        type = CollectableType.NONE;
+        itemName = "";
         iconImage.sprite = null;
         gameObject.SetActive(false);
+    }
+
+    public bool IsEmpty()
+    {
+        if (count == 0)
+            return true;
+        else
+            return false;
     }
 }

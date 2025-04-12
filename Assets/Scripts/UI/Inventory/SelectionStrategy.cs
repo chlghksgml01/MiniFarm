@@ -56,7 +56,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
                 if (!dragState.isDragging)
                 {
                     // 빈칸이면 return
-                    if (selectedSlot.type == CollectableType.NONE)
+                    if (selectedSlot.IsEmpty())
                         return;
 
                     // 아이템 드래그 시작
@@ -82,14 +82,11 @@ public abstract class BaseClickStrategy : ISelectionStrategy
         // 인벤창 켜있는데 인벤말고 다른거 클릭 -> 아이템 드랍
         if (GameManager.Instance.uiManager.inventoryPanel.activeSelf && !EventSystem.current.IsPointerOverGameObject())
         {
-            if (selectedItem.type == CollectableType.NONE)
+            if (selectedItem.IsEmpty())
                 return;
 
-            dropItemQuantity = 0;
-
-            int slotCount = selectedItem.Count;
             DropItem();
-            GameManager.Instance.player.CreateDropItem(selectedItem, slotCount);
+            GameManager.Instance.player.CreateDropItem(selectedItem, dropItemQuantity);
 
             if (selectedItem.Count == 0)
             {
@@ -122,7 +119,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
         selectedItem.gameObject.SetActive(true);
 
         // SelectedItem 설정 -> 개수는 선택모드에 따라 나중에 지정
-        selectedItem.type = selectedSlot.type;
+        selectedItem.itemName = selectedSlot.itemName;
         selectedItem.Icon = selectedSlot.icon;
     }
 
@@ -167,11 +164,11 @@ public class LeftClickStrategy : BaseClickStrategy
     protected override void DragEnd_SetItemQuantity()
     {
         // 슬롯 비어있을 경우
-        if (selectedSlot.type == CollectableType.NONE)
+        if (selectedSlot.IsEmpty())
         {
             slotQuantity = selectedItem.Count;
             selectedItem.Count = 0;
-            selectedSlot.Refresh(selectedItem.type, selectedItem.Icon, slotQuantity);
+            selectedSlot.Refresh(selectedItem.itemName, selectedItem.Icon, slotQuantity);
             selectedItem.SetEmpty();
         }
 
@@ -191,25 +188,25 @@ public class LeftClickStrategy : BaseClickStrategy
     void SwapItemWithSlot()
     {
         // 같은 아이템
-        if (selectedSlot.type == selectedItem.type)
+        if (selectedSlot.itemName == selectedItem.itemName)
         {
             slotQuantity = selectedSlot.count + selectedItem.Count;
             selectedItem.Count = 0;
-            slots[slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, slotQuantity);
+            slots[slotUI.slotIdx].Refresh(selectedItem.itemName, selectedItem.Icon, slotQuantity);
             selectedItem.SetEmpty();
         }
         // 다른 아이템
         else
         {
             Slot tempslot = new Slot();
-            tempslot.type = selectedSlot.type;
+            tempslot.itemName = selectedSlot.itemName;
             tempslot.icon = selectedSlot.icon;
             tempslot.count = selectedSlot.count;
 
             slotQuantity = selectedItem.Count;
-            slots[slotUI.slotIdx].Refresh(selectedItem.type, selectedItem.Icon, selectedItem.Count);
+            slots[slotUI.slotIdx].Refresh(selectedItem.itemName, selectedItem.Icon, selectedItem.Count);
 
-            selectedItem.type = tempslot.type;
+            selectedItem.itemName = tempslot.itemName;
             selectedItem.Icon = tempslot.icon;
             selectedItem.Count = tempslot.count;
         }
@@ -230,12 +227,12 @@ public class RightClickStrategy : BaseClickStrategy
 
     protected override void DragEnd_SetItemQuantity()
     {
-        if (selectedSlot.type != CollectableType.NONE && selectedSlot.type != selectedItem.type)
+        if (!selectedSlot.IsEmpty() && selectedSlot.itemName != selectedItem.itemName)
             return;
 
         selectedItem.Count -= 1;
         slotQuantity = selectedSlot.count + 1;
-        selectedSlot.Refresh(selectedItem.type, selectedItem.Icon, slotQuantity);
+        selectedSlot.Refresh(selectedItem.itemName, selectedItem.Icon, slotQuantity);
     }
 
     protected override void DropItem()
@@ -259,13 +256,13 @@ public class ShiftRightClickStrategy : BaseClickStrategy
 
     protected override void DragEnd_SetItemQuantity()
     {
-        if (selectedSlot.type != CollectableType.NONE && selectedSlot.type != selectedItem.type)
+        if (!selectedSlot.IsEmpty() && selectedSlot.itemName != selectedItem.itemName)
             return;
 
         int tempquantity = selectedItem.Count;
         selectedItem.Count = (int)(selectedItem.Count / 2f);
         slotQuantity = selectedSlot.count + (tempquantity - selectedItem.Count);
-        selectedSlot.Refresh(selectedItem.type, selectedItem.Icon, slotQuantity);
+        selectedSlot.Refresh(selectedItem.itemName, selectedItem.Icon, slotQuantity);
     }
 
     protected override void DropItem()
