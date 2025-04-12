@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -6,7 +7,9 @@ public class TileManager : MonoBehaviour
     [SerializeField] public Tilemap interactableMap;
 
     [SerializeField] Tile hiddenInteractableTile;
-    [SerializeField] Tile interactedTile;
+    [SerializeField] List<Tile> interactedTileDict;
+
+    Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
 
     void Start()
     {
@@ -17,13 +20,18 @@ public class TileManager : MonoBehaviour
             if (existingTile != null)
             {
                 interactableMap.SetTile(position, hiddenInteractableTile);
+
+                TileData tileData = new TileData();
+                tileDict.Add(position, tileData);
             }
         }
     }
 
-    public bool IsInteractable(Vector3Int position)
+    public bool IsInteractable(Vector3 position)
     {
-        TileBase tile = interactableMap.GetTile(position);
+        Vector3Int cellPosition = interactableMap.WorldToCell(position);
+        TileBase tile = interactableMap.GetTile(cellPosition);
+
         if (tile == null)
         {
             Debug.Log("TileMananger - position에 타일 없음");
@@ -36,13 +44,23 @@ public class TileManager : MonoBehaviour
             return false;
     }
 
-    public void SetInteracted(Vector3Int position)
+    public void SetInteracted(Vector3 position)
     {
-        if(interactedTile == null)
+        Vector3Int cellPosition = interactableMap.WorldToCell(position);
+
+        SetTileState(cellPosition);
+    }
+
+    void SetTileState(Vector3Int cellPosition)
+    {
+        if (!tileDict.ContainsKey(cellPosition))
         {
-            Debug.Log("TileMananger - interactedTile 없음");
+            Debug.LogWarning("TileManager - cellPosition에 타일 없음");
             return;
-        }    
-        interactableMap.SetTile(position, interactedTile);
+        }
+
+        // 타일맵에 타일 설정, 타일 상태 설정
+        tileDict[cellPosition].tileState = TileState.Tilled;
+        TileLogicHelper.SetTiles(cellPosition, tileDict, interactableMap, interactedTileDict);
     }
 }

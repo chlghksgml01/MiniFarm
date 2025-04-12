@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: tilledTile2_Down
+  m_Name: 16tilledITile_Vertical
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 1461680413, guid: 1947e3b74c08d4a42b8e7f45302abde5, type: 3}
+  m_Sprite: {fileID: 8239673070834437554, guid: 6b02f6a1e439dc84e93c69904bf8c374, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

@@ -9,11 +9,10 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Vector3Int position = new Vector3Int((int)transform.position.x, (int)transform.position.y, 0);
-            if (GameManager.Instance.tileManager.IsInteractable(position))
+            if (GameManager.Instance.tileManager.IsInteractable(transform.position))
             {
                 Debug.Log("Tile is interactable");
-                GameManager.Instance.tileManager.SetInteracted(position);
+                GameManager.Instance.tileManager.SetInteracted(transform.position);
             }
         }
     }
