@@ -4,9 +4,34 @@ public class Player : MonoBehaviour
 {
     public InventoryManager inventoryManager;
     [SerializeField] GameObject dropItem;
+    PlayerStateMachine stateMachine;
 
-    private void Update()
+    public Vector3 moveInput;
+    public Animator anim;
+    public float speed = 5f;
+
+    public PlayerIdleState idleState;
+    public PlayerMoveState moveState;
+
+    private void Awake()
     {
+        anim = GetComponentInChildren<Animator>();
+        if (anim == null)
+            Debug.Log("Player - anim ¾øÀ½");
+
+        stateMachine = new PlayerStateMachine();
+
+        idleState = new PlayerIdleState(this, stateMachine, "isMoving");
+        moveState = new PlayerMoveState(this, stateMachine, "isMoving");
+
+        stateMachine.Initialize(idleState);
+    }
+
+    void Update()
+    {
+        moveInput.x = Input.GetAxisRaw("Horizontal");
+        moveInput.y = Input.GetAxisRaw("Vertical");
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (GameManager.Instance.tileManager.IsInteractable(transform.position))
@@ -15,6 +40,13 @@ public class Player : MonoBehaviour
                 GameManager.Instance.tileManager.SetInteracted(transform.position);
             }
         }
+
+        stateMachine.currentState.UpdateState();
+    }
+
+    private void FixedUpdate()
+    {
+        transform.Translate(moveInput * speed * Time.fixedDeltaTime);
     }
 
     public void CreateDropItem(SelectedItem_UI selectedItem, int count)
