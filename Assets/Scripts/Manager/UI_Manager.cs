@@ -3,19 +3,13 @@ using UnityEngine;
 
 public class UI_Manager : MonoBehaviour
 {
-    public Dictionary<string, Inventory_UI> inventoryUIDict = new Dictionary<string, Inventory_UI>();
-    public List<Inventory_UI> inventoryUIs;
-    public GameObject inventoryPanel;
+    [SerializeField] public Inventory_UI inventory_UI;
+    [SerializeField] public GameObject inventoryPanel;
+    [SerializeField] public GameObject toolBarPanel;
 
-    private void Awake()
+    private void Start()
     {
-        foreach (Inventory_UI ui in inventoryUIs)
-        {
-            if (!inventoryUIDict.ContainsKey(ui.inventoryName))
-            {
-                inventoryUIDict.Add(ui.inventoryName, ui);
-            }
-        }
+        inventory_UI.Refresh();
     }
 
     private void Update()
@@ -34,45 +28,27 @@ public class UI_Manager : MonoBehaviour
             return;
         }
 
+        if (toolBarPanel == null)
+        {
+            Debug.Log("UI_Manager - 툴바패널 없음");
+            return;
+        }
+
         if (!inventoryPanel.activeSelf)
         {
+            toolBarPanel.SetActive(false);
             inventoryPanel.SetActive(true);
-            RefreshInventoryUI("backpack");
+            inventory_UI.Refresh();
         }
         else
         {
             inventoryPanel.SetActive(false);
+            toolBarPanel.SetActive(true);
 
-            if (GetInventoryUIByName("backpack").dragState.isDragging)
+            if (inventory_UI.dragState.isDragging)
             {
-                GetInventoryUIByName("backpack").CloseInventoryUI();
+                inventory_UI.CloseInventoryUI();
             }
-        }
-    }
-
-    public Inventory_UI GetInventoryUIByName(string _name)
-    {
-        if (inventoryUIDict.ContainsKey(_name))
-        {
-            return inventoryUIDict[_name];
-        }
-        else
-        {
-            Debug.Log("UI_Manager - Inventory Dictionary에 " + _name + "없음");
-            return null;
-        }
-    }
-
-    public void RefreshInventoryUI(string _name)
-    {
-        if (inventoryUIDict.ContainsKey(_name))
-        {
-            inventoryUIDict[_name].Refresh();
-        }
-        else
-        {
-            Debug.Log("UI_Manager - Inventory Dictionary에 " + _name + "없음");
-            return;
         }
     }
 }

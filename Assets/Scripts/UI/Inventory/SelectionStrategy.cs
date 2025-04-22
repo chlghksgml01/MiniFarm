@@ -47,7 +47,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
             {
                 // 클릭한 슬롯UI의 슬롯 가져오기
                 if (slots == null)
-                    slots = GameManager.Instance.player.inventoryManager.GetInventoryByName("backpack").slots;
+                    slots = GameManager.Instance.player.inventory.slots;
                 selectedSlot = slots[slotUI.slotIdx];
 
                 dragState.isClick = true;
@@ -131,9 +131,9 @@ public abstract class BaseClickStrategy : ISelectionStrategy
         if (selectedSlot.count == 0)
             selectedSlot.SetEmpty();
 
-        GameManager.Instance.uiManager.GetInventoryUIByName("backpack").Refresh();
+        GameManager.Instance.uiManager.inventory_UI.Refresh();
 
-        selectedItem.transform.SetParent(GameManager.Instance.uiManager.GetInventoryUIByName("backpack").transform.root); // UI 최상위로 이동
+        selectedItem.transform.SetParent(GameManager.Instance.uiManager.inventory_UI.transform.root); // UI 최상위로 이동
         selectedItem.transform.position = pointerData.position;
     }
 
@@ -145,7 +145,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
             selectedItem.SetEmpty();
         }
 
-        GameManager.Instance.uiManager.GetInventoryUIByName("backpack").Refresh();
+        GameManager.Instance.uiManager.inventory_UI.Refresh();
     }
 }
 

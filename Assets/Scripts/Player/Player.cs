@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public InventoryManager inventoryManager;
+    public Inventory inventory;
     [SerializeField] GameObject dropItem;
     PlayerStateMachine stateMachine;
 
@@ -25,6 +25,9 @@ public class Player : MonoBehaviour
         moveState = new PlayerMoveState(this, stateMachine, "isMoving");
 
         stateMachine.Initialize(idleState);
+
+        inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
+
     }
 
     void Update()

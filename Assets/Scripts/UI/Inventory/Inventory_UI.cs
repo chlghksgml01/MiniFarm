@@ -8,11 +8,12 @@ using static Inventory;
 public class Inventory_UI : MonoBehaviour
 {
     private Inventory inventory;
-    public string inventoryName;
+    [SerializeField] private ToolBar_UI toolBar_UI;
 
     public List<Slot_UI> slotsUIs = new List<Slot_UI>();
 
     public SelectedItem_UI selectedItem;
+
 
     ISelectionStrategy selectionStrategy;
     LeftClickStrategy leftClick;
@@ -48,7 +49,7 @@ public class Inventory_UI : MonoBehaviour
             return;
         }
         selectedItem.gameObject.SetActive(false);
-        inventory = GameManager.Instance.player.inventoryManager.GetInventoryByName(inventoryName);
+        inventory = GameManager.Instance.player.inventory;
     }
 
     void Update()
@@ -95,7 +96,7 @@ public class Inventory_UI : MonoBehaviour
     {
         if (inventory == null)
         {
-            inventory = GameManager.Instance.player.inventoryManager.GetInventoryByName(inventoryName);
+            inventory = GameManager.Instance.player.inventory;
         }
 
         if (slotsUIs.Count != inventory.slots.Count)
@@ -109,10 +110,16 @@ public class Inventory_UI : MonoBehaviour
             if (!inventory.slots[i].IsEmpty())
             {
                 slotsUIs[i].SetItem(inventory.slots[i]);
+
+                if (i < 9)
+                    toolBar_UI.slotsUIs[i].SetItem(inventory.slots[i]);
             }
             else
             {
                 slotsUIs[i].SetEmtpy();
+
+                if (i < 9)
+                    toolBar_UI.slotsUIs[i].SetEmtpy();
             }
         }
     }

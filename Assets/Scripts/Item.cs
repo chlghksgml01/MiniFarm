@@ -77,8 +77,8 @@ public class Item : MonoBehaviour
         if (player)
         {
             // 인벤 메니저에서 backpack 이름의 인벤토리에 아이템(this) 넣기
-            player.inventoryManager.Add("backpack", this);
-            GameManager.Instance.uiManager.RefreshInventoryUI("backpack");
+            player.inventory.AddItem(this);
+            GameManager.Instance.uiManager.inventory_UI.Refresh();
             Destroy(gameObject);
         }
     }

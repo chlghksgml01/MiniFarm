@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -7.272583, y: 2.015625}
-  m_SizeDelta: {x: 44, y: 30.5}
+  m_AnchoredPosition: {x: -6.7075806, y: 3.5386353}
+  m_SizeDelta: {x: 50.5, y: 30.5}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &4955512563207727958
 CanvasRenderer:
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -0.0138549805, y: 0, z: 0, w: 0}
+  m_margin: {x: 0.045654297, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 4498293119931708713}
   - component: {fileID: 322919968833071363}
   m_Layer: 5
-  m_Name: Slot
+  m_Name: ToolBarSlot
   m_TagString: InventorySlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -264,8 +264,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1, y: -1.3425903}
-  m_SizeDelta: {x: -30, y: -35}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -21.25, y: -21.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6714672206805478241
 CanvasRenderer:
