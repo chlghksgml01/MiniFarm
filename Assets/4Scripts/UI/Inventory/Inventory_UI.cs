@@ -33,8 +33,6 @@ public class Inventory_UI : MonoBehaviour
         rightClick = new RightClickStrategy(selectedItem, dragState);
         shiftRightClick = new ShiftRightClickStrategy(selectedItem, dragState);
 
-        GameManager.Instance.uiManager.inventoryPanel.SetActive(false);
-
         for (int i = 0; i < slotsUIs.Count; i++)
         {
             slotsUIs[i].InitializeSlot(i); // °¢ ½½·Ô¿¡ ÀÎµ¦½º ¼³Á¤

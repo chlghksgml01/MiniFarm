@@ -36,8 +36,8 @@ public class UI_Manager : MonoBehaviour
 
         if (!inventoryPanel.activeSelf)
         {
-            toolBarPanel.SetActive(false);
             inventoryPanel.SetActive(true);
+            toolBarPanel.SetActive(false);
             inventory_UI.Refresh();
         }
         else

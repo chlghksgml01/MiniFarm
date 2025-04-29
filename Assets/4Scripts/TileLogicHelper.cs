@@ -6,7 +6,7 @@ public static class TileLogicHelper
 {
     public static void SetTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, Tilemap interactableMap, List<Tile> interactedTileDict)
     {
-        if (tileDict[cellPosition].tileState == TileState.Empty)
+        if (!tileDict.TryGetValue(cellPosition, out var centerTileData) || centerTileData.tileState == TileState.Empty)
             return;
 
         Vector3Int rightCellPos = cellPosition + Vector3Int.right;
@@ -14,32 +14,48 @@ public static class TileLogicHelper
         Vector3Int upCellPos = cellPosition + Vector3Int.up;
         Vector3Int downCellPos = cellPosition + Vector3Int.down;
 
-        tileDict[rightCellPos].tileConnectDir |= TileConnectDir.Left;
-        if (tileDict[rightCellPos].tileState != TileState.Empty)
+        // 오른쪽
+        if (tileDict.TryGetValue(rightCellPos, out var rightTileData))
         {
-            tileDict[cellPosition].tileConnectDir |= TileConnectDir.Right;
-            UpdateConnectState(rightCellPos, tileDict, interactableMap, interactedTileDict);
+            rightTileData.tileConnectDir |= TileConnectDir.Left;
+            if (rightTileData.tileState != TileState.Empty)
+            {
+                centerTileData.tileConnectDir |= TileConnectDir.Right;
+                UpdateConnectState(rightCellPos, tileDict, interactableMap, interactedTileDict);
+            }
         }
 
-        tileDict[leftCellPos].tileConnectDir |= TileConnectDir.Right;
-        if (tileDict[leftCellPos].tileState != TileState.Empty)
+        // 왼쪽
+        if (tileDict.TryGetValue(leftCellPos, out var leftTileData))
         {
-            tileDict[cellPosition].tileConnectDir |= TileConnectDir.Left;
-            UpdateConnectState(leftCellPos, tileDict, interactableMap, interactedTileDict);
+            leftTileData.tileConnectDir |= TileConnectDir.Right;
+            if (leftTileData.tileState != TileState.Empty)
+            {
+                centerTileData.tileConnectDir |= TileConnectDir.Left;
+                UpdateConnectState(leftCellPos, tileDict, interactableMap, interactedTileDict);
+            }
         }
 
-        tileDict[upCellPos].tileConnectDir |= TileConnectDir.Down;
-        if (tileDict[upCellPos].tileState != TileState.Empty)
+        // 위쪽
+        if (tileDict.TryGetValue(upCellPos, out var upTileData))
         {
-            tileDict[cellPosition].tileConnectDir |= TileConnectDir.Up;
-            UpdateConnectState(upCellPos, tileDict, interactableMap, interactedTileDict);
+            upTileData.tileConnectDir |= TileConnectDir.Down;
+            if (upTileData.tileState != TileState.Empty)
+            {
+                centerTileData.tileConnectDir |= TileConnectDir.Up;
+                UpdateConnectState(upCellPos, tileDict, interactableMap, interactedTileDict);
+            }
         }
 
-        tileDict[downCellPos].tileConnectDir |= TileConnectDir.Up;
-        if (tileDict[downCellPos].tileState != TileState.Empty)
+        // 아래쪽
+        if (tileDict.TryGetValue(downCellPos, out var downTileData))
         {
-            tileDict[cellPosition].tileConnectDir |= TileConnectDir.Down;
-            UpdateConnectState(downCellPos, tileDict, interactableMap, interactedTileDict);
+            downTileData.tileConnectDir |= TileConnectDir.Up;
+            if (downTileData.tileState != TileState.Empty)
+            {
+                centerTileData.tileConnectDir |= TileConnectDir.Down;
+                UpdateConnectState(downCellPos, tileDict, interactableMap, interactedTileDict);
+            }
         }
 
         UpdateConnectState(cellPosition, tileDict, interactableMap, interactedTileDict);

@@ -1,8 +1,11 @@
+using TreeEditor;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public Inventory inventory;
+    private TileManager tileManager;
+
     [SerializeField] GameObject dropItem;
     PlayerStateMachine stateMachine;
 
@@ -12,6 +15,7 @@ public class Player : MonoBehaviour
 
     public PlayerIdleState idleState;
     public PlayerMoveState moveState;
+
 
     private void Awake()
     {
@@ -27,7 +31,7 @@ public class Player : MonoBehaviour
         stateMachine.Initialize(idleState);
 
         inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
-
+        tileManager = GameManager.Instance.tileManager;
     }
 
     void Update()
@@ -37,10 +41,18 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (GameManager.Instance.tileManager.IsInteractable(transform.position))
+            if (tileManager != null)
             {
-                Debug.Log("Tile is interactable");
-                GameManager.Instance.tileManager.SetInteracted(transform.position);
+                Vector3Int position = new Vector3Int((int)transform.position.x, (int)transform.position.y, 0);
+                string tileName = tileManager.GetTileName(position);
+
+                if (!string.IsNullOrWhiteSpace(tileName))
+                {
+                    if(tileName == "InVisible_InteractableTile")
+                    {
+                        tileManager.SetInteracted(position);
+                    }
+                }
             }
         }
 

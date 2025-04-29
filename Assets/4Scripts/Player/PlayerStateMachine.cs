@@ -3,7 +3,6 @@ public class PlayerStateMachine
 {
     public PlayerState currentState;
 
-
     public void Initialize(PlayerState newState)
     {
         currentState = newState;

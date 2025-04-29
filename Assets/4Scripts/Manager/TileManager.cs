@@ -27,23 +27,6 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    public bool IsInteractable(Vector3 position)
-    {
-        Vector3Int cellPosition = interactableMap.WorldToCell(position);
-        TileBase tile = interactableMap.GetTile(cellPosition);
-
-        if (tile == null)
-        {
-            Debug.Log("TileMananger - position에 타일 없음");
-            return false;
-        }
-
-        if (tile.name == "InVisible_InteractableTile")
-            return true;
-        else
-            return false;
-    }
-
     public void SetInteracted(Vector3 position)
     {
         Vector3Int cellPosition = interactableMap.WorldToCell(position);
@@ -62,5 +45,19 @@ public class TileManager : MonoBehaviour
         // 타일맵에 타일 설정, 타일 상태 설정
         tileDict[cellPosition].tileState = TileState.Tilled;
         TileLogicHelper.SetTiles(cellPosition, tileDict, interactableMap, interactedTileDict);
+    }
+
+    public string GetTileName(Vector3Int position)
+    {
+        if(interactableMap != null)
+        {
+            TileBase tile = interactableMap.GetTile(position);
+
+            if(tile != null)
+            {
+                return tile.name;
+            }
+        }
+        return "";
     }
 }
