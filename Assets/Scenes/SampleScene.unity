@@ -7409,7 +7409,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -410.8014, y: 0}
+  m_AnchoredPosition: {x: -411, y: 0}
   m_SizeDelta: {x: 85.5, y: 87.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &734523106
@@ -24242,6 +24242,8 @@ MonoBehaviour:
   - {fileID: 1802947286}
   - {fileID: 2144092894}
   - {fileID: 1779941141}
+  nextSelectedUIDistance: 102.5
+  selectedUI: {fileID: 734523104}
 --- !u!1 &1449725795
 GameObject:
   m_ObjectHideFlags: 0
