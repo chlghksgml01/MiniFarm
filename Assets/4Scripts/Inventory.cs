@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Threading;
-using Unity.VisualScripting.AssemblyQualifiedNameParser;
 using UnityEngine;
 
 [System.Serializable]
@@ -9,51 +7,47 @@ public class Inventory
     [System.Serializable]
     public class Slot
     {
-        public string itemName;
-        public Sprite icon;
-        public int count;
+        public ItemData slotItemData = new ItemData();
         public int maxAllowed;
 
         public Slot()
         {
-            itemName = "";
-            count = 0;
             maxAllowed = 999;
         }
 
         public bool CanAddItem()
         {
-            if (count < maxAllowed)
+            if (slotItemData.count < maxAllowed)
                 return true;
             return false;
         }
 
         public void AddItem(Item item)
         {
-            itemName = item.itemData.itemName;
-            icon = item.itemData.icon;
-            count += item.count;
+            slotItemData.itemName = item.itemData.itemName;
+            slotItemData.icon = item.itemData.icon;
+            slotItemData.itemType = item.itemData.itemType;
+            slotItemData.count += item.count;
         }
 
         public void SetEmpty()
         {
-            itemName = "";
-            count = 0;
-            icon = null;
+            slotItemData.SetEmpty();
         }
 
         public bool IsEmpty()
         {
-            if (itemName == "")
+            if (slotItemData.IsEmpty())
                 return true;
             return false;
         }
 
-        public void Refresh(string _name, Sprite _icon, int _quantity)
+        public void SetSlotItemData(ItemData itemData, int _count = -99)
         {
-            itemName = _name;
-            icon = _icon;
-            count = _quantity;
+            if(_count!= -99)
+                itemData.count = _count;
+
+            slotItemData.SetItemData(itemData);
         }
     }
 
@@ -72,7 +66,7 @@ public class Inventory
     {
         foreach (Slot slot in slots)
         {
-            if (slot.itemName == item.itemData.itemName && slot.CanAddItem())
+            if (slot.slotItemData.itemName == item.itemData.itemName && slot.CanAddItem())
             {
                 slot.AddItem(item);
                 return;
@@ -104,7 +98,7 @@ public class Inventory
                 }
 
                 // j가 i보다 뒤에 있으면
-                else if (slots[j].itemName.CompareTo(slots[i].itemName) > 0 && slots[j].IsEmpty())
+                else if (slots[j].slotItemData.itemName.CompareTo(slots[i].slotItemData.itemName) > 0 && slots[j].IsEmpty())
                 {
                     var temp = slots[i];
                     slots[i] = slots[j];
@@ -112,9 +106,9 @@ public class Inventory
                 }
 
                 // 같은거라면 묶어주기
-                else if (slots[i].itemName.CompareTo(slots[j].itemName) == 0)
+                else if (slots[i].slotItemData.itemName.CompareTo(slots[j].slotItemData.itemName) == 0)
                 {
-                    slots[i].count += slots[j].count;
+                    slots[i].slotItemData.count += slots[j].slotItemData.count;
                     slots[j].SetEmpty();
                 }
             }

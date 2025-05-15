@@ -3,19 +3,19 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Inventory inventory;
+    [SerializeField] private GameObject dropItem;
+    [SerializeField] public float speed = 5f;
+
+    [HideInInspector] public Inventory inventory;
     private TileManager tileManager;
 
-    [SerializeField] GameObject dropItem;
-    PlayerStateMachine stateMachine;
+    [HideInInspector] public Vector3 moveInput;
+    [HideInInspector] public Animator anim;
 
-    public Vector3 moveInput;
-    public Animator anim;
-    public float speed = 5f;
+    [HideInInspector] public PlayerIdleState idleState;
+    [HideInInspector] public PlayerMoveState moveState;
 
-    public PlayerIdleState idleState;
-    public PlayerMoveState moveState;
-
+    private PlayerStateMachine stateMachine;
 
     private void Awake()
     {
@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
 
                 if (!string.IsNullOrWhiteSpace(tileName))
                 {
-                    if(tileName == "InVisible_InteractableTile")
+                    if (tileName == "InVisible_InteractableTile")
                     {
                         tileManager.SetInteracted(position);
                     }
@@ -76,11 +76,7 @@ public class Player : MonoBehaviour
 
         var item = Instantiate(dropItem, bounceBasePos, Quaternion.identity);
         Item _item = item.GetComponent<Item>();
-        _item.BounceBasePos = bounceBasePos;
-        _item.GetComponent<SpriteRenderer>().sprite = selectedItem.Icon;
-        _item.itemData.itemName = selectedItem.itemName;
-        _item.itemData.icon = selectedItem.Icon;
-        _item.count = count;
-        _item.IsBouncing = true;
+
+        _item.SpawnItem(true, bounceBasePos, selectedItem.selectedItemData, count);
     }
 }

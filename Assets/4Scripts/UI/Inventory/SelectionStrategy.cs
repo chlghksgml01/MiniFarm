@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static Inventory;
@@ -13,7 +14,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 {
     PointerEventData pointerData;
 
-    protected SelectedItem_UI selectedItem;
+    protected SelectedItem_UI selectedItemUI;
     protected Slot selectedSlot;
     protected DragState dragState;
     protected List<Slot> slots;
@@ -24,7 +25,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
     public BaseClickStrategy(SelectedItem_UI _selectedItem, DragState _dragState)
     {
-        selectedItem = _selectedItem;
+        selectedItemUI = _selectedItem;
         dragState = _dragState;
     }
 
@@ -64,6 +65,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
                     // 선택모드에 따라 개수 설정
                     DragStart_SetItemQuantity();
+                    selectedItemUI.SetSelectedUIItemData(selectedSlot);
                 }
                 // 드래깅상태라면 : 내려놓기
                 else
@@ -82,16 +84,16 @@ public abstract class BaseClickStrategy : ISelectionStrategy
         // 인벤창 켜있는데 인벤말고 다른거 클릭 -> 아이템 드랍
         if (GameManager.Instance.uiManager.inventoryPanel.activeSelf && !EventSystem.current.IsPointerOverGameObject())
         {
-            if (selectedItem.IsEmpty())
+            if (selectedItemUI.IsEmpty())
                 return;
 
             DropItem();
-            GameManager.Instance.player.CreateDropItem(selectedItem, dropItemQuantity);
+            GameManager.Instance.player.CreateDropItem(selectedItemUI, dropItemQuantity);
 
-            if (selectedItem.Count == 0)
+            if (selectedItemUI.selectedItemData.count == 0)
             {
                 dragState.isDragging = false;
-                selectedItem.SetEmpty();
+                selectedItemUI.SetEmpty();
             }
         }
     }
@@ -116,11 +118,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
     void StartItemDrag()
     {
         dragState.isDragging = true;
-        selectedItem.gameObject.SetActive(true);
-
-        // SelectedItem 설정 -> 개수는 선택모드에 따라 나중에 지정
-        selectedItem.itemName = selectedSlot.itemName;
-        selectedItem.Icon = selectedSlot.icon;
+        selectedItemUI.gameObject.SetActive(true);
     }
 
     protected void CompleteStartDrag()
@@ -128,21 +126,21 @@ public abstract class BaseClickStrategy : ISelectionStrategy
         if (selectedSlot == null)
             return;
 
-        if (selectedSlot.count == 0)
+        if (selectedSlot.slotItemData.count == 0)
             selectedSlot.SetEmpty();
 
         GameManager.Instance.uiManager.inventory_UI.Refresh();
 
-        selectedItem.transform.SetParent(GameManager.Instance.uiManager.inventory_UI.transform.root); // UI 최상위로 이동
-        selectedItem.transform.position = pointerData.position;
+        selectedItemUI.transform.SetParent(GameManager.Instance.uiManager.inventory_UI.transform.root); // UI 최상위로 이동
+        selectedItemUI.transform.position = pointerData.position;
     }
 
     protected void CompleteEndDrag()
     {
-        if (selectedItem.Count == 0)
+        if (selectedItemUI.selectedItemData.count == 0)
         {
             dragState.isDragging = false;
-            selectedItem.SetEmpty();
+            selectedItemUI.SetEmpty();
         }
 
         GameManager.Instance.uiManager.inventory_UI.Refresh();
@@ -157,8 +155,8 @@ public class LeftClickStrategy : BaseClickStrategy
 
     protected override void DragStart_SetItemQuantity()
     {
-        selectedItem.Count = selectedSlot.count;
-        selectedSlot.count = 0;
+        selectedItemUI.SetCount(selectedSlot.slotItemData.count);
+        selectedSlot.slotItemData.count = 0;
     }
 
     protected override void DragEnd_SetItemQuantity()
@@ -166,10 +164,8 @@ public class LeftClickStrategy : BaseClickStrategy
         // 슬롯 비어있을 경우
         if (selectedSlot.IsEmpty())
         {
-            slotQuantity = selectedItem.Count;
-            selectedItem.Count = 0;
-            selectedSlot.Refresh(selectedItem.itemName, selectedItem.Icon, slotQuantity);
-            selectedItem.SetEmpty();
+            selectedSlot.SetSlotItemData(selectedItemUI.selectedItemData);
+            selectedItemUI.SetEmpty();
         }
 
         // 다른 아이템 있을 경우
@@ -181,34 +177,29 @@ public class LeftClickStrategy : BaseClickStrategy
 
     protected override void DropItem()
     {
-        dropItemQuantity = selectedItem.Count;
-        selectedItem.Count = 0;
+        dropItemQuantity = selectedItemUI.selectedItemData.count;
+        selectedItemUI.SetCount(0);
     }
 
     void SwapItemWithSlot()
     {
         // 같은 아이템
-        if (selectedSlot.itemName == selectedItem.itemName)
+        if (selectedSlot.slotItemData.itemName == selectedItemUI.selectedItemData.itemName)
         {
-            slotQuantity = selectedSlot.count + selectedItem.Count;
-            selectedItem.Count = 0;
-            slots[slotUI.slotIdx].Refresh(selectedItem.itemName, selectedItem.Icon, slotQuantity);
-            selectedItem.SetEmpty();
+            slotQuantity = selectedSlot.slotItemData.count + selectedItemUI.selectedItemData.count;
+            selectedItemUI.SetCount(0);
+            selectedSlot.SetSlotItemData(selectedItemUI.selectedItemData, slotQuantity);
+            selectedItemUI.SetEmpty();
         }
         // 다른 아이템
         else
         {
             Slot tempslot = new Slot();
-            tempslot.itemName = selectedSlot.itemName;
-            tempslot.icon = selectedSlot.icon;
-            tempslot.count = selectedSlot.count;
+            tempslot.slotItemData.SetItemData(selectedItemUI.selectedItemData);
 
-            slotQuantity = selectedItem.Count;
-            slots[slotUI.slotIdx].Refresh(selectedItem.itemName, selectedItem.Icon, selectedItem.Count);
+            selectedItemUI.SetSelectedUIItemData(selectedSlot, true);
 
-            selectedItem.itemName = tempslot.itemName;
-            selectedItem.Icon = tempslot.icon;
-            selectedItem.Count = tempslot.count;
+            selectedSlot.SetSlotItemData(tempslot.slotItemData);
         }
     }
 }
@@ -221,24 +212,24 @@ public class RightClickStrategy : BaseClickStrategy
 
     protected override void DragStart_SetItemQuantity()
     {
-        selectedItem.Count = 1;
-        selectedSlot.count -= 1;
+        selectedItemUI.SetCount(1);
+        selectedSlot.slotItemData.count -= 1;
     }
 
     protected override void DragEnd_SetItemQuantity()
     {
-        if (!selectedSlot.IsEmpty() && selectedSlot.itemName != selectedItem.itemName)
+        if (!selectedSlot.IsEmpty() && selectedSlot.slotItemData.itemName != selectedItemUI.selectedItemData.itemName)
             return;
 
-        selectedItem.Count -= 1;
-        slotQuantity = selectedSlot.count + 1;
-        selectedSlot.Refresh(selectedItem.itemName, selectedItem.Icon, slotQuantity);
+        selectedItemUI.SetCount(selectedItemUI.selectedItemData.count - 1);
+        slotQuantity = selectedSlot.slotItemData.count + 1;
+        selectedSlot.SetSlotItemData(selectedItemUI.selectedItemData, slotQuantity);
     }
 
     protected override void DropItem()
     {
         dropItemQuantity = 1;
-        selectedItem.Count--;
+        selectedItemUI.SetCount(selectedItemUI.selectedItemData.count - 1);
     }
 }
 
@@ -250,24 +241,27 @@ public class ShiftRightClickStrategy : BaseClickStrategy
 
     protected override void DragStart_SetItemQuantity()
     {
-        selectedItem.Count = (int)Mathf.Ceil(selectedSlot.count / 2f);
-        selectedSlot.count -= selectedItem.Count;
+        int count = (int)Mathf.Ceil(selectedSlot.slotItemData.count / 2f);
+        selectedItemUI.SetCount(count);
+        selectedSlot.slotItemData.count -= selectedItemUI.selectedItemData.count;
     }
 
     protected override void DragEnd_SetItemQuantity()
     {
-        if (!selectedSlot.IsEmpty() && selectedSlot.itemName != selectedItem.itemName)
+        if (!selectedSlot.IsEmpty() && selectedSlot.slotItemData.itemName != selectedItemUI.selectedItemData.itemName)
             return;
 
-        int tempquantity = selectedItem.Count;
-        selectedItem.Count = (int)(selectedItem.Count / 2f);
-        slotQuantity = selectedSlot.count + (tempquantity - selectedItem.Count);
-        selectedSlot.Refresh(selectedItem.itemName, selectedItem.Icon, slotQuantity);
+        int tempquantity = selectedItemUI.selectedItemData.count;
+        int count = (int)(selectedItemUI.selectedItemData.count / 2f);
+        selectedItemUI.SetCount(count);
+        slotQuantity = selectedSlot.slotItemData.count + (tempquantity - selectedItemUI.selectedItemData.count);
+        selectedSlot.SetSlotItemData(selectedItemUI.selectedItemData, slotQuantity);
     }
 
     protected override void DropItem()
     {
-        dropItemQuantity = (int)Mathf.Ceil(selectedItem.Count / 2f);
-        selectedItem.Count -= dropItemQuantity;
+        dropItemQuantity = (int)Mathf.Ceil(selectedItemUI.selectedItemData.count / 2f);
+        int count = selectedItemUI.selectedItemData.count - dropItemQuantity;
+        selectedItemUI.SetCount(count);
     }
 }

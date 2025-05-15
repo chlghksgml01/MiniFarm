@@ -15,6 +15,9 @@ public class ItemManager : MonoBehaviour
 
     void AddItem(Item item)
     {
+        if (item == null || item.itemData == null)
+            return;
+
         if (!itemDict.ContainsKey(item.itemData.itemName))
             itemDict.Add(item.itemData.itemName, item);
     }

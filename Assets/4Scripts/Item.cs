@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public ItemData itemData;
+    public ScriptableItemData itemData;
     public int count = 1;
     TextMeshProUGUI textUI;
 
@@ -17,7 +17,6 @@ public class Item : MonoBehaviour
     float bounceDamping = 0.7f;
     #endregion
 
-    public bool IsBouncing { set { isBouncing = value; } }
     public Vector3 BounceBasePos { get { return bounceBasePos; } set { bounceBasePos = value; } }
 
     void Awake()
@@ -81,5 +80,18 @@ public class Item : MonoBehaviour
             GameManager.Instance.uiManager.inventory_UI.Refresh();
             Destroy(gameObject);
         }
+    }
+
+    public void SpawnItem(bool _isBouncing, Vector3 bounceBasePos, ItemData _itemData, int _count)
+    {
+        isBouncing = _isBouncing;
+        BounceBasePos = bounceBasePos;
+
+        itemData.itemName = _itemData.itemName;
+        itemData.icon = _itemData.icon;
+        itemData.itemType = _itemData.itemType;
+
+        GetComponent<SpriteRenderer>().sprite = _itemData.icon;
+        count = _count;
     }
 }

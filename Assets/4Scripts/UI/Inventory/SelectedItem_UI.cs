@@ -7,44 +7,56 @@ public class SelectedItem_UI : MonoBehaviour
     [SerializeField] Image iconImage;
     [SerializeField] TextMeshProUGUI textUI;
 
-    public string itemName;
-    private int count;
-
-    public Sprite Icon
-    {
-        get { return iconImage.sprite; }
-        set { iconImage.sprite = value; }
-    }
-
-    public int Count
-    {
-        get { return count; }
-        set
-        {
-            count = value;
-            if (count > 1)
-                textUI.text = count.ToString();
-            else
-                textUI.text = "";
-        }
-    }
+    public ItemData selectedItemData = new ItemData();
 
     private void Awake()
     {
         iconImage.raycastTarget = false;
     }
 
+    private void Update()
+    {
+        int a = 0;
+    }
+
+    public void SetSelectedUIItemData(Inventory.Slot slot, bool isSetCount = false)
+    {
+        selectedItemData.itemName = slot.slotItemData.itemName;
+        selectedItemData.icon = slot.slotItemData.icon;
+        selectedItemData.itemType = slot.slotItemData.itemType;
+
+        if (isSetCount)
+            selectedItemData.count = slot.slotItemData.count;
+
+        SetCount();
+
+        iconImage.sprite = selectedItemData.icon;
+    }
+
+    public void SetCount(int _count = -99)
+    {
+        if(_count != -99)
+            selectedItemData.count = _count;
+
+        if (selectedItemData.count > 1)
+            textUI.text = selectedItemData.count.ToString();
+        else
+            textUI.text = "";
+    }
+
+
     public void SetEmpty()
     {
-        count = 0;
-        itemName = "";
+        selectedItemData.SetEmpty();
+
+        textUI.text = "";
         iconImage.sprite = null;
         gameObject.SetActive(false);
     }
 
     public bool IsEmpty()
     {
-        if (count == 0)
+        if (selectedItemData.IsEmpty())
             return true;
         else
             return false;

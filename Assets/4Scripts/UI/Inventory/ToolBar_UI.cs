@@ -24,6 +24,7 @@ public class ToolBar_UI : MonoBehaviour
         if (Input.mouseScrollDelta.y > 0)
         {
             selectedSlotIdx--;
+            CheckSlot();
             DrawSelectedUI();
         }
         // 아래로 스크롤 -> 오른쪽으로 
@@ -31,6 +32,15 @@ public class ToolBar_UI : MonoBehaviour
         {
             selectedSlotIdx++;
             DrawSelectedUI();
+        }
+    }
+
+    private void CheckSlot()
+    {
+        // 선택한 슬롯에 뭔가 있다면
+        if (!GameManager.Instance.player.inventory.slots[selectedSlotIdx].IsEmpty())
+        {
+            // 애니메이션 변경
         }
     }
 

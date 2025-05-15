@@ -20,17 +20,18 @@ public class Slot_UI : MonoBehaviour
     {
         if (_slot != null)
         {
-            if (_slot.count == 0)
+            if (_slot.slotItemData.count == 0)
                 return;
 
-            itemIcon.sprite = _slot.icon;
+            itemIcon.sprite = _slot.slotItemData.icon;
             itemIcon.color = new Color(1, 1, 1, 1);
-            if (_slot.count != 1)
-                quantityText.text = _slot.count.ToString();
+
+            if (_slot.slotItemData.count != 1)
+                quantityText.text = _slot.slotItemData.count.ToString();
             else
                 quantityText.text = "";
 
-            count = _slot.count;
+            count = _slot.slotItemData.count;
         }
     }
 

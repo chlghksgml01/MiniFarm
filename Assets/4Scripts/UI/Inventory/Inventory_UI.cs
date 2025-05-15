@@ -14,7 +14,6 @@ public class Inventory_UI : MonoBehaviour
 
     public SelectedItem_UI selectedItem;
 
-
     ISelectionStrategy selectionStrategy;
     LeftClickStrategy leftClick;
     RightClickStrategy rightClick;
@@ -140,9 +139,9 @@ public class Inventory_UI : MonoBehaviour
 
         foreach (Slot slot in inventory.slots)
         {
-            if (selectedItem.itemName == slot.itemName)
+            if (selectedItem.selectedItemData.itemName == slot.slotItemData.itemName)
             {
-                slot.count += selectedItem.Count;
+                slot.slotItemData.count += selectedItem.selectedItemData.count;
                 selectedItem.SetEmpty();
                 return;
             }
@@ -152,7 +151,7 @@ public class Inventory_UI : MonoBehaviour
         {
             if (slot.IsEmpty())
             {
-                slot.Refresh(selectedItem.itemName, selectedItem.Icon, selectedItem.Count);
+                slot.SetSlotItemData(selectedItem.selectedItemData);
                 selectedItem.SetEmpty();
                 return;
             }
@@ -170,7 +169,7 @@ public class Inventory_UI : MonoBehaviour
 
     void DropItem()
     {
-        GameManager.Instance.player.CreateDropItem(selectedItem, selectedItem.Count);
+        GameManager.Instance.player.CreateDropItem(selectedItem, selectedItem.selectedItemData.count);
     }
 
     public void TrashBin()
