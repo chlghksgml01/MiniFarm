@@ -20,23 +20,22 @@ public class ToolBar_UI : MonoBehaviour
 
     private void Update()
     {
-        // 위로 스크롤 -> 왼쪽으로 
-        if (Input.mouseScrollDelta.y > 0)
+        float scrollInpt = Input.mouseScrollDelta.y;
+        if (scrollInpt != 0)
         {
-            selectedSlotIdx--;
+            selectedSlotIdx += scrollInpt > 0 ? -1 : 1;
             CheckSlot();
-            DrawSelectedUI();
-        }
-        // 아래로 스크롤 -> 오른쪽으로 
-        else if (Input.mouseScrollDelta.y < 0)
-        {
-            selectedSlotIdx++;
             DrawSelectedUI();
         }
     }
 
     private void CheckSlot()
     {
+        if (selectedSlotIdx < 0)
+            selectedSlotIdx = slotCount - 1;
+        if (selectedSlotIdx >= slotCount)
+            selectedSlotIdx = 0;
+
         // 선택한 슬롯에 뭔가 있다면
         if (!GameManager.Instance.player.inventory.slots[selectedSlotIdx].IsEmpty())
         {
@@ -46,11 +45,6 @@ public class ToolBar_UI : MonoBehaviour
 
     private void DrawSelectedUI()
     {
-        if (selectedSlotIdx < 0)
-            selectedSlotIdx = slotCount - 1;
-        if (selectedSlotIdx >= slotCount)
-            selectedSlotIdx = 0;
-
         Vector3 nextSelectedUIPos = selectedUI.transform.position;
         nextSelectedUIPos.x = initialSelectedUIPosX + nextSelectedUIDistance * selectedSlotIdx;
         selectedUI.transform.position = nextSelectedUIPos;
