@@ -10,6 +10,8 @@ public class UI_Manager : MonoBehaviour
     private void Start()
     {
         inventory_UI.Refresh();
+        inventoryPanel.SetActive(false);
+        toolBarPanel.SetActive(true);
     }
 
     private void Update()

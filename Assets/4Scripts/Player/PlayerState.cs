@@ -26,15 +26,6 @@ public class PlayerState
 
     public virtual void UpdateState()
     {
-        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
-        if (scrollInput > 0f)
-        {
-            toolBar.MoveSelectedSlot(-1);
-        }
-        else if (scrollInput < 0f)
-        {
-            toolBar.MoveSelectedSlot(1);
-        }
     }
 
     public virtual void ExitState()

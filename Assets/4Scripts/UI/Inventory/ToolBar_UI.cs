@@ -3,11 +3,46 @@ using UnityEngine;
 
 public class ToolBar_UI : MonoBehaviour
 {
-    public List<Slot_UI> slotsUIs = new List<Slot_UI>();
     private Slot_UI selectedSlot;
+    private int slotCount;
+    private int selectedSlotIdx = 0;
+    private float initialSelectedUIPosX;
 
-    public void MoveSelectedSlot(int dir)
+    [SerializeField] public List<Slot_UI> slotsUIs;
+    [SerializeField] private float nextSelectedUIDistance = 102.5f;
+    [SerializeField] private GameObject selectedUI;
+
+    private void Awake()
     {
+        slotCount = slotsUIs.Count;
+        initialSelectedUIPosX = selectedUI.transform.position.x;
+    }
 
+    private void Update()
+    {
+        // 위로 스크롤 -> 왼쪽으로 
+        if (Input.mouseScrollDelta.y > 0)
+        {
+            selectedSlotIdx--;
+            DrawSelectedUI();
+        }
+        // 아래로 스크롤 -> 오른쪽으로 
+        else if (Input.mouseScrollDelta.y < 0)
+        {
+            selectedSlotIdx++;
+            DrawSelectedUI();
+        }
+    }
+
+    private void DrawSelectedUI()
+    {
+        if (selectedSlotIdx < 0)
+            selectedSlotIdx = slotCount - 1;
+        if (selectedSlotIdx >= slotCount)
+            selectedSlotIdx = 0;
+
+        Vector3 nextSelectedUIPos = selectedUI.transform.position;
+        nextSelectedUIPos.x = initialSelectedUIPosX + nextSelectedUIDistance * selectedSlotIdx;
+        selectedUI.transform.position = nextSelectedUIPos;
     }
 }
