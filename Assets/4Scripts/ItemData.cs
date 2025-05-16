@@ -12,11 +12,15 @@ public class ItemData
     public int count = 0;
     public ItemType itemType = ItemType.None;
 
-    public void SetItemData(ItemData newItemData)
+    public void SetItemData(ItemData newItemData, int _count = -99)
     {
+        if (_count != -99)
+            count = _count;
+        else
+            count = newItemData.count;
+
         itemName = newItemData.itemName;
         icon = newItemData.icon;
-        count = newItemData.count;
         itemType = newItemData.itemType;
     }
 

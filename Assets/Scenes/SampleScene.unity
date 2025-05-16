@@ -24698,7 +24698,7 @@ MonoBehaviour:
   - {fileID: 1802947286}
   - {fileID: 2144092894}
   - {fileID: 1779941141}
-  nextSelectedUIDistance: 102.5
+  nextSelectedUIDistance: 102.8
   selectedUI: {fileID: 734523104}
 --- !u!1 &1449725795
 GameObject:

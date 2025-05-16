@@ -14,11 +14,6 @@ public class SelectedItem_UI : MonoBehaviour
         iconImage.raycastTarget = false;
     }
 
-    private void Update()
-    {
-        int a = 0;
-    }
-
     public void SetSelectedUIItemData(Inventory.Slot slot, bool isSetCount = false)
     {
         selectedItemData.itemName = slot.slotItemData.itemName;
@@ -43,7 +38,6 @@ public class SelectedItem_UI : MonoBehaviour
         else
             textUI.text = "";
     }
-
 
     public void SetEmpty()
     {

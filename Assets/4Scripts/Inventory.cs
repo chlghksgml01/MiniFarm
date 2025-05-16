@@ -44,10 +44,10 @@ public class Inventory
 
         public void SetSlotItemData(ItemData itemData, int _count = -99)
         {
-            if(_count!= -99)
-                itemData.count = _count;
-
-            slotItemData.SetItemData(itemData);
+            if (_count != -99)
+                slotItemData.SetItemData(itemData, _count);
+            else
+                slotItemData.SetItemData(itemData);
         }
     }
 
