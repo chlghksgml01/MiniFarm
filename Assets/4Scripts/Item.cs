@@ -93,5 +93,7 @@ public class Item : MonoBehaviour
 
         GetComponent<SpriteRenderer>().sprite = _itemData.icon;
         count = _count;
+
+        GameManager.Instance.uiManager.toolBar_UI.CheckSlot();
     }
 }
