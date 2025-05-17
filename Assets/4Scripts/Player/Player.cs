@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public PlayerMoveState moveState;
 
     private PlayerStateMachine stateMachine;
+    private bool isHoldItem = false;
 
     private void Awake()
     {
@@ -78,5 +79,11 @@ public class Player : MonoBehaviour
         Item _item = item.GetComponent<Item>();
 
         _item.SpawnItem(true, bounceBasePos, selectedItem.selectedItemData, count);
+    }
+
+    public void SetItemHold(bool _isHoldItem)
+    {
+        isHoldItem = _isHoldItem;
+        anim.SetBool("isHoldItem", isHoldItem);
     }
 }

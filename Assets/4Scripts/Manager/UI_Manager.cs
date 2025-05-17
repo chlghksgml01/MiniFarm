@@ -4,6 +4,7 @@ using UnityEngine;
 public class UI_Manager : MonoBehaviour
 {
     [SerializeField] public Inventory_UI inventory_UI;
+    [SerializeField] public ToolBar_UI toolBar_UI;
     [SerializeField] public GameObject inventoryPanel;
     [SerializeField] public GameObject toolBarPanel;
 

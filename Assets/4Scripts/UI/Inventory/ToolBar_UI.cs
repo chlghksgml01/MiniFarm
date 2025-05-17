@@ -29,18 +29,17 @@ public class ToolBar_UI : MonoBehaviour
         }
     }
 
-    private void CheckSlot()
+    public void CheckSlot()
     {
         if (selectedSlotIdx < 0)
             selectedSlotIdx = slotCount - 1;
         if (selectedSlotIdx >= slotCount)
             selectedSlotIdx = 0;
 
-        // 선택한 슬롯에 뭔가 있다면
         if (!GameManager.Instance.player.inventory.slots[selectedSlotIdx].IsEmpty())
-        {
-            // 애니메이션 변경
-        }
+            GameManager.Instance.player.SetItemHold(true);
+        else
+            GameManager.Instance.player.SetItemHold(false);
     }
 
     private void DrawSelectedUI()

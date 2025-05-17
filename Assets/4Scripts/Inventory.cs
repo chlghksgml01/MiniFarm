@@ -78,6 +78,7 @@ public class Inventory
             if (slot.IsEmpty())
             {
                 slot.AddItem(item);
+                GameManager.Instance.uiManager.toolBar_UI.CheckSlot();
                 return;
             }
         }

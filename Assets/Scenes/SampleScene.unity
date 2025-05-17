@@ -7408,6 +7408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory_UI: {fileID: 657148323}
+  toolBar_UI: {fileID: 1419314158}
   inventoryPanel: {fileID: 657148321}
   toolBarPanel: {fileID: 1419314156}
 --- !u!114 &632928897

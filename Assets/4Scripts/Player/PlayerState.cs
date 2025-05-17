@@ -7,16 +7,11 @@ public class PlayerState
     protected PlayerStateMachine stateMachine;
     protected string animBoolName;
 
-    private ToolBar_UI toolBar;
-
     public PlayerState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName)
     {
         player = _player;
         stateMachine = _stateMachine;
         animBoolName = _animBoolName;
-
-        if (toolBar == null)
-            toolBar = GameManager.Instance.uiManager.toolBarPanel.GetComponent<ToolBar_UI>();
     }
 
     public virtual void EnterState()
