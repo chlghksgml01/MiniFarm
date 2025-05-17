@@ -52034,34 +52034,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2291338546584941062, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: dropItem
-      value: 
-      objectReference: {fileID: 66480898167699907, guid: 2b9ad9bbe0fac8249a9504c70ac28eb2, type: 3}
-    - target: {fileID: 3363399488693892103, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_Size.x
-      value: 0.7473614
-      objectReference: {fileID: 0}
-    - target: {fileID: 3363399488693892103, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_Size.y
-      value: 1.2471952
-      objectReference: {fileID: 0}
-    - target: {fileID: 3363399488693892103, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_Offset.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3363399488693892103, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_Offset.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6320830372756349322, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6320830372756349322, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6320830372756349322, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.5
@@ -52102,20 +52074,23 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7282898735484896204, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_SortingLayer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7282898735484896204, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -455653977
+    - target: {fileID: 7052277153817599581, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7613151609588484325, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 9124266449851594242, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
+    - target: {fileID: 9136690710509677243, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9136690710509677243, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
 
     private PlayerStateMachine stateMachine;
     private bool isHoldItem = false;
+    [SerializeField] public HoldItem holdItem;
 
     private void Awake()
     {
@@ -81,9 +82,19 @@ public class Player : MonoBehaviour
         _item.SpawnItem(true, bounceBasePos, selectedItem.selectedItemData, count);
     }
 
-    public void SetItemHold(bool _isHoldItem)
+    public void SetItemHold(bool _isHoldItem, ItemData _holdItem = null)
     {
         isHoldItem = _isHoldItem;
         anim.SetBool("isHoldItem", isHoldItem);
+
+        if (_holdItem != null)
+        {
+            holdItem.gameObject.SetActive(true);
+            holdItem.SetHoldItem(_holdItem);
+        }
+        else
+        {
+            holdItem.gameObject.SetActive(false);
+        }
     }
 }

@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class ToolBar_UI : MonoBehaviour
 {
-    private Slot_UI selectedSlot;
     private int slotCount;
     private int selectedSlotIdx = 0;
     private float initialSelectedUIPosX;
@@ -37,7 +36,10 @@ public class ToolBar_UI : MonoBehaviour
             selectedSlotIdx = 0;
 
         if (!GameManager.Instance.player.inventory.slots[selectedSlotIdx].IsEmpty())
-            GameManager.Instance.player.SetItemHold(true);
+        {
+            ItemData holdItemData = GameManager.Instance.player.inventory.slots[selectedSlotIdx].slotItemData;
+            GameManager.Instance.player.SetItemHold(true, holdItemData);
+        }
         else
             GameManager.Instance.player.SetItemHold(false);
     }
