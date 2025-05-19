@@ -40,6 +40,10 @@ public class Player : MonoBehaviour
     {
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
+        // 단위벡터-> 대각선으로 가도 같은 속도로 이동하게끔
+        moveInput = moveInput.normalized;
+
+        transform.Translate(moveInput * speed * Time.fixedDeltaTime);
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -59,11 +63,6 @@ public class Player : MonoBehaviour
         }
 
         stateMachine.currentState.UpdateState();
-    }
-
-    private void FixedUpdate()
-    {
-        transform.Translate(moveInput * speed * Time.fixedDeltaTime);
     }
 
     public void CreateDropItem(SelectedItem_UI selectedItem, int count)
