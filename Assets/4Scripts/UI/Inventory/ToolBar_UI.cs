@@ -36,12 +36,12 @@ public class ToolBar_UI : MonoBehaviour
             selectedSlotIdx = 0;
 
         ItemData selectedItemData = GameManager.Instance.player.inventory.slots[selectedSlotIdx].slotItemData;
-        
+
         if (!selectedItemData.IsEmpty() && selectedItemData.itemType == ItemType.Consumable)
-        {
             GameManager.Instance.player.SetItemHold(true, selectedItemData);
-        }
-        else
+        else if (!selectedItemData.IsEmpty() && selectedItemData.itemType == ItemType.Tool)
+            GameManager.Instance.player.SetItemHold(false, selectedItemData);
+        else if (selectedItemData.IsEmpty())
             GameManager.Instance.player.SetItemHold(false);
     }
 

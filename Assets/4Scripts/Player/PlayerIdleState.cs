@@ -9,7 +9,6 @@ public class PlayerIdleState : PlayerState
 
     public override void EnterState()
     {
-        base.EnterState();
         player.anim.SetBool(animBoolName, false);
     }
 
@@ -25,6 +24,5 @@ public class PlayerIdleState : PlayerState
 
     public override void ExitState()
     {
-        base.EnterState();
     }
 }

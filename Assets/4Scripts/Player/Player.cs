@@ -1,4 +1,3 @@
-using TreeEditor;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -14,10 +13,12 @@ public class Player : MonoBehaviour
 
     [HideInInspector] public PlayerIdleState idleState;
     [HideInInspector] public PlayerMoveState moveState;
+    [HideInInspector] public PlayerWorkingState workingState;
 
     private PlayerStateMachine stateMachine;
     private bool isHoldItem = false;
     [SerializeField] public HoldItem holdItem;
+    public ToolType toolType = ToolType.None;
 
     private void Awake()
     {
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour
 
         idleState = new PlayerIdleState(this, stateMachine, "isMoving");
         moveState = new PlayerMoveState(this, stateMachine, "isMoving");
+        workingState = new PlayerWorkingState(this, stateMachine, "isWorking");
 
         stateMachine.Initialize(idleState);
 
@@ -86,7 +88,7 @@ public class Player : MonoBehaviour
         isHoldItem = _isHoldItem;
         anim.SetBool("isHoldItem", isHoldItem);
 
-        if (_holdItem != null)
+        if (isHoldItem)
         {
             holdItem.gameObject.SetActive(true);
             holdItem.SetHoldItem(_holdItem);
@@ -94,6 +96,36 @@ public class Player : MonoBehaviour
         else
         {
             holdItem.gameObject.SetActive(false);
+
+            if (_holdItem == null && toolType != ToolType.None)
+                toolType = ToolType.None;
+            else
+                SetToolHold(_holdItem);
+        }
+    }
+
+    private void SetToolHold(ItemData _holdItem)
+    {
+        switch (_holdItem.itemName)
+        {
+            case "Hoe":
+                toolType = ToolType.Hoe;
+                break;
+            case "Pickaxe":
+                toolType = ToolType.Pickaxe;
+                break;
+            case "Axe":
+                toolType = ToolType.Axe;
+                break;
+            case "WateringCan":
+                toolType = ToolType.WateringCan;
+                break;
+            case "FishingRod":
+                toolType = ToolType.FishingRod;
+                break;
+            default:
+                toolType = ToolType.None;
+                break;
         }
     }
 }

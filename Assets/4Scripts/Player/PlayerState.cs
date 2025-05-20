@@ -1,6 +1,16 @@
 
 using UnityEngine;
 
+public enum ToolType
+{
+    None,
+    Hoe,
+    Pickaxe,
+    Axe,
+    FishingRod,
+    WateringCan
+}
+
 public class PlayerState
 {
     protected Player player;
@@ -21,6 +31,10 @@ public class PlayerState
 
     public virtual void UpdateState()
     {
+        if (stateMachine.currentState != player.workingState && player.toolType != ToolType.None && Input.GetMouseButtonDown(0))
+        {
+            stateMachine.ChangeState(player.workingState);
+        }
     }
 
     public virtual void ExitState()
