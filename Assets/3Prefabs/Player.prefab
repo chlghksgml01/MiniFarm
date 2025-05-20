@@ -159,12 +159,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropItem: {fileID: 66480898167699907, guid: 2b9ad9bbe0fac8249a9504c70ac28eb2, type: 3}
-  speed: 5
+  speed: 1
   inventory:
     slots: []
   moveInput: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
   holdItem: {fileID: 3085691364585730817}
+  toolType: 0
 --- !u!70 &3363399488693892103
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -241,6 +242,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HoldItem
       objectReference: {fileID: 0}
+    - target: {fileID: 66480898167699907, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_Size.x
       value: 1
@@ -252,10 +257,10 @@ PrefabInstance:
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 8902764129226356341, guid: aeed4e54ffbb240489345abdbdba2d80, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4194134174828060832, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_LocalScale.x
@@ -271,7 +276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4194134174828060832, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.69
+      value: 1.27
       objectReference: {fileID: 0}
     - target: {fileID: 4194134174828060832, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_LocalPosition.z

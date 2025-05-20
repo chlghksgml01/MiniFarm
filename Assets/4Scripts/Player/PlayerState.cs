@@ -33,6 +33,7 @@ public class PlayerState
     {
         if (stateMachine.currentState != player.workingState && player.toolType != ToolType.None && Input.GetMouseButtonDown(0))
         {
+            player.InteractWithTile();
             stateMachine.ChangeState(player.workingState);
         }
     }

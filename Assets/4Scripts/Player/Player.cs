@@ -1,9 +1,10 @@
 using UnityEngine;
+using UnityEngine.XR;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] private GameObject dropItem;
-    [SerializeField] public float speed = 5f;
+    [SerializeField] public float speed;
 
     [HideInInspector] public Inventory inventory;
     private TileManager tileManager;
@@ -15,7 +16,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public PlayerMoveState moveState;
     [HideInInspector] public PlayerWorkingState workingState;
 
-    private PlayerStateMachine stateMachine;
+    public PlayerStateMachine stateMachine { get; private set; }
     private bool isHoldItem = false;
     [SerializeField] public HoldItem holdItem;
     public ToolType toolType = ToolType.None;
@@ -40,31 +41,35 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        moveInput.x = Input.GetAxisRaw("Horizontal");
-        moveInput.y = Input.GetAxisRaw("Vertical");
-        // 단위벡터-> 대각선으로 가도 같은 속도로 이동하게끔
-        moveInput = moveInput.normalized;
-
-        transform.Translate(moveInput * speed * Time.fixedDeltaTime);
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (stateMachine.currentState != workingState)
         {
-            if (tileManager != null)
-            {
-                Vector3Int position = new Vector3Int((int)transform.position.x, (int)transform.position.y, 0);
-                string tileName = tileManager.GetTileName(position);
+            moveInput.x = Input.GetAxisRaw("Horizontal");
+            moveInput.y = Input.GetAxisRaw("Vertical");
 
-                if (!string.IsNullOrWhiteSpace(tileName))
-                {
-                    if (tileName == "InVisible_InteractableTile")
-                    {
-                        tileManager.SetInteracted(position);
-                    }
-                }
-            }
+            // 단위벡터-> 대각선으로 가도 같은 속도로 이동하게끔
+            moveInput = moveInput.normalized;
+
+            transform.Translate(moveInput * speed * Time.fixedDeltaTime);
         }
 
         stateMachine.currentState.UpdateState();
+    }
+
+    public void InteractWithTile()
+    {
+        if (tileManager != null)
+        {
+            Vector3Int position = new Vector3Int((int)transform.position.x, (int)transform.position.y, 0);
+            string tileName = tileManager.GetTileName(position);
+
+            if (!string.IsNullOrWhiteSpace(tileName))
+            {
+                if (tileName == "InVisible_InteractableTile")
+                {
+                    tileManager.SetInteracted(position);
+                }
+            }
+        }
     }
 
     public void CreateDropItem(SelectedItem_UI selectedItem, int count)
