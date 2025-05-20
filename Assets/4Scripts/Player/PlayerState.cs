@@ -31,7 +31,8 @@ public class PlayerState
 
     public virtual void UpdateState()
     {
-        if (stateMachine.currentState != player.workingState && player.toolType != ToolType.None && Input.GetMouseButtonDown(0))
+        if (stateMachine.currentState != player.workingState && player.toolType != ToolType.None
+            && Input.GetMouseButtonDown(0) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf)
         {
             player.InteractWithTile();
             stateMachine.ChangeState(player.workingState);

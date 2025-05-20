@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class PlayerWorkingState : PlayerState
@@ -10,7 +9,7 @@ public class PlayerWorkingState : PlayerState
 
     public override void EnterState()
     {
-        player.anim.SetInteger(animBoolName, (int)player.toolType); 
+        player.anim.SetInteger(animBoolName, (int)player.toolType);
     }
 
     public override void UpdateState()
@@ -24,5 +23,4 @@ public class PlayerWorkingState : PlayerState
     {
         player.anim.SetInteger(animBoolName, (int)ToolType.None);
     }
-
 }

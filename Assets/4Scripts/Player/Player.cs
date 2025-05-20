@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public PlayerWorkingState workingState;
 
     public PlayerStateMachine stateMachine { get; private set; }
-    private bool isHoldItem = false;
+    public bool isHoldItem { get; private set; } = false;
     [SerializeField] public HoldItem holdItem;
     public ToolType toolType = ToolType.None;
 
