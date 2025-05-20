@@ -99,7 +99,7 @@ public class Player : MonoBehaviour
 
             if (_holdItem == null && toolType != ToolType.None)
                 toolType = ToolType.None;
-            else
+            else if (_holdItem != null)
                 SetToolHold(_holdItem);
         }
     }
