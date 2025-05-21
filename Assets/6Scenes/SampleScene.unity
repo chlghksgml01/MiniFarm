@@ -7447,7 +7447,7 @@ MonoBehaviour:
   interactableMap: {fileID: 356956701}
   mainTileMap: {fileID: 1773313161}
   hiddenInteractableTile: {fileID: 11400000, guid: 1bbedb399c9cdb24d9945d698123c599, type: 2}
-  seletedTile: {fileID: 11400000, guid: d0b899fd9638df84fbb15c806ab30d17, type: 2}
+  selectedTile: {fileID: 11400000, guid: d0b899fd9638df84fbb15c806ab30d17, type: 2}
   interactedTileDict:
   - {fileID: 11400000, guid: 1e023f790c6bd9d4e8078692c46fca6e, type: 2}
   - {fileID: 11400000, guid: 94252f4cf489ba74cb6598844e8abb03, type: 2}

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 
 public enum MouseDirection
 {
@@ -16,7 +15,7 @@ public class TileManager : MonoBehaviour
     [SerializeField] public Tilemap mainTileMap;
 
     [SerializeField] Tile hiddenInteractableTile;
-    [SerializeField] Tile seletedTile;
+    [SerializeField] Tile selectedTile;
     [SerializeField] List<Tile> interactedTileDict;
 
     Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
@@ -56,7 +55,7 @@ public class TileManager : MonoBehaviour
                 interactableMap.SetTile(position, hiddenInteractableTile);
 
                 TileData tileData = new TileData();
-                tileDict.Add(position, tileData);
+                tileDict.TryAdd(position, tileData);
             }
         }
     }
@@ -70,36 +69,39 @@ public class TileManager : MonoBehaviour
     private void UpdateMouseDirection()
     {
         playerCellPosition = mainTileMap.WorldToCell(player.transform.position);
+
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mouseDirection = GetMouseDirection(playerCellPosition, mousePos);
+        GetMouseDirection(playerCellPosition, mousePos);
     }
 
-    private MouseDirection GetMouseDirection(Vector3 playerPos, Vector3 mousePos)
+    private void GetMouseDirection(Vector3 playerPos, Vector3 mousePos)
     {
         Vector2 dir = (mousePos - playerPos).normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        if (angle < -180f) angle += 360f;
-        if (angle > 180f) angle -= 360f;
+        if (angle < -180f)
+            angle += 360f;
+        if (angle > 180f)
+            angle -= 360f;
 
         if (angle >= -22.5f && angle < 22.5f)
             mouseDirection = MouseDirection.Right;
-        if (angle >= 22.5f && angle < 67.5f)
+        else if (angle >= 22.5f && angle < 67.5f)
             mouseDirection = MouseDirection.UpRight;
-        if (angle >= 67.5f && angle < 112.5f)
+        else if (angle >= 67.5f && angle < 112.5f)
             mouseDirection = MouseDirection.Up;
-        if (angle >= 112.5f && angle < 157.5f)
+        else if (angle >= 112.5f && angle < 157.5f)
             mouseDirection = MouseDirection.UpLeft;
-        if (angle >= 157.5f || angle < -157.5f)
+        else if (angle >= 157.5f || angle < -157.5f)
             mouseDirection = MouseDirection.Left;
-        if (angle >= -157.5f && angle < -112.5f)
+        else if (angle >= -157.5f && angle < -112.5f)
             mouseDirection = MouseDirection.DownLeft;
-        if (angle >= -112.5f && angle < -67.5f)
+        else if (angle >= -112.5f && angle < -67.5f)
             mouseDirection = MouseDirection.Down;
-        if (angle >= -67.5f && angle < -22.5f)
+        else if (angle >= -67.5f && angle < -22.5f)
             mouseDirection = MouseDirection.DownRight;
-
-        return mouseDirection;
+        else
+            mouseDirection = MouseDirection.Right;
     }
 
     private void DrawSelectedTile()
@@ -109,15 +111,14 @@ public class TileManager : MonoBehaviour
         if (_selectedTilePos != selectedTilePos)
         {
             mainTileMap.SetTile(selectedTilePos, null);
-            mainTileMap.SetTile(_selectedTilePos, seletedTile);
+            mainTileMap.SetTile(_selectedTilePos, selectedTile);
             selectedTilePos = _selectedTilePos;
         }
     }
 
-    public void ChangeTileState(Vector3 position)
+    public void ChangeTileState()
     {
-        Vector3Int intPosition = new Vector3Int((int)position.x, (int)position.y, 0);
-        string tileName = GetTileName(intPosition);
+        string tileName = GetTileName(selectedTilePos);
 
         if (!string.IsNullOrWhiteSpace(tileName))
         {

@@ -15,8 +15,6 @@ public class PlayerWorkingState : PlayerState
     public override void UpdateState()
     {
         base.UpdateState();
-        if (Input.GetMouseButtonUp(0))
-            stateMachine.ChangeState(player.idleState);
     }
 
     public override void ExitState()

@@ -33,7 +33,7 @@ public class PlayerState
         if (stateMachine.currentState != player.workingState && player.toolType != ToolType.None
             && Input.GetMouseButtonDown(0) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf)
         {
-            GameManager.Instance.tileManager.ChangeTileState(player.transform.position);
+            GameManager.Instance.tileManager.ChangeTileState();
             stateMachine.ChangeState(player.workingState);
         }
     }
