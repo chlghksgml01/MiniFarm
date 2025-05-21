@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Autodesk.Fbx;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public enum MouseDirection
 {
+    Center,
     Up, Down,
     Right, UpRight, DownRight,
     Left, UpLeft, DownLeft,
@@ -25,6 +27,7 @@ public class TileManager : MonoBehaviour
 
     private Dictionary<MouseDirection, Vector2Int> mouseDirectionValues = new Dictionary<MouseDirection, Vector2Int>
         {
+            { MouseDirection.Center,     Vector2Int.zero },
             { MouseDirection.Up,         Vector2Int.up },
             { MouseDirection.Down,       Vector2Int.down },
             { MouseDirection.Right,      Vector2Int.right },
@@ -74,7 +77,7 @@ public class TileManager : MonoBehaviour
         GetMouseDirection(playerCellPosition, mousePos);
     }
 
-    private void GetMouseDirection(Vector3 playerPos, Vector3 mousePos)
+    private void GetMouseDirection(Vector3Int playerPos, Vector3 mousePos)
     {
         Vector2 dir = (mousePos - playerPos).normalized;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -102,6 +105,10 @@ public class TileManager : MonoBehaviour
             mouseDirection = MouseDirection.DownRight;
         else
             mouseDirection = MouseDirection.Right;
+
+        Vector3Int intMousePos = new Vector3Int((int)mousePos.x, (int)mousePos.y, 0);
+        if(playerPos == intMousePos)
+            mouseDirection = MouseDirection.Center;
     }
 
     private void DrawSelectedTile()
@@ -118,6 +125,8 @@ public class TileManager : MonoBehaviour
 
     public void ChangeTileState()
     {
+        player.SetPlayerDirection(mouseDirection);
+
         string tileName = GetTileName(selectedTilePos);
 
         if (!string.IsNullOrWhiteSpace(tileName))

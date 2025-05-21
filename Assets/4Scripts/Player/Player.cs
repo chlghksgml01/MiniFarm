@@ -116,4 +116,30 @@ public class Player : MonoBehaviour
                 break;
         }
     }
+
+    public void SetPlayerDirection(MouseDirection mouseDirection)
+    {
+        switch (mouseDirection)
+        {
+            case MouseDirection.Up:
+                anim.SetFloat("vertical", 1f);
+                anim.SetFloat("horizontal", 0f);
+                break;
+            case MouseDirection.Center:
+            case MouseDirection.Down:
+                anim.SetFloat("vertical", -1f);
+                anim.SetFloat("horizontal", 0f);
+                break;
+            case MouseDirection.Right:
+            case MouseDirection.UpRight:
+            case MouseDirection.DownRight:
+                anim.SetFloat("horizontal", 1f);
+                break;
+            case MouseDirection.Left:
+            case MouseDirection.UpLeft:
+            case MouseDirection.DownLeft:
+                anim.SetFloat("horizontal", -1f);
+                break;
+        }
+    }
 }
