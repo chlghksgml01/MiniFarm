@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public enum ToolType
@@ -34,7 +33,7 @@ public class PlayerState
         if (stateMachine.currentState != player.workingState && player.toolType != ToolType.None
             && Input.GetMouseButtonDown(0) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf)
         {
-            player.InteractWithTile();
+            GameManager.Instance.tileManager.ChangeTileState(player.transform.position);
             stateMachine.ChangeState(player.workingState);
         }
     }

@@ -55,23 +55,6 @@ public class Player : MonoBehaviour
         stateMachine.currentState.UpdateState();
     }
 
-    public void InteractWithTile()
-    {
-        if (tileManager != null)
-        {
-            Vector3Int position = new Vector3Int((int)transform.position.x, (int)transform.position.y, 0);
-            string tileName = tileManager.GetTileName(position);
-
-            if (!string.IsNullOrWhiteSpace(tileName))
-            {
-                if (tileName == "InVisible_InteractableTile")
-                {
-                    tileManager.SetInteracted(position);
-                }
-            }
-        }
-    }
-
     public void CreateDropItem(SelectedItem_UI selectedItem, int count)
     {
         if (dropItem == null || selectedItem == null)
