@@ -37,6 +37,9 @@ public class Player : MonoBehaviour
 
         inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
         tileManager = GameManager.Instance.tileManager;
+
+        anim.SetFloat("vertical", -1f);
+        anim.SetFloat("horizontal", 0f);
     }
 
     void Update()
@@ -49,7 +52,7 @@ public class Player : MonoBehaviour
             // 단위벡터-> 대각선으로 가도 같은 속도로 이동하게끔
             moveInput = moveInput.normalized;
 
-            transform.Translate(moveInput * speed * Time.fixedDeltaTime);
+            transform.Translate(moveInput * speed * Time.deltaTime);
         }
 
         stateMachine.currentState.UpdateState();

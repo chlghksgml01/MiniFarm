@@ -74,7 +74,9 @@ public class TileManager : MonoBehaviour
         playerCellPosition = mainTileMap.WorldToCell(player.transform.position);
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        GetMouseDirection(playerCellPosition, mousePos);
+        Vector3Int mouseCellPos = mainTileMap.WorldToCell(mousePos);
+
+        GetMouseDirection(playerCellPosition, mouseCellPos);
     }
 
     private void GetMouseDirection(Vector3Int playerPos, Vector3 mousePos)
@@ -107,7 +109,7 @@ public class TileManager : MonoBehaviour
             mouseDirection = MouseDirection.Right;
 
         Vector3Int intMousePos = new Vector3Int((int)mousePos.x, (int)mousePos.y, 0);
-        if(playerPos == intMousePos)
+        if (playerPos == intMousePos)
             mouseDirection = MouseDirection.Center;
     }
 
