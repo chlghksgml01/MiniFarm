@@ -1,5 +1,6 @@
 public enum TileState
 {
+    None,
     Empty,
     Tilled,
     Watered,
@@ -7,7 +8,7 @@ public enum TileState
     Grown
 }
 
-public enum TileConnectState
+public enum TileConnectedState
 {
     None,
     One,
@@ -28,7 +29,7 @@ public enum TileConnectState
     VerticalCenter
 }
 
-public enum TileConnectDir
+public enum TileConnectedDir
 {
     None = 0,
     Up = 1 << 0,
@@ -40,6 +41,6 @@ public enum TileConnectDir
 public class TileData
 {
     public TileState tileState = TileState.Empty;
-    public TileConnectState tileConnectState = TileConnectState.None;
-    public TileConnectDir tileConnectDir = TileConnectDir.None;
+    public TileConnectedState tileConnectedState = TileConnectedState.None;
+    public TileConnectedDir tileConnectedDir = TileConnectedDir.None;
 }

@@ -15,10 +15,13 @@ public class TileManager : MonoBehaviour
 {
     [SerializeField] public Tilemap interactableMap;
     [SerializeField] public Tilemap mainTileMap;
+    [SerializeField] public Tilemap wateringMap;
 
     [SerializeField] Tile hiddenInteractableTile;
     [SerializeField] Tile selectedTile;
-    [SerializeField] List<Tile> interactedTileDict;
+    [SerializeField] public Tile emptyTile;
+    [SerializeField] public Tile wateringTile;
+    [SerializeField] public List<Tile> tilledTileDict;
 
     Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
 
@@ -131,13 +134,8 @@ public class TileManager : MonoBehaviour
 
         string tileName = GetTileName(selectedTilePos);
 
-        if (!string.IsNullOrWhiteSpace(tileName))
-        {
-            if (tileName == "InVisible_InteractableTile")
-            {
-                SetTileState();
-            }
-        }
+        if (tileDict.ContainsKey(selectedTilePos))
+            SetTileState();
     }
 
     private void SetTileState()
@@ -148,9 +146,7 @@ public class TileManager : MonoBehaviour
             return;
         }
 
-        // 타일맵에 타일 설정, 타일 상태 설정
-        tileDict[selectedTilePos].tileState = TileState.Tilled;
-        TileLogicHelper.SetTiles(selectedTilePos, tileDict, interactableMap, interactedTileDict);
+        TileLogicHelper.SetTiles(selectedTilePos, tileDict);
     }
 
     public string GetTileName(Vector3Int position)
