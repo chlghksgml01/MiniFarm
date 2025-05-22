@@ -6,8 +6,8 @@ public enum ToolType
     Hoe,
     Pickaxe,
     Axe,
+    WateringCan,
     FishingRod,
-    WateringCan
 }
 
 public class PlayerState
