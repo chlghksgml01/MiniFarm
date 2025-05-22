@@ -7,7 +7,6 @@ public static class TileLogicHelper
     public static void SetTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict)
     {
         Tilemap interactableMap = GameManager.Instance.tileManager.interactableMap;
-        List<Tile> interactedTileDict = GameManager.Instance.tileManager.tilledTileDict;
 
         if (!tileDict.TryGetValue(cellPosition, out var centerTileData) || centerTileData.tileState == TileState.None)
             return;
@@ -23,6 +22,7 @@ public static class TileLogicHelper
                 }
                 break;
             case ToolType.WateringCan:
+                if (centerTileData.tileState == TileState.Tilled)
                 {
                     Tilemap wateringMap = GameManager.Instance.tileManager.wateringMap;
                     wateringMap.SetTile(cellPosition, GameManager.Instance.tileManager.wateringTile);
@@ -57,7 +57,7 @@ public static class TileLogicHelper
         if (tileDict.TryGetValue(rightCellPos, out var rightTileData))
         {
             rightTileData.tileConnectedDir |= TileConnectedDir.Left;
-            if (rightTileData.tileState == TileState.Tilled)
+            if (rightTileData.tileState != TileState.Empty)
             {
                 centerTileData.tileConnectedDir |= TileConnectedDir.Right;
                 UpdateConnectedTilledTile(rightCellPos, tileDict);
@@ -68,7 +68,7 @@ public static class TileLogicHelper
         if (tileDict.TryGetValue(leftCellPos, out var leftTileData))
         {
             leftTileData.tileConnectedDir |= TileConnectedDir.Right;
-            if (leftTileData.tileState == TileState.Tilled)
+            if (leftTileData.tileState != TileState.Empty)
             {
                 centerTileData.tileConnectedDir |= TileConnectedDir.Left;
                 UpdateConnectedTilledTile(leftCellPos, tileDict);
@@ -79,7 +79,7 @@ public static class TileLogicHelper
         if (tileDict.TryGetValue(upCellPos, out var upTileData))
         {
             upTileData.tileConnectedDir |= TileConnectedDir.Down;
-            if (upTileData.tileState == TileState.Tilled)
+            if (upTileData.tileState != TileState.Empty)
             {
                 centerTileData.tileConnectedDir |= TileConnectedDir.Up;
                 UpdateConnectedTilledTile(upCellPos, tileDict);
@@ -90,7 +90,7 @@ public static class TileLogicHelper
         if (tileDict.TryGetValue(downCellPos, out var downTileData))
         {
             downTileData.tileConnectedDir |= TileConnectedDir.Up;
-            if (downTileData.tileState == TileState.Tilled)
+            if (downTileData.tileState != TileState.Empty)
             {
                 centerTileData.tileConnectedDir |= TileConnectedDir.Down;
                 UpdateConnectedTilledTile(downCellPos, tileDict);
@@ -103,12 +103,12 @@ public static class TileLogicHelper
     static void UpdateConnectedTilledTile(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, bool isInteractedTile = false)
     {
         Tilemap interactableMap = GameManager.Instance.tileManager.interactableMap;
-        List<Tile> interactedTileDict = GameManager.Instance.tileManager.tilledTileDict;
+        List<Tile> tilledTileDict = GameManager.Instance.tileManager.tilledTileDict;
 
         // TileConnectedState 설정
         SetTileConnectedDirection(cellPosition, tileDict);
         int tileConnectedState = (int)tileDict[cellPosition].tileConnectedState;
-        interactableMap.SetTile(cellPosition, interactedTileDict[tileConnectedState]);
+        interactableMap.SetTile(cellPosition, tilledTileDict[tileConnectedState]);
 
         // TileState 설정
         tileDict[cellPosition].tileState = TileState.Tilled;
@@ -117,40 +117,40 @@ public static class TileLogicHelper
     static void ResetConnectedTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict)
     {
         Tilemap interactableMap = GameManager.Instance.tileManager.interactableMap;
-        List<Tile> interactedTileDict = GameManager.Instance.tileManager.tilledTileDict;
+        List<Tile> tilledTileDict = GameManager.Instance.tileManager.tilledTileDict;
 
         Vector3Int rightCellPos = cellPosition + Vector3Int.right;
         Vector3Int leftCellPos = cellPosition + Vector3Int.left;
         Vector3Int upCellPos = cellPosition + Vector3Int.up;
         Vector3Int downCellPos = cellPosition + Vector3Int.down;
 
-        if (tileDict[rightCellPos].tileState == TileState.Tilled)
+        if (tileDict.TryGetValue(rightCellPos, out var rightTileData) && rightTileData.tileState != TileState.Empty)
         {
-            tileDict[rightCellPos].tileConnectedDir &= ~TileConnectedDir.Left;
+            rightTileData.tileConnectedDir &= ~TileConnectedDir.Left;
             SetTileConnectedDirection(rightCellPos, tileDict);
-            int tileConnectedState = (int)tileDict[rightCellPos].tileConnectedState;
-            interactableMap.SetTile(rightCellPos, interactedTileDict[tileConnectedState]);
+            int tileConnectedState = (int)rightTileData.tileConnectedState;
+            interactableMap.SetTile(rightCellPos, tilledTileDict[tileConnectedState]);
         }
-        if (tileDict[leftCellPos].tileState == TileState.Tilled)
+        if (tileDict.TryGetValue(leftCellPos, out var leftTileData) && leftTileData.tileState != TileState.Empty)
         {
-            tileDict[leftCellPos].tileConnectedDir &= ~TileConnectedDir.Right;
+            leftTileData.tileConnectedDir &= ~TileConnectedDir.Right;
             SetTileConnectedDirection(leftCellPos, tileDict);
-            int tileConnectedState = (int)tileDict[leftCellPos].tileConnectedState;
-            interactableMap.SetTile(leftCellPos, interactedTileDict[tileConnectedState]);
+            int tileConnectedState = (int)leftTileData.tileConnectedState;
+            interactableMap.SetTile(leftCellPos, tilledTileDict[tileConnectedState]);
         }
-        if (tileDict[upCellPos].tileState == TileState.Tilled)
+        if (tileDict.TryGetValue(upCellPos, out var upTileData) && upTileData.tileState != TileState.Empty)
         {
-            tileDict[upCellPos].tileConnectedDir &= ~TileConnectedDir.Down;
+            upTileData.tileConnectedDir &= ~TileConnectedDir.Down;
             SetTileConnectedDirection(upCellPos, tileDict);
-            int tileConnectedState = (int)tileDict[upCellPos].tileConnectedState;
-            interactableMap.SetTile(upCellPos, interactedTileDict[tileConnectedState]);
+            int tileConnectedState = (int)upTileData.tileConnectedState;
+            interactableMap.SetTile(upCellPos, tilledTileDict[tileConnectedState]);
         }
-        if (tileDict[downCellPos].tileState == TileState.Tilled)
+        if (tileDict.TryGetValue(downCellPos, out var downTileData) && downTileData.tileState != TileState.Empty)
         {
-            tileDict[downCellPos].tileConnectedDir &= ~TileConnectedDir.Up;
+            downTileData.tileConnectedDir &= ~TileConnectedDir.Up;
             SetTileConnectedDirection(downCellPos, tileDict);
-            int tileConnectedState = (int)tileDict[downCellPos].tileConnectedState;
-            interactableMap.SetTile(downCellPos, interactedTileDict[tileConnectedState]);
+            int tileConnectedState = (int)downTileData.tileConnectedState;
+            interactableMap.SetTile(downCellPos, tilledTileDict[tileConnectedState]);
         }
     }
 
