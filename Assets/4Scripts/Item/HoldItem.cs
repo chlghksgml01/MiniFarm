@@ -3,7 +3,7 @@ using UnityEngine;
 public class HoldItem : MonoBehaviour
 {
     private SpriteRenderer sprite;
-    public bool isSeed { get; set; } = false;
+    public string cropName { get; private set; }
 
     private void Awake()
     {
@@ -13,5 +13,15 @@ public class HoldItem : MonoBehaviour
     public void SetHoldItem(ItemData itemData)
     {
         sprite.sprite = itemData.icon;
+        if (itemData.itemName.Contains("Seed"))
+        {
+            string seedName = itemData.itemName;
+            cropName = seedName.Replace("Seed", "");
+        }
+    }
+
+    public void SetHoldSeedNull()
+    {
+        cropName = "";
     }
 }

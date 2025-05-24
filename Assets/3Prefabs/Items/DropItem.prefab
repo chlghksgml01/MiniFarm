@@ -145,11 +145,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 66480898167699907}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3027f7ed4d5737c4f98bda2470d725a8, type: 3}
+  m_Script: {fileID: 11500000, guid: c7fcf0016bb653e45b6223d6f3d5224b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: f05d8a04c300a2a419a55a5827aa6ec5, type: 2}
-  count: 0
+  count: 1
 --- !u!1 &5430533674888974394
 GameObject:
   m_ObjectHideFlags: 0

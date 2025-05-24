@@ -82,18 +82,13 @@ public class Player : MonoBehaviour
 
         if (isHoldItem)
         {
-            if (_holdItem.itemName.Contains("Seed"))
-                holdItem.isSeed = true;
-            else
-                holdItem.isSeed = false;
-
             holdItem.gameObject.SetActive(true);
             holdItem.SetHoldItem(_holdItem);
         }
         else
         {
+            holdItem.SetHoldSeedNull();
             holdItem.gameObject.SetActive(false);
-            holdItem.isSeed = false;
 
             if (_holdItem == null && toolType != ToolType.None)
                 toolType = ToolType.None;

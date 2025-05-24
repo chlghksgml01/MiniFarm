@@ -5,7 +5,6 @@ public enum TileState
     Tilled,
     Watered,
     Planted,
-    Grown
 }
 
 public enum TileConnectedState
@@ -43,4 +42,6 @@ public class TileData
     public TileState tileState = TileState.Empty;
     public TileConnectedState tileConnectedState = TileConnectedState.None;
     public TileConnectedDir tileConnectedDir = TileConnectedDir.None;
+    public string cropName = "";
+    public int cropGrowthLevel = 0;
 }

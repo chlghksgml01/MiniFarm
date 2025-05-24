@@ -38,7 +38,7 @@ public class PlayerState
         }
 
         else if (Input.GetMouseButtonDown(1) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
-            && player.isHoldItem && player.holdItem.isSeed)
+            && player.isHoldItem && player.holdItem.cropName != "")
         {
             GameManager.Instance.tileManager.ChangeTileState();
         }

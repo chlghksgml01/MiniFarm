@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Autodesk.Fbx;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -22,12 +23,13 @@ public class TileManager : MonoBehaviour
     [SerializeField] Tile selectedTile;
     [SerializeField] public Tile emptyTile;
     [SerializeField] public Tile wateringTile;
-    [SerializeField] public Tile cropTile;
     [SerializeField] public List<Tile> tilledTileDict;
+    [SerializeField] public Tile[] cropTiles;
+    [SerializeField] public Tile[] wetCropTiles;
 
     private Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
-    public Dictionary<string, Tile> cropTileDict = new Dictionary<string, Tile>();
-    public Dictionary<string, Tile> wetCropTileDict = new Dictionary<string, Tile>();
+    private Dictionary<string, List<Tile>> cropTileDict = new Dictionary<string, List<Tile>>();
+    private Dictionary<string, List<Tile>> wetCropTileDict = new Dictionary<string, List<Tile>>();
 
     private Player player;
     private Vector3Int playerCellPosition;
@@ -46,6 +48,28 @@ public class TileManager : MonoBehaviour
         };
     private MouseDirection mouseDirection;
     private Vector3Int selectedTilePos;
+
+    private void Awake()
+    {
+        InitialCropTiles(cropTiles, cropTileDict);
+        InitialCropTiles(wetCropTiles, wetCropTileDict);
+    }
+
+    private void InitialCropTiles(Tile[] _cropTiles, Dictionary<string, List<Tile>> _cropTileDict)
+    {
+        for (int i = 0; i < _cropTiles.Length; i++)
+        {
+            string cropTileName = _cropTiles[i].name;
+            cropTileName = cropTileName.Replace("Tile", "");
+            cropTileName = Regex.Replace(cropTileName, @"\d", "");
+
+            if (!_cropTileDict.ContainsKey(cropTileName))
+            {
+                _cropTileDict[cropTileName] = new List<Tile>();
+            }
+            _cropTileDict[cropTileName].Add(_cropTiles[i]);
+        }
+    }
 
     void Start()
     {
@@ -168,5 +192,30 @@ public class TileManager : MonoBehaviour
             }
         }
         return "";
+    }
+
+    public Tile GetCropTile(string cropName, bool isWet)
+    {
+        if (isWet && wetCropTileDict.ContainsKey(cropName))
+        {
+            return wetCropTileDict[cropName][0];
+        }
+        else if (cropTileDict.ContainsKey(cropName))
+        {
+            return cropTileDict[cropName][0];
+        }
+        return null;
+    }
+
+    public void SetCropTile(TileData tileData)
+    {
+        if (cropTileDict.ContainsKey(tileData.cropName))
+        {
+            string wetCropName = "Wet" + tileData.cropName;
+            if (wetCropTileDict.ContainsKey(wetCropName))
+            {
+                farmFieldMap.SetTile(selectedTilePos, wetCropTileDict[wetCropName][tileData.cropGrowthLevel - 1]);
+            }
+        }
     }
 }
