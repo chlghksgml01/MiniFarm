@@ -7720,54 +7720,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dayStartTime: 6
+  dayEndTime: 26
+  twilightStartTime: 19
+  darkestTime: 22
   timeScale: 60
-  timeInterval: 10
+  timeInterval: 2
   timeText: {fileID: 1157134613}
   globalLight: {fileID: 1009898803}
   nightLightColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 0}
   dayLightColor: {r: 1, g: 1, b: 1, a: 1}
-  nightTimeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 21600
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 68400
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 79200
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 93600
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &643859492 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 322919968833071363, guid: 446870934bb189b429e30cf2622dff97, type: 3}
