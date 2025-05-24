@@ -84,6 +84,9 @@ public class Player : MonoBehaviour
         {
             holdItem.gameObject.SetActive(true);
             holdItem.SetHoldItem(_holdItem);
+
+            if (_holdItem.itemType != ItemType.Tool)
+                toolType = ToolType.None;
         }
         else
         {
