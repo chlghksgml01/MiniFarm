@@ -6,43 +6,57 @@ public static class TileLogicHelper
 {
     public static void SetTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict)
     {
-        Tilemap interactableMap = GameManager.Instance.tileManager.interactableMap;
-
         if (!tileDict.TryGetValue(cellPosition, out var centerTileData) || centerTileData.tileState == TileState.None)
             return;
 
-        TileState tileState = tileDict[cellPosition].tileState;
-        ToolType playerToolType = GameManager.Instance.player.toolType;
-        switch (playerToolType)
+        // ¾¾¾Ñ µé°íÀÖ´Ù¸é
+        if (GameManager.Instance.player.isHoldItem)
         {
-            case ToolType.Hoe:
-                if (centerTileData.tileState == TileState.Empty)
-                {
-                    UpdateTiles(cellPosition, tileDict, centerTileData);
-                }
-                break;
-            case ToolType.WateringCan:
-                if (centerTileData.tileState == TileState.Tilled)
-                {
-                    Tilemap wateringMap = GameManager.Instance.tileManager.wateringMap;
-                    wateringMap.SetTile(cellPosition, GameManager.Instance.tileManager.wateringTile);
-                    tileDict[cellPosition].tileState = TileState.Watered;
-                }
-                break;
-            case ToolType.Pickaxe:
-                if (tileState != TileState.Empty)
-                {
-                    GameManager.Instance.tileManager.wateringMap.SetTile(cellPosition, null);
-                    interactableMap.SetTile(cellPosition, GameManager.Instance.tileManager.emptyTile);
+            Tilemap farmFieldMap = GameManager.Instance.tileManager.farmFieldMap;
+            if (farmFieldMap.GetTile(cellPosition) == null)
+            {
+                //???????????????????????????????????
+                //farmFieldMap.SetTile(cellPosition, GameManager.Instance.tileManager.cropTile);
+            }
+        }
 
-                    tileDict[cellPosition].tileConnectedDir = TileConnectedDir.None;
-                    tileDict[cellPosition].tileState = TileState.Empty;
+        else
+        {
+            Tilemap interactableMap = GameManager.Instance.tileManager.interactableMap;
 
-                    ResetConnectedTiles(cellPosition, tileDict);
-                }
-                break;
-            default:
-                break;
+            TileState tileState = tileDict[cellPosition].tileState;
+            ToolType playerToolType = GameManager.Instance.player.toolType;
+            switch (playerToolType)
+            {
+                case ToolType.Hoe:
+                    if (centerTileData.tileState == TileState.Empty)
+                    {
+                        UpdateTiles(cellPosition, tileDict, centerTileData);
+                    }
+                    break;
+                case ToolType.WateringCan:
+                    if (centerTileData.tileState == TileState.Tilled)
+                    {
+                        Tilemap wateringMap = GameManager.Instance.tileManager.wateringMap;
+                        wateringMap.SetTile(cellPosition, GameManager.Instance.tileManager.wateringTile);
+                        tileDict[cellPosition].tileState = TileState.Watered;
+                    }
+                    break;
+                case ToolType.Pickaxe:
+                    if (tileState != TileState.Empty)
+                    {
+                        GameManager.Instance.tileManager.wateringMap.SetTile(cellPosition, null);
+                        interactableMap.SetTile(cellPosition, GameManager.Instance.tileManager.emptyTile);
+
+                        tileDict[cellPosition].tileConnectedDir = TileConnectedDir.None;
+                        tileDict[cellPosition].tileState = TileState.Empty;
+
+                        ResetConnectedTiles(cellPosition, tileDict);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

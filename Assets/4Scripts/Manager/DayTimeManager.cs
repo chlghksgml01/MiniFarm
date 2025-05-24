@@ -1,8 +1,9 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class DayTimeController : MonoBehaviour
+public class DayTimeManager : MonoBehaviour
 {
     [Header("Time")]
     [SerializeField] int dayStartTime = 6;
@@ -26,12 +27,14 @@ public class DayTimeController : MonoBehaviour
     private int hour = 6;
     private int minute = 0;
 
+    public event Action OnDayPassed;
+
     private void Awake()
     {
         gameTimer = dayStartTime * secondsPerHour;
         timeText.text = string.Format("{0:00}:{1:00}", dayStartTime, minute);
     }
-    
+
     private void Update()
     {
         UpdateTime();
@@ -66,6 +69,7 @@ public class DayTimeController : MonoBehaviour
     {
         gameTimer = dayStartTime * secondsPerHour;
         hour = dayStartTime;
+        OnDayPassed?.Invoke();
     }
 
     private void UpdateLight()

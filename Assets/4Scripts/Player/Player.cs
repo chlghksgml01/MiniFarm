@@ -17,8 +17,9 @@ public class Player : MonoBehaviour
     [HideInInspector] public PlayerWorkingState workingState;
 
     public PlayerStateMachine stateMachine { get; private set; }
-    public bool isHoldItem { get; private set; } = false;
+
     [SerializeField] public HoldItem holdItem;
+    public bool isHoldItem { get; private set; } = false;
     public ToolType toolType = ToolType.None;
 
     private void Awake()
@@ -81,12 +82,18 @@ public class Player : MonoBehaviour
 
         if (isHoldItem)
         {
+            if (_holdItem.itemName.Contains("Seed"))
+                holdItem.isSeed = true;
+            else
+                holdItem.isSeed = false;
+
             holdItem.gameObject.SetActive(true);
             holdItem.SetHoldItem(_holdItem);
         }
         else
         {
             holdItem.gameObject.SetActive(false);
+            holdItem.isSeed = false;
 
             if (_holdItem == null && toolType != ToolType.None)
                 toolType = ToolType.None;

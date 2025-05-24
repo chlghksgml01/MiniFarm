@@ -54,5 +54,8 @@ TagManager:
   - name: Item
     uniqueID: 826969125
     locked: 0
+  - name: Crop
+    uniqueID: 405030709
+    locked: 0
   m_RenderingLayers:
   - Default

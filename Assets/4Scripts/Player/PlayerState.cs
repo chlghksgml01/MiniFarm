@@ -30,11 +30,17 @@ public class PlayerState
 
     public virtual void UpdateState()
     {
-        if (stateMachine.currentState != player.workingState && player.toolType != ToolType.None
-            && Input.GetMouseButtonDown(0) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf)
+        if (Input.GetMouseButtonDown(0) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
+            && stateMachine.currentState != player.workingState && player.toolType != ToolType.None)
         {
             GameManager.Instance.tileManager.ChangeTileState();
             stateMachine.ChangeState(player.workingState);
+        }
+
+        else if (Input.GetMouseButtonDown(1) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
+            && player.isHoldItem && player.holdItem.isSeed)
+        {
+            GameManager.Instance.tileManager.ChangeTileState();
         }
     }
 

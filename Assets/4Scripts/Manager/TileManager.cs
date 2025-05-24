@@ -16,14 +16,18 @@ public class TileManager : MonoBehaviour
     [SerializeField] public Tilemap interactableMap;
     [SerializeField] public Tilemap mainTileMap;
     [SerializeField] public Tilemap wateringMap;
+    [SerializeField] public Tilemap farmFieldMap;
 
     [SerializeField] Tile hiddenInteractableTile;
     [SerializeField] Tile selectedTile;
     [SerializeField] public Tile emptyTile;
     [SerializeField] public Tile wateringTile;
+    [SerializeField] public Tile cropTile;
     [SerializeField] public List<Tile> tilledTileDict;
 
-    Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
+    private Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
+    public Dictionary<string, Tile> cropTileDict = new Dictionary<string, Tile>();
+    public Dictionary<string, Tile> wetCropTileDict = new Dictionary<string, Tile>();
 
     private Player player;
     private Vector3Int playerCellPosition;
@@ -132,8 +136,6 @@ public class TileManager : MonoBehaviour
     {
         player.SetPlayerDirection(mouseDirection);
 
-        string tileName = GetTileName(selectedTilePos);
-
         if (tileDict.ContainsKey(selectedTilePos))
             SetTileState();
     }
@@ -147,6 +149,11 @@ public class TileManager : MonoBehaviour
         }
 
         TileLogicHelper.SetTiles(selectedTilePos, tileDict);
+    }
+
+    public void GrowCrop()
+    {
+
     }
 
     public string GetTileName(Vector3Int position)

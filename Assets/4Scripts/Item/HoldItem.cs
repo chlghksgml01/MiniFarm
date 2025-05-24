@@ -3,6 +3,7 @@ using UnityEngine;
 public class HoldItem : MonoBehaviour
 {
     private SpriteRenderer sprite;
+    public bool isSeed { get; set; } = false;
 
     private void Awake()
     {
