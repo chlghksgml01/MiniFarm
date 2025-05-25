@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.XR;
 
 public class Player : MonoBehaviour
 {
@@ -7,7 +6,6 @@ public class Player : MonoBehaviour
     [SerializeField] public float speed;
 
     [HideInInspector] public Inventory inventory;
-    private TileManager tileManager;
 
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Animator anim;
@@ -19,10 +17,7 @@ public class Player : MonoBehaviour
     public PlayerStateMachine stateMachine { get; private set; }
 
     [SerializeField] public HoldItem holdItem;
-    //[SerializeField] public HoldItem holdItem;
-
-    //public bool isHoldItem { get; private set; } = false;
-    public ToolType playerToolType = ToolType.None;
+    public ToolType playerToolType { get; set; } = ToolType.None;
 
     private void Awake()
     {
@@ -39,7 +34,6 @@ public class Player : MonoBehaviour
         stateMachine.Initialize(idleState);
 
         inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
-        tileManager = GameManager.Instance.tileManager;
 
         anim.SetFloat("vertical", -1f);
         anim.SetFloat("horizontal", 0f);

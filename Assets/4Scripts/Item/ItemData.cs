@@ -24,11 +24,6 @@ public class ItemData
         itemName = newItemData.itemName;
         icon = newItemData.icon;
         itemType = newItemData.itemType;
-
-        if (!newItemData.cropData.IsEmpty())
-            cropData = newItemData.cropData;
-        else
-            cropData.SetEmpty();
     }
 
     public void SetItemData(ScriptableItemData scriptableItemData, ScriptableCropData scriptableCropData)
@@ -94,8 +89,6 @@ public class CropData
         growthLevel = newCropData.growthLevel;
         growthDurations = newCropData.growthDurations;
         isRegrowable = newCropData.isRegrowable;
-        currentGrowthLevel = newCropData.currentGrowthLevel;
-        isWatered = newCropData.isWatered;
     }
 
     public void SetEmpty()
