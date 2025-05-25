@@ -37,9 +37,9 @@ public static class TileLogicHelper
 
             // ¾¾¾Ñ Å¸ÀÏ °¡Á®¿À±â
             if (tileState == TileState.Tilled)
-                cropSeedTile = tileManager.GetCropSeedTile(cropName, false);
+                cropSeedTile = GameManager.Instance.player.holdItem.itemData.cropData.cropTiles[0];
             else if (tileState == TileState.Watered)
-                cropSeedTile = tileManager.GetCropSeedTile(cropName, true);
+                cropSeedTile = GameManager.Instance.player.holdItem.itemData.cropData.wetCropTiles[0];
 
             if (cropSeedTile != null)
             {
@@ -47,6 +47,8 @@ public static class TileLogicHelper
 
                 tileManager.cropTileDataDict.TryAdd(cellPosition, new CropData());
                 tileManager.cropTileDataDict[cellPosition].SetCropData(GameManager.Instance.player.holdItem.itemData.cropData);
+                if (tileState == TileState.Watered)
+                    tileManager.cropTileDataDict[cellPosition].isWatered = true;
                 tileDict[cellPosition].tileState = TileState.Planted;
                 GameManager.Instance.uiManager.toolBar_UI.UseItem();
             }

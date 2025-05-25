@@ -22,7 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5a9c2fd5636c8c3499cf6b4ecc4e9682, type: 2}
   - {fileID: 11400000, guid: 53aa6fd890ccc194799c3e3b6a4dbe57, type: 2}
   growthLevel: 3
-  growthDurations: 01000000
+  growthDurations: 0100000001000000
   isRegrowable: 0
   regrowImage: {fileID: 0}
   harvestedImage: {fileID: 648987640, guid: 17dea276f36b33d408c810e58a37f79d, type: 3}

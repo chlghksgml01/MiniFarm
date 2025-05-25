@@ -1,5 +1,6 @@
 using NUnit.Framework.Interfaces;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public enum ItemType
 {
@@ -68,6 +69,8 @@ public class CropData
 {
     public string cropName = "";
     public int growthLevel;
+    public Tile[] cropTiles;
+    public Tile[] wetCropTiles;
     public int[] growthDurations;
     public bool isRegrowable;
 
@@ -78,6 +81,8 @@ public class CropData
     public void SetCropData(ScriptableCropData scriptableCropData)
     {
         cropName = scriptableCropData.cropName;
+        cropTiles = scriptableCropData.cropTiles;
+        wetCropTiles = scriptableCropData.wetCropTiles;
         growthLevel = scriptableCropData.growthLevel;
         growthDurations = scriptableCropData.growthDurations;
         isRegrowable = scriptableCropData.isRegrowable;
@@ -86,6 +91,8 @@ public class CropData
     public void SetCropData(CropData newCropData)
     {
         cropName = newCropData.cropName;
+        cropTiles = newCropData.cropTiles;
+        wetCropTiles = newCropData.wetCropTiles;
         growthLevel = newCropData.growthLevel;
         growthDurations = newCropData.growthDurations;
         isRegrowable = newCropData.isRegrowable;
@@ -94,6 +101,8 @@ public class CropData
     public void SetEmpty()
     {
         cropName = "";
+        cropTiles = null;
+        wetCropTiles = null;
         growthLevel = 0;
         growthDurations = null;
         isRegrowable = false;

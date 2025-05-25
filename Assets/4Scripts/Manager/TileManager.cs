@@ -29,8 +29,6 @@ public class TileManager : MonoBehaviour
     [SerializeField] public Tile[] wetCropTiles;
 
     private Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
-    private Dictionary<string, List<Tile>> cropTileDict = new Dictionary<string, List<Tile>>();
-    private Dictionary<string, List<Tile>> wetCropTileDict = new Dictionary<string, List<Tile>>();
     public Dictionary<Vector3Int, CropData> cropTileDataDict = new Dictionary<Vector3Int, CropData>();
 
     private Player player;
@@ -50,28 +48,6 @@ public class TileManager : MonoBehaviour
         };
     private MouseDirection mouseDirection;
     private Vector3Int selectedTilePos;
-
-    private void Awake()
-    {
-        InitialCropTiles(cropTiles, cropTileDict);
-        InitialCropTiles(wetCropTiles, wetCropTileDict);
-    }
-
-    private void InitialCropTiles(Tile[] _cropTiles, Dictionary<string, List<Tile>> _cropTileDict)
-    {
-        for (int i = 0; i < _cropTiles.Length; i++)
-        {
-            string cropTileName = _cropTiles[i].name;
-            cropTileName = cropTileName.Replace("Tile", "");
-            cropTileName = Regex.Replace(cropTileName, @"\d", "");
-
-            if (!_cropTileDict.ContainsKey(cropTileName))
-            {
-                _cropTileDict[cropTileName] = new List<Tile>();
-            }
-            _cropTileDict[cropTileName].Add(_cropTiles[i]);
-        }
-    }
 
     void Start()
     {
@@ -183,7 +159,6 @@ public class TileManager : MonoBehaviour
         TileLogicHelper.SetTiles(selectedTilePos, tileDict);
     }
 
-
     public string GetTileName(Vector3Int position)
     {
         if (interactableMap != null)
@@ -198,17 +173,16 @@ public class TileManager : MonoBehaviour
         return "";
     }
 
-    public Tile GetCropSeedTile(string cropSeedName, bool isWet)
+    public Tile GetCropSeedTile(Vector3Int cellPosition, bool isWet)
     {
-        string cropName = cropSeedName.Replace("Seed", "");
-        if (isWet && wetCropTileDict.ContainsKey("Wet" + cropName))
+        if (cropTileDataDict.TryGetValue(cellPosition, out CropData cropData))
         {
-            return wetCropTileDict["Wet" + cropName][0];
+            if (isWet && cropData.cropTiles.Length > 0)
+                return cropData.wetCropTiles[0];
+            else if (!isWet && cropData.cropTiles.Length > 0)
+                return cropData.cropTiles[0];
         }
-        else if (!isWet && cropTileDict.ContainsKey(cropName))
-        {
-            return cropTileDict[cropName][0];
-        }
+
         return null;
     }
 
@@ -219,7 +193,7 @@ public class TileManager : MonoBehaviour
             return;
 
         cropData.isWatered = true;
-        Tile wetTile = wetCropTileDict["Wet" + cropData.cropName][cropData.currentGrowthLevel];
+        Tile wetTile = cropData.wetCropTiles[cropData.currentGrowthLevel];
         farmFieldMap.SetTile(selectedTilePos, wetTile);
     }
 
@@ -230,22 +204,24 @@ public class TileManager : MonoBehaviour
             Vector3Int cropPos = cropTile.Key;
             CropData cropData = cropTile.Value;
 
-            if (cropData.isWatered)
+            if (cropData.isWatered && cropData.currentGrowthLevel < cropData.growthLevel - 1)
             {
-                if (cropData.currentGrowthLevel >= cropData.growthLevel)
-                    return;
-
                 cropData.currentGrowthDuration++;
+                if (cropData.currentGrowthLevel >= cropData.growthLevel - 1)
+                    cropData.currentGrowthLevel = cropData.growthLevel - 1;
+
                 if (cropData.currentGrowthDuration >= cropData.growthDurations[cropData.currentGrowthLevel])
                 {
+                    cropData.currentGrowthDuration = 0;
                     cropData.currentGrowthLevel++;
-                    Tile nextLevelCropTile = cropTileDict[cropData.cropName][cropData.currentGrowthLevel];
+                    Tile nextLevelCropTile = cropData.cropTiles[cropData.currentGrowthLevel];
                     farmFieldMap.SetTile(cropPos, nextLevelCropTile);
                 }
             }
 
             cropData.isWatered = false;
             wateringMap.SetTile(cropPos, null);
+            farmFieldMap.SetTile(cropPos, cropData.cropTiles[cropData.currentGrowthLevel]);
         }
     }
 }
