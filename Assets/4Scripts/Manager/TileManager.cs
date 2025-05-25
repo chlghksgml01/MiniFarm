@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Autodesk.Fbx;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 public enum MouseDirection
@@ -30,6 +31,7 @@ public class TileManager : MonoBehaviour
     private Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
     private Dictionary<string, List<Tile>> cropTileDict = new Dictionary<string, List<Tile>>();
     private Dictionary<string, List<Tile>> wetCropTileDict = new Dictionary<string, List<Tile>>();
+    public Dictionary<Vector3Int, CropData> cropTileDataDict = new Dictionary<Vector3Int, CropData>();
 
     private Player player;
     private Vector3Int playerCellPosition;
@@ -74,8 +76,14 @@ public class TileManager : MonoBehaviour
     void Start()
     {
         InitializeTileData();
+        GameManager.Instance.dayTimeManager.OnDayPassed += CropGrow;
 
         player = GameManager.Instance.player;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.dayTimeManager.OnDayPassed -= CropGrow;
     }
 
     private void InitializeTileData()
@@ -175,10 +183,6 @@ public class TileManager : MonoBehaviour
         TileLogicHelper.SetTiles(selectedTilePos, tileDict);
     }
 
-    public void GrowCrop()
-    {
-
-    }
 
     public string GetTileName(Vector3Int position)
     {
@@ -194,8 +198,9 @@ public class TileManager : MonoBehaviour
         return "";
     }
 
-    public Tile GetCropTile(string cropName, bool isWet)
+    public Tile GetCropSeedTile(string cropSeedName, bool isWet)
     {
+        string cropName = cropSeedName.Replace("Seed", "");
         if (isWet && wetCropTileDict.ContainsKey(cropName))
         {
             return wetCropTileDict[cropName][0];
@@ -207,14 +212,36 @@ public class TileManager : MonoBehaviour
         return null;
     }
 
-    public void SetCropTile(TileData tileData)
+    public void WaterCropTile(Vector3Int cellPosition)
     {
-        if (cropTileDict.ContainsKey(tileData.cropName))
+        cropTileDataDict.TryGetValue(cellPosition, out CropData cropData);
+        if (cropData == null)
+            return;
+
+        cropData.isWatered = true;
+        Tile wetTile = wetCropTileDict["Wet" + cropData.cropName][cropData.currentGrowthLevel];
+        farmFieldMap.SetTile(selectedTilePos, wetTile);
+    }
+
+    public void CropGrow()
+    {
+        foreach (KeyValuePair<Vector3Int, CropData> cropTile in cropTileDataDict)
         {
-            string wetCropName = "Wet" + tileData.cropName;
-            if (wetCropTileDict.ContainsKey(wetCropName))
+            Vector3Int cropPos = cropTile.Key;
+            CropData cropData = cropTile.Value;
+
+            if (cropData.isWatered)
             {
-                farmFieldMap.SetTile(selectedTilePos, wetCropTileDict[wetCropName][tileData.cropGrowthLevel - 1]);
+                if (cropData.currentGrowthLevel >= cropData.growthLevel)
+                    return;
+
+                cropData.currentGrowthDuration++;
+                if (cropData.currentGrowthDuration >= cropData.growthDurations[cropData.currentGrowthLevel])
+                {
+                    cropData.currentGrowthLevel++;
+                    Tile nextLevelCropTile = cropTileDict[cropData.cropName][cropData.currentGrowthLevel];
+                    farmFieldMap.SetTile(cropPos, nextLevelCropTile);
+                }
             }
         }
     }

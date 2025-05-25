@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 38e7aa83b5eb21d41b37aaae4d34f11a, type: 2}
+  cropData: {fileID: 11400000, guid: 055ecb39b0c1c674783260bf4688c519, type: 2}
   count: 1
 --- !u!1 &1965836515667882740
 GameObject:

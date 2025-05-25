@@ -27,7 +27,7 @@ public class DayTimeManager : MonoBehaviour
     private int hour = 6;
     private int minute = 0;
 
-    public event Action OnDayPassed;
+    public event Action OnDayPassed = null;
 
     private void Awake()
     {

@@ -31,14 +31,14 @@ public class PlayerState
     public virtual void UpdateState()
     {
         if (Input.GetMouseButtonDown(0) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
-            && stateMachine.currentState != player.workingState && player.toolType != ToolType.None)
+            && stateMachine.currentState != player.workingState && player.playerToolType != ToolType.None)
         {
             GameManager.Instance.tileManager.ChangeTileState();
             stateMachine.ChangeState(player.workingState);
         }
 
         else if (Input.GetMouseButtonDown(1) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
-            && player.isHoldItem && player.holdItem.cropName != "")
+            && player.holdItem.IsCropSeedHold())
         {
             GameManager.Instance.tileManager.ChangeTileState();
         }

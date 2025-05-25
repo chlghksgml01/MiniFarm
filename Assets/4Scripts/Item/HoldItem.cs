@@ -3,25 +3,29 @@ using UnityEngine;
 public class HoldItem : MonoBehaviour
 {
     private SpriteRenderer sprite;
-    public string cropName { get; private set; }
+    public ItemData itemData = new ItemData();
 
     private void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
     }
 
-    public void SetHoldItem(ItemData itemData)
+    public void SetHoldItem(ScriptableItemData scriptableItemData, ScriptableCropData scriptableCropData)
     {
+        itemData.SetItemData(scriptableItemData, scriptableCropData);
         sprite.sprite = itemData.icon;
-        if (itemData.itemName.Contains("Seed"))
-        {
-            string seedName = itemData.itemName;
-            cropName = seedName.Replace("Seed", "");
-        }
     }
 
-    public void SetHoldSeedNull()
+    public void SetEmpty()
     {
-        cropName = "";
+        itemData.SetEmpty();
+        sprite.sprite = null;
+    }
+
+    public bool IsCropSeedHold()
+    {
+        if (itemData.itemType == ItemType.Seed && !itemData.cropData.IsEmpty())
+            return true;
+        return false;
     }
 }

@@ -4,8 +4,9 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public ScriptableItemData itemData;
+    public ScriptableCropData cropData;
     public int count = 1;
-    TextMeshProUGUI textUI;
+    private TextMeshProUGUI textUI;
 
     #region DropItemBounce
     bool isBouncing = false;
@@ -70,17 +71,6 @@ public class Item : MonoBehaviour
         transform.position = bounceBasePos + new Vector3(0, bounceY, 0);
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        Player player = collision.GetComponent<Player>();
-        if (player)
-        {
-            // 인벤 메니저에서 backpack 이름의 인벤토리에 아이템(this) 넣기
-            player.inventory.AddItem(this);
-            GameManager.Instance.uiManager.inventory_UI.Refresh();
-            Destroy(gameObject);
-        }
-    }
 
     public void SpawnItem(bool _isBouncing, Vector3 bounceBasePos, ItemData _itemData, int _count)
     {

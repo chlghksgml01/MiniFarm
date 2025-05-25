@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: PumpkinSeed
   icon: {fileID: 1148123142949428641, guid: aeed4e54ffbb240489345abdbdba2d80, type: 3}
-  itemType: 1
+  itemType: 2

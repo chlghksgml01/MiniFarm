@@ -28,6 +28,9 @@ public class Inventory
             slotItemData.icon = item.itemData.icon;
             slotItemData.itemType = item.itemData.itemType;
             slotItemData.count += item.count;
+
+            if (item.cropData != null)
+                slotItemData.cropData.SetCropData(item.cropData);
         }
 
         public void SetEmpty()

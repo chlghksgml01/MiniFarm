@@ -19,8 +19,10 @@ public class Player : MonoBehaviour
     public PlayerStateMachine stateMachine { get; private set; }
 
     [SerializeField] public HoldItem holdItem;
-    public bool isHoldItem { get; private set; } = false;
-    public ToolType toolType = ToolType.None;
+    //[SerializeField] public HoldItem holdItem;
+
+    //public bool isHoldItem { get; private set; } = false;
+    public ToolType playerToolType = ToolType.None;
 
     private void Awake()
     {
@@ -59,6 +61,18 @@ public class Player : MonoBehaviour
         stateMachine.currentState.UpdateState();
     }
 
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        Item item = collision.GetComponent<Item>();
+        if (item)
+        {
+            inventory.AddItem(item);
+            GameManager.Instance.uiManager.inventory_UI.Refresh();
+            Destroy(item.gameObject);
+        }
+    }
+
     public void CreateDropItem(SelectedItem_UI selectedItem, int count)
     {
         if (dropItem == null || selectedItem == null)
@@ -75,52 +89,54 @@ public class Player : MonoBehaviour
         _item.SpawnItem(true, bounceBasePos, selectedItem.selectedItemData, count);
     }
 
-    public void SetItemHold(bool _isHoldItem, ItemData _holdItem = null)
+    public void SetHoldItem(ItemData holdItemData = null)
     {
-        isHoldItem = _isHoldItem;
-        anim.SetBool("isHoldItem", isHoldItem);
-
-        if (isHoldItem)
+        if (holdItemData == null || holdItemData.IsEmpty())
         {
-            holdItem.gameObject.SetActive(true);
-            holdItem.SetHoldItem(_holdItem);
+            anim.SetBool("isHoldItem", false);
+            holdItem.SetEmpty();
+            SetHoldTool();
+            return;
+        }
 
-            if (_holdItem.itemType != ItemType.Tool)
-                toolType = ToolType.None;
+        holdItem.gameObject.SetActive(true);
+        var item = GameManager.Instance.itemManager.itemDict[holdItemData.itemName];
+        holdItem.SetHoldItem(item.itemData, item.cropData);
+
+        if (holdItem.itemData.itemType == ItemType.Tool)
+        {
+            anim.SetBool("isHoldItem", false);
+            holdItem.gameObject.SetActive(false);
         }
         else
         {
-            holdItem.SetHoldSeedNull();
-            holdItem.gameObject.SetActive(false);
-
-            if (_holdItem == null && toolType != ToolType.None)
-                toolType = ToolType.None;
-            else if (_holdItem != null)
-                SetToolHold(_holdItem);
+            anim.SetBool("isHoldItem", true);
         }
+
+        SetHoldTool();
     }
 
-    private void SetToolHold(ItemData _holdItem)
+    private void SetHoldTool()
     {
-        switch (_holdItem.itemName)
+        switch (holdItem.itemData.itemName)
         {
             case "Hoe":
-                toolType = ToolType.Hoe;
+                playerToolType = ToolType.Hoe;
                 break;
             case "Pickaxe":
-                toolType = ToolType.Pickaxe;
+                playerToolType = ToolType.Pickaxe;
                 break;
             case "Axe":
-                toolType = ToolType.Axe;
+                playerToolType = ToolType.Axe;
                 break;
             case "WateringCan":
-                toolType = ToolType.WateringCan;
+                playerToolType = ToolType.WateringCan;
                 break;
             case "FishingRod":
-                toolType = ToolType.FishingRod;
+                playerToolType = ToolType.FishingRod;
                 break;
             default:
-                toolType = ToolType.None;
+                playerToolType = ToolType.None;
                 break;
         }
     }

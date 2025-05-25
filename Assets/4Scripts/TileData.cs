@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public enum TileState
 {
     None,
@@ -42,6 +44,10 @@ public class TileData
     public TileState tileState = TileState.Empty;
     public TileConnectedState tileConnectedState = TileConnectedState.None;
     public TileConnectedDir tileConnectedDir = TileConnectedDir.None;
-    public string cropName = "";
-    public int cropGrowthLevel = 0;
+}
+
+public class CropTileData
+{
+    public Vector3Int cropPosition = Vector3Int.zero;
+    public CropData cropData = new CropData();
 }

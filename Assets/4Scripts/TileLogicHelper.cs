@@ -10,60 +10,75 @@ public static class TileLogicHelper
             return;
 
         TileState tileState = centerTileData.tileState;
+        TileManager tileManager = GameManager.Instance.tileManager;
+
+        string cropName = "";
+        // 플레이어가 들고있는 씨앗 이름으로 타일 가져오기
+        if (GameManager.Instance.player.holdItem.itemData.IsCrop())
+            cropName = GameManager.Instance.player.holdItem.itemData.itemName;
 
         // 씨앗 심기
-        if (GameManager.Instance.player.holdItem.cropName != ""
-            && tileState == TileState.Tilled || tileState == TileState.Watered)
+        if (cropName != "" && tileState == TileState.Tilled || tileState == TileState.Watered)
         {
-            Tilemap farmFieldMap = GameManager.Instance.tileManager.farmFieldMap;
+            Tilemap farmFieldMap = tileManager.farmFieldMap;
             if (farmFieldMap.GetTile(cellPosition) == null)
             {
-                // 플레이어가 들고있는 씨앗 이름으로 타일 가져오기
-                string cropName = GameManager.Instance.player.holdItem.cropName;
-                Tile cropTile = new Tile();
+                Tile cropSeedTile = ScriptableObject.CreateInstance<Tile>();
 
+                // 씨앗 타일 가져오기
                 if (tileState == TileState.Tilled)
-                    cropTile = GameManager.Instance.tileManager.GetCropTile(cropName, false);
+                    cropSeedTile = tileManager.GetCropSeedTile(cropName, false);
                 else if (tileState == TileState.Watered)
-                    cropTile = GameManager.Instance.tileManager.GetCropTile(cropName, true);
+                    cropSeedTile = tileManager.GetCropSeedTile(cropName, true);
 
-                farmFieldMap.SetTile(cellPosition, cropTile);
-                tileDict[cellPosition].tileState = TileState.Planted;
-                centerTileData.cropGrowthLevel = 1;
-                centerTileData.cropName = cropName;
+                if (cropSeedTile != null)
+                {
+                    farmFieldMap.SetTile(cellPosition, cropSeedTile);
+
+                    tileManager.cropTileDataDict.TryAdd(cellPosition, new CropData());
+                    tileManager.cropTileDataDict[cellPosition].SetCropData(GameManager.Instance.player.holdItem.itemData.cropData);
+                    tileDict[cellPosition].tileState = TileState.Planted;
+                }
             }
         }
         else
         {
-            Tilemap interactableMap = GameManager.Instance.tileManager.interactableMap;
+            Tilemap interactableMap = tileManager.interactableMap;
 
-            ToolType playerToolType = GameManager.Instance.player.toolType;
+            ToolType playerToolType = GameManager.Instance.player.playerToolType;
             switch (playerToolType)
             {
                 case ToolType.Hoe:
                     if (tileState == TileState.Empty)
                     {
+                        tileDict[cellPosition].tileState = TileState.Tilled;
                         UpdateTiles(cellPosition, tileDict, centerTileData);
+                    }
+                    else if (tileState == TileState.Planted)
+                    {
+                        tileDict[cellPosition].tileState = TileState.Tilled;
+                        tileManager.farmFieldMap.SetTile(cellPosition, null);
                     }
                     break;
                 case ToolType.WateringCan:
                     if (tileState == TileState.Tilled || tileState == TileState.Planted)
                     {
-                        Tilemap wateringMap = GameManager.Instance.tileManager.wateringMap;
-                        wateringMap.SetTile(cellPosition, GameManager.Instance.tileManager.wateringTile);
+                        Tilemap wateringMap = tileManager.wateringMap;
+                        wateringMap.SetTile(cellPosition, tileManager.wateringTile);
                         if (tileState == TileState.Tilled)
                             tileDict[cellPosition].tileState = TileState.Watered;
                         if (tileState == TileState.Planted)
                         {
-                            GameManager.Instance.tileManager.SetCropTile(centerTileData);
+                            tileManager.WaterCropTile(cellPosition);
                         }
                     }
                     break;
                 case ToolType.Pickaxe:
                     if (tileState != TileState.Empty)
                     {
-                        GameManager.Instance.tileManager.wateringMap.SetTile(cellPosition, null);
-                        interactableMap.SetTile(cellPosition, GameManager.Instance.tileManager.emptyTile);
+                        tileManager.farmFieldMap.SetTile(cellPosition, null);
+                        tileManager.wateringMap.SetTile(cellPosition, null);
+                        interactableMap.SetTile(cellPosition, tileManager.emptyTile);
 
                         tileDict[cellPosition].tileConnectedDir = TileConnectedDir.None;
                         tileDict[cellPosition].tileState = TileState.Empty;
@@ -140,9 +155,6 @@ public static class TileLogicHelper
         SetTileConnectedDirection(cellPosition, tileDict);
         int tileConnectedState = (int)tileDict[cellPosition].tileConnectedState;
         interactableMap.SetTile(cellPosition, tilledTileDict[tileConnectedState]);
-
-        // TileState 설정
-        tileDict[cellPosition].tileState = TileState.Tilled;
     }
 
     static void ResetConnectedTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict)

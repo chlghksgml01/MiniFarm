@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+
 public class CropController : MonoBehaviour
 {
     [SerializeField] private ScriptableCropData cropData;
@@ -17,12 +18,10 @@ public class CropController : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.dayTimeManager.OnDayPassed += Grow;
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.dayTimeManager.OnDayPassed -= Grow;
     }
 
     private void Grow()
@@ -37,7 +36,7 @@ public class CropController : MonoBehaviour
         {
             growthDays = 0;
             currentGrowthLevel++;
-            GameManager.Instance.tileManager.GrowCrop();
+            //GameManager.Instance.tileManager.GrowCrop();
         }
     }
 

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class ToolBar_UI : MonoBehaviour
 {
@@ -37,12 +38,10 @@ public class ToolBar_UI : MonoBehaviour
 
         ItemData selectedItemData = GameManager.Instance.player.inventory.slots[selectedSlotIdx].slotItemData;
 
-        if (!selectedItemData.IsEmpty() && selectedItemData.itemType == ItemType.Consumable)
-            GameManager.Instance.player.SetItemHold(true, selectedItemData);
-        else if (!selectedItemData.IsEmpty() && selectedItemData.itemType == ItemType.Tool)
-            GameManager.Instance.player.SetItemHold(false, selectedItemData);
+        if (!selectedItemData.IsEmpty() && selectedItemData.itemType != ItemType.None)
+            GameManager.Instance.player.SetHoldItem(selectedItemData);
         else if (selectedItemData.IsEmpty())
-            GameManager.Instance.player.SetItemHold(false);
+            GameManager.Instance.player.SetHoldItem();
     }
 
     private void DrawSelectedUI()

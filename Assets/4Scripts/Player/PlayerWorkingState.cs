@@ -9,7 +9,7 @@ public class PlayerWorkingState : PlayerState
 
     public override void EnterState()
     {
-        player.anim.SetInteger(animBoolName, (int)player.toolType);
+        player.anim.SetInteger(animBoolName, (int)player.playerToolType);
     }
 
     public override void UpdateState()
