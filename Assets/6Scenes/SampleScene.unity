@@ -7838,7 +7838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faaae923ee3390c43989ff926ad255d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dayStartTime: 24
+  dayStartTime: 7
   dayEndTime: 26
   twilightStartTime: 19
   darkestTime: 22
