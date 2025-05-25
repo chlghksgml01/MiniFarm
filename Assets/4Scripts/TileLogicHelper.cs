@@ -33,6 +33,7 @@ public static class TileLogicHelper
 
                 if (cropSeedTile != null)
                 {
+                    GameManager.Instance.uiManager.toolBar_UI.UseItem();
                     farmFieldMap.SetTile(cellPosition, cropSeedTile);
 
                     tileManager.cropTileDataDict.TryAdd(cellPosition, new CropData());

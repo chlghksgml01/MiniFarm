@@ -91,7 +91,7 @@ public class Player : MonoBehaviour
 
     public void SetHoldItem(ItemData holdItemData = null)
     {
-        if (holdItemData == null || holdItemData.IsEmpty())
+        if (holdItemData == null || holdItemData.IsEmpty() || holdItemData.IsEmpty())
         {
             anim.SetBool("isHoldItem", false);
             holdItem.SetEmpty();

@@ -33,6 +33,16 @@ public class Inventory
                 slotItemData.cropData.SetCropData(item.cropData);
         }
 
+        public void UseItem()
+        {
+            if (slotItemData.count > 0)
+            {
+                slotItemData.count--;
+                if (slotItemData.count <= 0)
+                    SetEmpty();
+            }
+        }
+
         public void SetEmpty()
         {
             slotItemData.SetEmpty();
