@@ -71,8 +71,12 @@ public static class TileLogicHelper
                 }
                 else if (tileState == TileState.Planted)
                 {
-                    tileDict[cellPosition].tileState = TileState.Tilled;
+                    if (tileManager.cropTileDataDict.ContainsKey(cellPosition))
+                        tileManager.cropTileDataDict.Remove(cellPosition);
+
                     tileManager.farmFieldMap.SetTile(cellPosition, null);
+
+                    tileDict[cellPosition].tileState = TileState.Tilled;
                 }
                 break;
             case ToolType.WateringCan:
@@ -91,6 +95,9 @@ public static class TileLogicHelper
             case ToolType.Pickaxe:
                 if (tileState != TileState.Empty)
                 {
+                    if (tileManager.cropTileDataDict.ContainsKey(cellPosition))
+                        tileManager.cropTileDataDict.Remove(cellPosition);
+
                     tileManager.farmFieldMap.SetTile(cellPosition, null);
                     tileManager.wateringMap.SetTile(cellPosition, null);
                     interactableMap.SetTile(cellPosition, tileManager.emptyTile);
