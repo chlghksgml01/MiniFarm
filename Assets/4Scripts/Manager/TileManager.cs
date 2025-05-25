@@ -201,11 +201,11 @@ public class TileManager : MonoBehaviour
     public Tile GetCropSeedTile(string cropSeedName, bool isWet)
     {
         string cropName = cropSeedName.Replace("Seed", "");
-        if (isWet && wetCropTileDict.ContainsKey(cropName))
+        if (isWet && wetCropTileDict.ContainsKey("Wet" + cropName))
         {
-            return wetCropTileDict[cropName][0];
+            return wetCropTileDict["Wet" + cropName][0];
         }
-        else if (cropTileDict.ContainsKey(cropName))
+        else if (!isWet && cropTileDict.ContainsKey(cropName))
         {
             return cropTileDict[cropName][0];
         }
@@ -243,6 +243,9 @@ public class TileManager : MonoBehaviour
                     farmFieldMap.SetTile(cropPos, nextLevelCropTile);
                 }
             }
+
+            cropData.isWatered = false;
+            wateringMap.SetTile(cropPos, null);
         }
     }
 }
