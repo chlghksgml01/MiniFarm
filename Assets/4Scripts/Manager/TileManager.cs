@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,21 +13,23 @@ public enum MouseDirection
 
 public class TileManager : MonoBehaviour
 {
-    [SerializeField] public Tilemap interactableMap;
-    [SerializeField] public Tilemap mainTileMap;
-    [SerializeField] public Tilemap wateringMap;
-    [SerializeField] public Tilemap farmFieldMap;
+    [Header("타일맵")]
+    [SerializeField] public Tilemap farmSelectedTileMap;
+    [SerializeField] public Tilemap tilledTileMap;
+    [SerializeField] public Tilemap wateringTileMap;
+    [SerializeField] public Tilemap cropTileMap;
 
+    [Header("타일")]
     [SerializeField] Tile hiddenInteractableTile;
     [SerializeField] Tile selectedTile;
     [SerializeField] public Tile emptyTile;
     [SerializeField] public Tile wateringTile;
     [SerializeField] public List<Tile> tilledTileDict;
-    [SerializeField] public Tile[] cropTiles;
-    [SerializeField] public Tile[] wetCropTiles;
+
+    [Space]
+    [SerializeField] private int resetTileChance = 30;
 
     private Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
-    // public Dictionary<Vector3Int, CropData> cropTileDataDict = new Dictionary<Vector3Int, CropData>();
 
     private Player player;
     private Vector3Int playerCellPosition;
@@ -49,25 +52,25 @@ public class TileManager : MonoBehaviour
     void Start()
     {
         InitializeTileData();
-        //GameManager.Instance.dayTimeManager.OnDayPassed += CropGrow;
+        GameManager.Instance.dayTimeManager.OnDayPassed += NewDayTile;
 
         player = GameManager.Instance.player;
     }
 
-    //private void OnDisable()
-    //{
-    //    GameManager.Instance.dayTimeManager.OnDayPassed -= CropGrow;
-    //}
+    private void OnDisable()
+    {
+        GameManager.Instance.dayTimeManager.OnDayPassed -= NewDayTile;
+    }
 
     private void InitializeTileData()
     {
         // 타일맵 안의 모든 셀 좌표 하나씩 가져오기
-        foreach (var position in interactableMap.cellBounds.allPositionsWithin)
+        foreach (var position in tilledTileMap.cellBounds.allPositionsWithin)
         {
-            TileBase tile = interactableMap.GetTile(position);
+            TileBase tile = tilledTileMap.GetTile(position);
             if (tile != null && tile.name == "Visible_InteractableTile")
             {
-                interactableMap.SetTile(position, hiddenInteractableTile);
+                tilledTileMap.SetTile(position, hiddenInteractableTile);
 
                 TileData tileData = new TileData();
                 tileDict.TryAdd(position, tileData);
@@ -83,10 +86,10 @@ public class TileManager : MonoBehaviour
 
     private void UpdateMouseDirection()
     {
-        playerCellPosition = mainTileMap.WorldToCell(player.transform.position);
+        playerCellPosition = farmSelectedTileMap.WorldToCell(player.transform.position);
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int mouseCellPos = mainTileMap.WorldToCell(mousePos);
+        Vector3Int mouseCellPos = farmSelectedTileMap.WorldToCell(mousePos);
 
         GetMouseDirection(playerCellPosition, mouseCellPos);
     }
@@ -131,8 +134,8 @@ public class TileManager : MonoBehaviour
 
         if (_selectedTilePos != selectedTilePos)
         {
-            mainTileMap.SetTile(selectedTilePos, null);
-            mainTileMap.SetTile(_selectedTilePos, selectedTile);
+            farmSelectedTileMap.SetTile(selectedTilePos, null);
+            farmSelectedTileMap.SetTile(_selectedTilePos, selectedTile);
             selectedTilePos = _selectedTilePos;
         }
     }
@@ -158,9 +161,9 @@ public class TileManager : MonoBehaviour
 
     public string GetTileName(Vector3Int position)
     {
-        if (interactableMap != null)
+        if (tilledTileMap != null)
         {
-            TileBase tile = interactableMap.GetTile(position);
+            TileBase tile = tilledTileMap.GetTile(position);
 
             if (tile != null)
             {
@@ -168,5 +171,27 @@ public class TileManager : MonoBehaviour
             }
         }
         return "";
+    }
+
+    private void NewDayTile()
+    {
+        var wateredTiles = tileDict.Where(pair => pair.Value.tileState == TileState.Watered);
+        foreach (var wateredTile in wateredTiles)
+        {
+            wateringTileMap.SetTile(wateredTile.Key, null);
+            wateredTile.Value.tileState = TileState.Tilled;
+        }
+
+        var tilledTiles = tileDict.Where(pair => pair.Value.tileState == TileState.Tilled);
+        foreach (var tilledTile in tilledTiles)
+        {
+            bool isReset = Random.Range(0, 100) <= resetTileChance;
+            if (isReset)
+            {
+                tilledTileMap.SetTile(tilledTile.Key, null);
+                tilledTile.Value.tileState = TileState.Empty;
+                TileLogicHelper.ResetConnectedTiles(tilledTile.Key, tileDict);
+            }
+        }
     }
 }

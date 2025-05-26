@@ -11,12 +11,12 @@ public class CropManager : MonoBehaviour
     private void Start()
     {
         tileManager = GameManager.Instance.tileManager;
-        GameManager.Instance.dayTimeManager.OnDayPassed += CropGrow;
+        GameManager.Instance.dayTimeManager.OnDayPassed += NewDayCrop;
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.dayTimeManager.OnDayPassed -= CropGrow;
+        GameManager.Instance.dayTimeManager.OnDayPassed -= NewDayCrop;
     }
 
     public Tile GetCropSeedTile(Vector3Int cellPosition, bool isWet)
@@ -39,11 +39,11 @@ public class CropManager : MonoBehaviour
             return;
 
         cropData.isWatered = true;
-        Tile wetTile = cropData.wetCropTiles[cropData.currentGrowthLevel];
-        tileManager.farmFieldMap.SetTile(tileManager.selectedTilePos, wetTile);
+        Tile wetCropTile = cropData.wetCropTiles[cropData.currentGrowthLevel];
+        tileManager.cropTileMap.SetTile(tileManager.selectedTilePos, wetCropTile);
     }
 
-    public void CropGrow()
+    public void NewDayCrop()
     {
         foreach (KeyValuePair<Vector3Int, CropData> cropTile in plantedCropsDict)
         {
@@ -61,13 +61,13 @@ public class CropManager : MonoBehaviour
                     cropData.currentGrowthDuration = 0;
                     cropData.currentGrowthLevel++;
                     Tile nextLevelCropTile = cropData.cropTiles[cropData.currentGrowthLevel];
-                    tileManager.farmFieldMap.SetTile(cropPos, nextLevelCropTile);
+                    tileManager.cropTileMap.SetTile(cropPos, nextLevelCropTile);
                 }
             }
 
             cropData.isWatered = false;
-            tileManager.wateringMap.SetTile(cropPos, null);
-            tileManager.farmFieldMap.SetTile(cropPos, cropData.cropTiles[cropData.currentGrowthLevel]);
+            tileManager.wateringTileMap.SetTile(cropPos, null);
+            tileManager.cropTileMap.SetTile(cropPos, cropData.cropTiles[cropData.currentGrowthLevel]);
         }
     }
 }

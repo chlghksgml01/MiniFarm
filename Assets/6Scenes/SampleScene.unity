@@ -1022,7 +1022,7 @@ GameObject:
   - component: {fileID: 288885634}
   - component: {fileID: 288885633}
   m_Layer: 0
-  m_Name: FarmFieldMap
+  m_Name: CropTileMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1301,7 +1301,7 @@ GameObject:
   - component: {fileID: 356956701}
   - component: {fileID: 356956700}
   m_Layer: 0
-  m_Name: InteractableMap
+  m_Name: TilledTileMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7839,10 +7839,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b2a31ea4da71764bac96c5d0ee24acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactableMap: {fileID: 356956701}
-  mainTileMap: {fileID: 1773313161}
-  wateringMap: {fileID: 406487758}
-  farmFieldMap: {fileID: 288885634}
+  farmSelectedTileMap: {fileID: 1773313161}
+  tilledTileMap: {fileID: 356956701}
+  wateringTileMap: {fileID: 406487758}
+  cropTileMap: {fileID: 288885634}
   hiddenInteractableTile: {fileID: 11400000, guid: 1bbedb399c9cdb24d9945d698123c599, type: 2}
   selectedTile: {fileID: 11400000, guid: d0b899fd9638df84fbb15c806ab30d17, type: 2}
   emptyTile: {fileID: 11400000, guid: 5e6c408882f6c0341bb448b947c861e3, type: 2}
@@ -7865,26 +7865,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b8e3685df9d5c414bb38c83447fd97f0, type: 2}
   - {fileID: 11400000, guid: 113f4b802640c0e46add511f4e5329c1, type: 2}
   - {fileID: 11400000, guid: 44a2e2f35dca5ba4babf851aa3f71693, type: 2}
-  cropTiles:
-  - {fileID: 11400000, guid: 9583fef43b71abb438e431f6c8bf8e84, type: 2}
-  - {fileID: 11400000, guid: f2767b08b79d863458a3a3496eeaef25, type: 2}
-  - {fileID: 11400000, guid: cf47b68651c7cfd469b822b214520de3, type: 2}
-  - {fileID: 11400000, guid: d9a5f5ab925fb35489cce395a7a10b7b, type: 2}
-  - {fileID: 11400000, guid: 75b0689eecad5fb49b86239f1beb932d, type: 2}
-  - {fileID: 11400000, guid: b29688c8fccbf1c49b55d7ac67769f6b, type: 2}
-  - {fileID: 11400000, guid: 9727aeb86dc9a014b839b2274d094263, type: 2}
-  - {fileID: 11400000, guid: b00e709a7caea2047ad94dabe933d3d6, type: 2}
-  - {fileID: 11400000, guid: bbdc1a67593d88841ae56a8bb18645ae, type: 2}
-  wetCropTiles:
-  - {fileID: 11400000, guid: 35299c9b6039b024db3b4a53ceb767f2, type: 2}
-  - {fileID: 11400000, guid: 5a9c2fd5636c8c3499cf6b4ecc4e9682, type: 2}
-  - {fileID: 11400000, guid: 53aa6fd890ccc194799c3e3b6a4dbe57, type: 2}
-  - {fileID: 11400000, guid: 8e26e7731bb8fee40ad9e20300cde572, type: 2}
-  - {fileID: 11400000, guid: e4587f495fd065344a0424e2abbfbfaa, type: 2}
-  - {fileID: 11400000, guid: 7395025e7d5e07545b06c9b869eafe8a, type: 2}
-  - {fileID: 11400000, guid: d232469b7127abb4fa8da0cc29ea4ced, type: 2}
-  - {fileID: 11400000, guid: df85d0a6809a4e04cb77791cfea056f3, type: 2}
-  - {fileID: 11400000, guid: f4a2843477658df49bc4bf5c23d4fe2c, type: 2}
+  resetTileChance: 30
 --- !u!114 &632928898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7901,7 +7882,7 @@ MonoBehaviour:
   dayEndTime: 26
   twilightStartTime: 19
   darkestTime: 22
-  timeScale: 1200
+  timeScale: 3600
   timeInterval: 1
   timeText: {fileID: 1157134613}
   globalLight: {fileID: 1009898803}
@@ -45412,7 +45393,7 @@ GameObject:
   - component: {fileID: 1773313161}
   - component: {fileID: 1773313160}
   m_Layer: 0
-  m_Name: MainTileMap
+  m_Name: farmSelectedTileMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
