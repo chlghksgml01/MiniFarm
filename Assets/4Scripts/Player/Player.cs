@@ -49,12 +49,17 @@ public class Player : MonoBehaviour
             // 단위벡터-> 대각선으로 가도 같은 속도로 이동하게끔
             moveInput = moveInput.normalized;
 
-            transform.Translate(moveInput * speed * Time.deltaTime);
+            //transform.Translate(moveInput * speed * Time.deltaTime);
         }
 
         stateMachine.currentState.UpdateState();
     }
 
+    private void FixedUpdate()
+    {
+        transform.Translate(moveInput * speed * Time.fixedDeltaTime);
+
+    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {

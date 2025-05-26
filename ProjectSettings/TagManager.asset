@@ -45,14 +45,14 @@ TagManager:
   - name: Background
     uniqueID: 3225854121
     locked: 0
-  - name: Structures
-    uniqueID: 867774899
-    locked: 0
-  - name: Player
-    uniqueID: 3839313319
-    locked: 0
   - name: Item
     uniqueID: 826969125
+    locked: 0
+  - name: Player/Structure
+    uniqueID: 867774899
+    locked: 0
+  - name: HoldItem
+    uniqueID: 1837855293
     locked: 0
   - name: Crop
     uniqueID: 405030709

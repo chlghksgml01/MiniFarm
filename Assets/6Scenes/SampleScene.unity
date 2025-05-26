@@ -1283,7 +1283,7 @@ Transform:
   m_GameObject: {fileID: 297086716}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0.48, y: 0.75, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7882,7 +7882,7 @@ MonoBehaviour:
   dayEndTime: 26
   twilightStartTime: 19
   darkestTime: 22
-  timeScale: 3600
+  timeScale: 0
   timeInterval: 1
   timeText: {fileID: 1157134613}
   globalLight: {fileID: 1009898803}
@@ -8980,7 +8980,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000a9a046c0b331b933a745d7e4258c4a3135472418
+  m_ApplyToSortingLayers: 00000000a9a046c0b331b933258c4a31354724183d728b6d
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -47646,11 +47646,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6320830372756349322, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.48
       objectReference: {fileID: 0}
     - target: {fileID: 6320830372756349322, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 6320830372756349322, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -47687,22 +47687,6 @@ PrefabInstance:
     - target: {fileID: 7613151609588484325, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136690710509677243, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_Size.x
-      value: 3.9375
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136690710509677243, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_Size.y
-      value: 4.5625
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136690710509677243, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 1168926902407322946, guid: 4c70859e0746caa4b850337487e34691, type: 3}
-    - target: {fileID: 9136690710509677243, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

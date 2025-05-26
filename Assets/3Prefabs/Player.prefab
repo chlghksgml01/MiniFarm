@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7282898735484896204}
   - component: {fileID: 2880506516904200336}
   - component: {fileID: 940991261157504117}
+  - component: {fileID: 6672458755962310888}
   m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
@@ -75,9 +76,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -455653977
+  m_SortingLayerID: 867774899
   m_SortingLayer: 3
-  m_SortingOrder: 3
+  m_SortingOrder: 0
   m_Sprite: {fileID: 1090217281897295437, guid: c49ed7a8ae686c641b330ad31ec1c86e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -88,7 +89,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &2880506516904200336
 Animator:
   serializedVersion: 7
@@ -123,6 +124,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c69e58a374b4dec44ad1a0b67be82769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!70 &6672458755962310888
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080708159066243804}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.010913491, y: 0.26464117}
+  m_Size: {x: 0.48153347, y: 0.58088887}
+  m_Direction: 0
 --- !u!1 &7613151609588484325
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +216,6 @@ MonoBehaviour:
   moveInput: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
   holdItem: {fileID: 3085691364585730817}
-  toolType: 0
 --- !u!70 &3363399488693892103
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -209,12 +246,12 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.6236079}
-  m_Size: {x: 0.7473614, y: 1.2800171}
+  m_Offset: {x: 0.0022990704, y: 0.4886138}
+  m_Size: {x: 0.7399637, y: 0.7646617}
   m_Direction: 0
 --- !u!50 &3289378362473723201
 Rigidbody2D:
@@ -261,19 +298,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_Size.x
-      value: 1
+      value: 3.9375
       objectReference: {fileID: 0}
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_Size.y
-      value: 1
+      value: 4.5625
       objectReference: {fileID: 0}
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_Sprite
       value: 
+      objectReference: {fileID: 1168926902407322946, guid: 4c70859e0746caa4b850337487e34691, type: 3}
+    - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1837855293
       objectReference: {fileID: 0}
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_WasSpriteAssigned
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4194134174828060832, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_LocalScale.x
@@ -336,7 +381,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5426fffc1ff8c0143b012567fd5f0ef5, type: 3}
+  m_Script: {fileID: 11500000, guid: 5597aed834f08da4baed931777a9036d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &6558937044535936830 stripped
