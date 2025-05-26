@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public PlayerIdleState idleState;
     [HideInInspector] public PlayerMoveState moveState;
     [HideInInspector] public PlayerWorkingState workingState;
+    [HideInInspector] public PlayerPickUpState pickUpState;
 
     public PlayerStateMachine stateMachine { get; private set; }
 
@@ -30,6 +31,7 @@ public class Player : MonoBehaviour
         idleState = new PlayerIdleState(this, stateMachine, "isMoving");
         moveState = new PlayerMoveState(this, stateMachine, "isMoving");
         workingState = new PlayerWorkingState(this, stateMachine, "isWorking");
+        pickUpState = new PlayerPickUpState(this, stateMachine, "isPickingUp");
 
         stateMachine.Initialize(idleState);
 
@@ -41,7 +43,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (stateMachine.currentState != workingState)
+        if (stateMachine.currentState != workingState && stateMachine.currentState != pickUpState)
         {
             moveInput.x = Input.GetAxisRaw("Horizontal");
             moveInput.y = Input.GetAxisRaw("Vertical");
@@ -49,15 +51,14 @@ public class Player : MonoBehaviour
             // 단위벡터-> 대각선으로 가도 같은 속도로 이동하게끔
             moveInput = moveInput.normalized;
 
-            //transform.Translate(moveInput * speed * Time.deltaTime);
+            stateMachine.currentState.UpdateState();
         }
-
-        stateMachine.currentState.UpdateState();
     }
 
     private void FixedUpdate()
     {
-        transform.Translate(moveInput * speed * Time.fixedDeltaTime);
+        if (stateMachine.currentState != workingState && stateMachine.currentState != pickUpState)
+            transform.Translate(moveInput * speed * Time.fixedDeltaTime);
 
     }
 
@@ -113,6 +114,27 @@ public class Player : MonoBehaviour
         }
 
         SetHoldTool();
+    }
+
+    public void HarvestCrop()
+    {
+        stateMachine.ChangeState(pickUpState);
+
+        // 현태 선택된 타일에 있는 작물 가져오기
+        CropData cropData = GameManager.Instance.tileManager.GetSelectedCropData();
+
+        GameManager.Instance.itemManager.itemDict.TryGetValue(cropData.cropName, out Item item);
+        ItemData itemData = new ItemData();
+        itemData.SetItemData(item.itemData, item.cropData);
+
+        inventory.AddItem(item);
+        GameManager.Instance.uiManager.inventory_UI.Refresh();
+
+        if (!GameManager.Instance.player.holdItem.IsEmpty())
+            return;
+
+        holdItem.gameObject.SetActive(true);
+        holdItem.SetHoldItem(itemData);
     }
 
     private void SetHoldTool()

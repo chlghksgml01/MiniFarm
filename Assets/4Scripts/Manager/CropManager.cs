@@ -64,6 +64,8 @@ public class CropManager : MonoBehaviour
                     tileManager.cropTileMap.SetTile(cropPos, nextLevelCropTile);
                 }
             }
+            if (cropData.currentGrowthLevel >= cropData.growthLevel - 1)
+                cropData.canHarvest = true;
 
             cropData.isWatered = false;
             tileManager.wateringTileMap.SetTile(cropPos, null);

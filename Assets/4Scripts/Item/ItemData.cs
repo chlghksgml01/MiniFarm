@@ -77,6 +77,7 @@ public class CropData
     public int currentGrowthDuration = 0;
     public int currentGrowthLevel = 0;
     public bool isWatered = false;
+    public bool canHarvest = false;
 
     public void SetCropData(ScriptableCropData scriptableCropData)
     {
@@ -110,6 +111,7 @@ public class CropData
         currentGrowthDuration = 0;
         currentGrowthLevel = 0;
         isWatered = false;
+        canHarvest = false;
     }
 
     public bool IsEmpty()

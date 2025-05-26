@@ -16,6 +16,17 @@ public class HoldItem : MonoBehaviour
         sprite.sprite = itemData.icon;
     }
 
+    public void SetHoldItem(ItemData newItemData)
+    {
+        itemData.SetItemData(newItemData);
+        sprite.sprite = itemData.icon;
+    }
+
+    public bool IsEmpty()
+    {
+        return itemData.IsEmpty();
+    }
+
     public void SetEmpty()
     {
         itemData.SetEmpty();

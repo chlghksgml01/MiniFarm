@@ -29,7 +29,7 @@ public class TileManager : MonoBehaviour
     [Space]
     [SerializeField] private int resetTileChance = 30;
 
-    private Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
+    public Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
 
     private Player player;
     private Vector3Int playerCellPosition;
@@ -159,18 +159,10 @@ public class TileManager : MonoBehaviour
         TileLogicHelper.SetTiles(selectedTilePos, tileDict);
     }
 
-    public string GetTileName(Vector3Int position)
+    public CropData GetSelectedCropData()
     {
-        if (tilledTileMap != null)
-        {
-            TileBase tile = tilledTileMap.GetTile(position);
-
-            if (tile != null)
-            {
-                return tile.name;
-            }
-        }
-        return "";
+        GameManager.Instance.cropManager.plantedCropsDict.TryGetValue(selectedTilePos, out CropData cropData);
+        return cropData;
     }
 
     private void NewDayTile()
@@ -193,5 +185,49 @@ public class TileManager : MonoBehaviour
                 TileLogicHelper.ResetConnectedTiles(tilledTile.Key, tileDict);
             }
         }
+    }
+
+    public bool CanHarvest()
+    {
+        var cropDict = GameManager.Instance.cropManager.plantedCropsDict;
+        cropDict.TryGetValue(selectedTilePos, out CropData cropData);
+        if (cropData == null)
+            return false;
+
+        if (cropData.canHarvest == true)
+            return true;
+
+        return false;
+    }
+
+    public void HarvestCrop()
+    {
+        if (!CanHarvest())
+        {
+            Debug.LogWarning("TileManager - 수확할 작물 없음");
+            return;
+        }
+
+        player.SetPlayerDirection(mouseDirection);
+
+        if (GameManager.Instance.cropManager.plantedCropsDict[selectedTilePos].isWatered)
+            tileDict[selectedTilePos].tileState = TileState.Watered;
+        else
+            tileDict[selectedTilePos].tileState = TileState.Tilled;
+
+        GameManager.Instance.cropManager.plantedCropsDict.Remove(selectedTilePos);
+
+        cropTileMap.SetTile(selectedTilePos, null);
+    }
+
+    public string GetSelectedCropName()
+    {
+        var cropDict = GameManager.Instance.cropManager.plantedCropsDict;
+        cropDict.TryGetValue(selectedTilePos, out CropData cropData);
+
+        if (cropData == null)
+            return "";
+
+        return cropData.cropName;
     }
 }

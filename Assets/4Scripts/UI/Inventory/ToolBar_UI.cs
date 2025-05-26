@@ -38,6 +38,9 @@ public class ToolBar_UI : MonoBehaviour
 
         ItemData selectedItemData = GameManager.Instance.player.inventory.slots[selectedSlotIdx].slotItemData;
 
+        if (GameManager.Instance.player.stateMachine.currentState == GameManager.Instance.player.pickUpState)
+            return;
+
         if (!selectedItemData.IsEmpty() && selectedItemData.itemType != ItemType.None)
             GameManager.Instance.player.SetHoldItem(selectedItemData);
         else if (selectedItemData.IsEmpty())

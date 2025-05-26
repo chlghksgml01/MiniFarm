@@ -42,6 +42,16 @@ public class PlayerState
         {
             GameManager.Instance.tileManager.ChangeTileState();
         }
+
+        else if ((Input.GetMouseButtonDown(1) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
+            && GameManager.Instance.tileManager.CanHarvest()))
+        {
+            if (player.holdItem.IsEmpty() || player.holdItem.itemData.itemName == GameManager.Instance.tileManager.GetSelectedCropName())
+            {
+                player.HarvestCrop();
+                GameManager.Instance.tileManager.HarvestCrop();
+            }
+        }
     }
 
     public virtual void ExitState()
