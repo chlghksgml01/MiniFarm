@@ -7742,6 +7742,7 @@ GameObject:
   - component: {fileID: 632928896}
   - component: {fileID: 632928897}
   - component: {fileID: 632928898}
+  - component: {fileID: 632928899}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -7765,6 +7766,7 @@ MonoBehaviour:
   uiManager: {fileID: 632928896}
   tileManager: {fileID: 632928897}
   dayTimeManager: {fileID: 632928898}
+  cropManager: {fileID: 632928899}
   player: {fileID: 3829045634920418538}
 --- !u!4 &632928894
 Transform:
@@ -7905,6 +7907,18 @@ MonoBehaviour:
   globalLight: {fileID: 1009898803}
   nightLightColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 0}
   dayLightColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &632928899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 632928892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a2871b72f86e744a01ec167f1f8deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &643859492 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 322919968833071363, guid: 446870934bb189b429e30cf2622dff97, type: 3}

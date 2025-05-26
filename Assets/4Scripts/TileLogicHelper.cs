@@ -30,7 +30,9 @@ public static class TileLogicHelper
 
     private static void PlantCrop(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileState tileState, TileManager tileManager, string cropName)
     {
+        CropManager cropManager = GameManager.Instance.cropManager;
         Tilemap farmFieldMap = tileManager.farmFieldMap;
+
         if (farmFieldMap.GetTile(cellPosition) == null)
         {
             Tile cropSeedTile = ScriptableObject.CreateInstance<Tile>();
@@ -45,10 +47,11 @@ public static class TileLogicHelper
             {
                 farmFieldMap.SetTile(cellPosition, cropSeedTile);
 
-                tileManager.cropTileDataDict.TryAdd(cellPosition, new CropData());
-                tileManager.cropTileDataDict[cellPosition].SetCropData(GameManager.Instance.player.holdItem.itemData.cropData);
+                cropManager.plantedCropsDict.TryAdd(cellPosition, new CropData());
+                cropManager.plantedCropsDict[cellPosition].SetCropData(GameManager.Instance.player.holdItem.itemData.cropData);
+
                 if (tileState == TileState.Watered)
-                    tileManager.cropTileDataDict[cellPosition].isWatered = true;
+                    cropManager.plantedCropsDict[cellPosition].isWatered = true;
                 tileDict[cellPosition].tileState = TileState.Planted;
                 GameManager.Instance.uiManager.toolBar_UI.UseItem();
             }
@@ -58,6 +61,7 @@ public static class TileLogicHelper
 
     private static void ApplyTool(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileData centerTileData, TileState tileState, TileManager tileManager)
     {
+        CropManager cropManager = GameManager.Instance.cropManager;
         Tilemap interactableMap = tileManager.interactableMap;
 
         ToolType playerToolType = GameManager.Instance.player.playerToolType;
@@ -71,8 +75,8 @@ public static class TileLogicHelper
                 }
                 else if (tileState == TileState.Planted)
                 {
-                    if (tileManager.cropTileDataDict.ContainsKey(cellPosition))
-                        tileManager.cropTileDataDict.Remove(cellPosition);
+                    if (cropManager.plantedCropsDict.ContainsKey(cellPosition))
+                        cropManager.plantedCropsDict.Remove(cellPosition);
 
                     tileManager.farmFieldMap.SetTile(cellPosition, null);
 
@@ -88,15 +92,15 @@ public static class TileLogicHelper
                         tileDict[cellPosition].tileState = TileState.Watered;
                     if (tileState == TileState.Planted)
                     {
-                        tileManager.WaterCropTile(cellPosition);
+                        cropManager.WaterCropTile(cellPosition);
                     }
                 }
                 break;
             case ToolType.Pickaxe:
                 if (tileState != TileState.Empty)
                 {
-                    if (tileManager.cropTileDataDict.ContainsKey(cellPosition))
-                        tileManager.cropTileDataDict.Remove(cellPosition);
+                    if (cropManager.plantedCropsDict.ContainsKey(cellPosition))
+                        cropManager.plantedCropsDict.Remove(cellPosition);
 
                     tileManager.farmFieldMap.SetTile(cellPosition, null);
                     tileManager.wateringMap.SetTile(cellPosition, null);
