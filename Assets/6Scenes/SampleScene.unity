@@ -620,7 +620,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  angrySpeed: 1.5
   patrolRadius: 3
+  detectionRange: 6
+  hp: 10
   moveInput: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
 --- !u!114 &169095792 stripped
@@ -8059,7 +8062,7 @@ MonoBehaviour:
   dayEndTime: 26
   twilightStartTime: 19
   darkestTime: 22
-  timeScale: 6000
+  timeScale: 0
   timeInterval: 1
   timeText: {fileID: 1157134613}
   globalLight: {fileID: 1009898803}

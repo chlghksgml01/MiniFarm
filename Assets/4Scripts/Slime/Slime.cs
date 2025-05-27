@@ -1,12 +1,9 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum SlimeState
 {
-    Idle,
-    Move,
+    Patrol,
     Angry,
     Death
 }
@@ -17,18 +14,12 @@ public class Slime : MonoBehaviour
     [SerializeField] public float angrySpeed = 1.5f;
     [SerializeField] private float patrolRadius = 2f;
     [SerializeField] private float detectionRange = 3f;
+    [SerializeField] private int hp = 10;
 
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Animator anim;
 
-    private SlimeState slimeState;
-    private Dictionary<SlimeState, string> animStateDict = new Dictionary<SlimeState, string>
-    {
-        { SlimeState.Idle , "isMoving" },
-        { SlimeState.Move , "isMoving" },
-        { SlimeState.Angry , "isPlayerDetected" },
-        { SlimeState.Death , "isDeath" },
-    };
+    private SlimeState slimeState = SlimeState.Patrol;
 
     private Transform playerTransform;
     private Coroutine patrolCoroutine;
@@ -43,7 +34,7 @@ public class Slime : MonoBehaviour
 
     private void Start()
     {
-        patrolCoroutine = StartCoroutine(Patrol());
+        patrolCoroutine = StartCoroutine(StartPatrol());
 
         anim.SetFloat("vertical", 0f);
         anim.SetFloat("horizontal", 0f);
@@ -60,11 +51,8 @@ public class Slime : MonoBehaviour
 
         switch (slimeState)
         {
-            case SlimeState.Idle:
-                Idle();
-                break;
-            case SlimeState.Move:
-                Move();
+            case SlimeState.Patrol:
+                Patrol();
                 break;
             case SlimeState.Angry:
                 Angry();
@@ -72,12 +60,7 @@ public class Slime : MonoBehaviour
         }
     }
 
-    private void Idle()
-    {
-        CheckAngryState();
-    }
-
-    private void Move()
+    private void Patrol()
     {
         CheckAngryState();
     }
@@ -87,8 +70,8 @@ public class Slime : MonoBehaviour
         if (Vector3.Distance(playerTransform.position, transform.position) > detectionRange)
         {
             anim.SetBool("isPlayerDetected", false);
-            slimeState = SlimeState.Idle;
-            patrolCoroutine = StartCoroutine(Patrol());
+            slimeState = SlimeState.Patrol;
+            patrolCoroutine = StartCoroutine(StartPatrol());
             return;
         }
 
@@ -105,29 +88,29 @@ public class Slime : MonoBehaviour
     {
         if (Vector3.Distance(playerTransform.position, transform.position) <= detectionRange)
         {
+            StopCoroutine(patrolCoroutine);
+            patrolCoroutine = null;
+
             slimeState = SlimeState.Angry;
             anim.SetBool("isPlayerDetected", true);
         }
     }
 
 
-    private IEnumerator Patrol()
+    private IEnumerator StartPatrol()
     {
         Vector3 startPos = transform.position;
         while (true)
         {
+            moveInput = Vector3.zero;
             float waitTime = Random.Range(1f, 3f);
 
-            slimeState = SlimeState.Idle;
-
             yield return new WaitForSeconds(waitTime);
-
-            slimeState = SlimeState.Idle;
 
             Vector3 distance = Random.insideUnitCircle * patrolRadius;
             Vector3 targetPos = startPos + distance;
 
-            while (Vector3.Distance(transform.position, targetPos) > 0.1f && slimeState == SlimeState.Move)
+            while (Vector3.Distance(transform.position, targetPos) > 0.1f)
             {
                 moveInput = (targetPos - transform.position).normalized;
                 anim.SetFloat("horizontal", moveInput.x);
