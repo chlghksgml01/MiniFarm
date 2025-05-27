@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Drawing;
 using UnityEngine;
 
 public enum SlimeState
@@ -15,21 +16,27 @@ public class Slime : MonoBehaviour
     [SerializeField] private float patrolRadius = 2f;
     [SerializeField] private float detectionRange = 3f;
     [SerializeField] private int hp = 10;
+    [SerializeField] private float knockbackForce = 5f;
+    [SerializeField] private float knockbackTime = 0.2f;
 
-    [HideInInspector] public Vector3 moveInput;
-    [HideInInspector] public Animator anim;
+    [HideInInspector] private Vector3 moveInput;
+    [HideInInspector] private Animator anim;
+    private Rigidbody2D rigid;
 
     private SlimeState slimeState = SlimeState.Patrol;
 
     private Transform playerTransform;
     private Coroutine patrolCoroutine;
 
+    private bool isKnockedBack = false;
+    private float knockbackTimer;
+
     private void Awake()
     {
-        anim = GetComponentInChildren<Animator>();
+        knockbackTimer = knockbackTime;
 
-        if (anim == null)
-            Debug.Log("Slime - anim ¾øÀ½");
+        rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     private void Start()
@@ -49,6 +56,17 @@ public class Slime : MonoBehaviour
 
         anim.SetBool("isMoving", moveInput != Vector3.zero);
 
+        if (isKnockedBack)
+        {
+            knockbackTimer -= Time.deltaTime;
+            if (knockbackTimer <= 0f)
+            {
+                isKnockedBack = false;
+                knockbackTimer = knockbackTime;
+                rigid.linearVelocity = Vector2.zero;
+            }
+        }
+
         switch (slimeState)
         {
             case SlimeState.Patrol:
@@ -57,6 +75,27 @@ public class Slime : MonoBehaviour
             case SlimeState.Angry:
                 Angry();
                 break;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (slimeState == SlimeState.Death)
+            return;
+        if (collision.CompareTag("PlayerAttack") && !isKnockedBack)
+        {
+            isKnockedBack = true;
+
+            rigid.linearVelocity = Vector2.zero;
+            Vector2 knockbackDirection = transform.position - collision.transform.position;
+            rigid.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode2D.Impulse);
+
+            hp -= 5;
+            if (hp <= 0)
+            {
+                slimeState = SlimeState.Death;
+                anim.SetTrigger("isDeath");
+            }
         }
     }
 
@@ -80,7 +119,8 @@ public class Slime : MonoBehaviour
             moveInput = (playerTransform.position - transform.position).normalized;
             anim.SetFloat("horizontal", moveInput.x);
             anim.SetFloat("vertical", moveInput.y);
-            transform.Translate(moveInput * angrySpeed * Time.deltaTime);
+            if (!isKnockedBack)
+                transform.Translate(moveInput * angrySpeed * Time.deltaTime);
         }
     }
 
@@ -115,7 +155,8 @@ public class Slime : MonoBehaviour
                 moveInput = (targetPos - transform.position).normalized;
                 anim.SetFloat("horizontal", moveInput.x);
                 anim.SetFloat("vertical", moveInput.y);
-                transform.Translate(moveInput * speed * Time.deltaTime);
+                if (!isKnockedBack)
+                    transform.Translate(moveInput * speed * Time.deltaTime);
                 yield return null;
             }
         }

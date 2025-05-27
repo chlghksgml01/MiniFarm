@@ -46,7 +46,7 @@ public class TileManager : MonoBehaviour
             { MouseDirection.UpLeft,     new Vector2Int(-1, 1)},
             { MouseDirection.DownLeft,   new Vector2Int(-1, -1)}
         };
-    private MouseDirection mouseDirection;
+    public MouseDirection mouseDirection;
     public Vector3Int selectedTilePos { get; set; }
 
     void Start()

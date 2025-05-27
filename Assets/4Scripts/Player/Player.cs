@@ -1,9 +1,21 @@
 using UnityEngine;
 
+public enum playerDir
+{
+    Up,
+    Down,
+    Left,
+    Right
+}
+
 public class Player : MonoBehaviour
 {
     [SerializeField] private GameObject dropItem;
     [SerializeField] public float speed;
+    [SerializeField] public GameObject SwordColliderRight;
+    [SerializeField] public GameObject SwordColliderLeft;
+    [SerializeField] public GameObject SwordColliderDown;
+    [SerializeField] public GameObject SwordColliderUp;
 
     [HideInInspector] public Inventory inventory;
 
@@ -19,6 +31,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] public HoldItem holdItem;
     public ToolType playerToolType { get; set; } = ToolType.None;
+    public playerDir playerDir { get; set; } = playerDir.Down;
 
     private void Awake()
     {
@@ -151,8 +164,8 @@ public class Player : MonoBehaviour
             case "WateringCan":
                 playerToolType = ToolType.WateringCan;
                 break;
-            case "FishingRod":
-                playerToolType = ToolType.FishingRod;
+            case "Sword":
+                playerToolType = ToolType.Sword;
                 break;
             default:
                 playerToolType = ToolType.None;
@@ -165,22 +178,26 @@ public class Player : MonoBehaviour
         switch (mouseDirection)
         {
             case MouseDirection.Up:
+                playerDir = playerDir.Up;
                 anim.SetFloat("vertical", 1f);
                 anim.SetFloat("horizontal", 0f);
                 break;
             case MouseDirection.Center:
             case MouseDirection.Down:
+                playerDir = playerDir.Down;
                 anim.SetFloat("vertical", -1f);
                 anim.SetFloat("horizontal", 0f);
                 break;
             case MouseDirection.Right:
             case MouseDirection.UpRight:
             case MouseDirection.DownRight:
+                playerDir = playerDir.Right;
                 anim.SetFloat("horizontal", 1f);
                 break;
             case MouseDirection.Left:
             case MouseDirection.UpLeft:
             case MouseDirection.DownLeft:
+                playerDir = playerDir.Left;
                 anim.SetFloat("horizontal", -1f);
                 break;
         }
