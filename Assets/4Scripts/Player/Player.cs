@@ -43,14 +43,14 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        moveInput.x = Input.GetAxisRaw("Horizontal");
+        moveInput.y = Input.GetAxisRaw("Vertical");
+
+        // 단위벡터-> 대각선으로 가도 같은 속도로 이동하게끔
+        moveInput = moveInput.normalized;
+
         if (stateMachine.currentState != workingState && stateMachine.currentState != pickUpState)
         {
-            moveInput.x = Input.GetAxisRaw("Horizontal");
-            moveInput.y = Input.GetAxisRaw("Vertical");
-
-            // 단위벡터-> 대각선으로 가도 같은 속도로 이동하게끔
-            moveInput = moveInput.normalized;
-
             stateMachine.currentState.UpdateState();
         }
     }
@@ -59,7 +59,6 @@ public class Player : MonoBehaviour
     {
         if (stateMachine.currentState != workingState && stateMachine.currentState != pickUpState)
             transform.Translate(moveInput * speed * Time.fixedDeltaTime);
-
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -187,5 +186,13 @@ public class Player : MonoBehaviour
                 anim.SetFloat("horizontal", -1f);
                 break;
         }
+    }
+
+    public bool CanHarvest()
+    {
+        if (holdItem.IsEmpty() || holdItem.itemData.itemName == GameManager.Instance.tileManager.GetSelectedCropName())
+            return true;
+
+        return false;
     }
 }

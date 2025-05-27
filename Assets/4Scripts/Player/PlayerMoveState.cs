@@ -14,8 +14,6 @@ public class PlayerMoveState : PlayerState
 
     public override void UpdateState()
     {
-        base.UpdateState();
-
         if (player.moveInput.magnitude > 0)
         {
             player.anim.SetFloat("horizontal", player.moveInput.x);
@@ -26,6 +24,8 @@ public class PlayerMoveState : PlayerState
         {
             stateMachine.ChangeState(player.idleState);
         }
+
+        base.UpdateState();
     }
 
     public override void ExitState()

@@ -10,6 +10,7 @@ public class PlayerWorkingState : PlayerState
     public override void EnterState()
     {
         player.anim.SetInteger(animBoolName, (int)player.playerToolType);
+        player.moveInput = Vector3.zero;
     }
 
     public override void UpdateState()
