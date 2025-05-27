@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 803e49a2570761048b1d983df97045b4
+guid: bfb434fca4851a44789064f64df05429
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8834441656716106029
-    second: hoe_0
+      213: 4707761353969668868
+    second: wateringcan_green_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: hoe_0
+      name: wateringcan_green_0
       rect:
         serializedVersion: 2
         x: 9
-        y: 10
+        y: 11
         width: 15
-        height: 13
+        height: 10
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d291a7141ed3a9a70800000000000000
-      internalID: 8834441656716106029
+      spriteID: 4039ca63204555140800000000000000
+      internalID: 4707761353969668868
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      hoe_0: 8834441656716106029
+      wateringcan_green_0: 4707761353969668868
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
