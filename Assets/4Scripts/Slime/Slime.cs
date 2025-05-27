@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Drawing;
+using Unity.Collections;
 using UnityEngine;
 
 public enum SlimeState
@@ -53,7 +54,6 @@ public class Slime : MonoBehaviour
     {
         if (slimeState == SlimeState.Death)
             return;
-
         anim.SetBool("isMoving", moveInput != Vector3.zero);
 
         if (isKnockedBack)
@@ -95,6 +95,8 @@ public class Slime : MonoBehaviour
             {
                 slimeState = SlimeState.Death;
                 anim.SetTrigger("isDeath");
+                isKnockedBack = true;
+                rigid.linearVelocity = Vector2.zero;
             }
         }
     }
@@ -160,5 +162,10 @@ public class Slime : MonoBehaviour
                 yield return null;
             }
         }
+    }
+
+    private void DeathAnimationTrigger()
+    {
+        Destroy(gameObject);
     }
 }

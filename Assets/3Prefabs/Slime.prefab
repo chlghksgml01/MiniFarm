@@ -130,8 +130,8 @@ MonoBehaviour:
   patrolRadius: 3
   detectionRange: 6
   hp: 10
-  moveInput: {x: 0, y: 0, z: 0}
-  anim: {fileID: 0}
+  knockbackForce: 5
+  knockbackTime: 0.2
 --- !u!50 &-3741043960818242706
 Rigidbody2D:
   serializedVersion: 5
@@ -158,7 +158,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &-34366102454874589
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -189,7 +189,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
