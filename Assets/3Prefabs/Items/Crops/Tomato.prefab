@@ -128,7 +128,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 0.5, y: 0.5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -148,8 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7fcf0016bb653e45b6223d6f3d5224b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: f5c6976a0722b5f4c9147c59399d3dd3, type: 2}
-  cropData: {fileID: 0}
+  scriptableItemData: {fileID: 11400000, guid: f5c6976a0722b5f4c9147c59399d3dd3, type: 2}
+  scriptableCropData: {fileID: 11400000, guid: 055ecb39b0c1c674783260bf4688c519, type: 2}
   count: 1
 --- !u!1 &1754105604331694469
 GameObject:

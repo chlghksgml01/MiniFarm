@@ -3,11 +3,32 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public ScriptableItemData itemData;
-    public ScriptableCropData cropData;
+    public ScriptableItemData scriptableItemData;
+    public ScriptableCropData scriptableCropData;
     public int count = 1;
+
     private TextMeshProUGUI textUI;
 
+    private ItemData _itemData;
+    public ItemData itemData
+    {
+        get
+        {
+            if (scriptableItemData == null)
+                return null;
+
+            if (_itemData == null)
+            {
+                _itemData = new ItemData();
+
+                _itemData.SetItemData(scriptableItemData, scriptableCropData);
+                _itemData.count = count;
+            }
+
+            return _itemData;
+        }
+        private set { _itemData = value; }
+    }
     #region DropItemBounce
     bool isBouncing = false;
     Vector3 bounceBasePos;
@@ -36,6 +57,8 @@ public class Item : MonoBehaviour
         if (isBouncing)
             BounceItem();
     }
+
+    public bool IsEmpty() => itemData.IsEmpty();
 
     void SetTextUI()
     {

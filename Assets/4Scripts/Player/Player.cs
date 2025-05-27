@@ -100,8 +100,11 @@ public class Player : MonoBehaviour
         }
 
         holdItem.gameObject.SetActive(true);
+
         var item = GameManager.Instance.itemManager.itemDict[holdItemData.itemName];
-        holdItem.SetHoldItem(item.itemData, item.cropData);
+        if (item.IsEmpty())
+            return;
+        holdItem.SetHoldItem(item.itemData);
 
         if (holdItem.itemData.itemType == ItemType.Tool)
         {
@@ -124,8 +127,6 @@ public class Player : MonoBehaviour
         CropData cropData = GameManager.Instance.tileManager.GetSelectedCropData();
 
         GameManager.Instance.itemManager.itemDict.TryGetValue(cropData.cropName, out Item item);
-        ItemData itemData = new ItemData();
-        itemData.SetItemData(item.itemData, item.cropData);
 
         inventory.AddItem(item);
         GameManager.Instance.uiManager.inventory_UI.Refresh();
@@ -134,7 +135,7 @@ public class Player : MonoBehaviour
             return;
 
         holdItem.gameObject.SetActive(true);
-        holdItem.SetHoldItem(itemData);
+        holdItem.SetHoldItem(item.itemData);
     }
 
     private void SetHoldTool()

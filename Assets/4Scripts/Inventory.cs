@@ -24,13 +24,16 @@ public class Inventory
 
         public void AddItem(Item item)
         {
+            if (item.IsEmpty())
+                return;
+
             slotItemData.itemName = item.itemData.itemName;
             slotItemData.icon = item.itemData.icon;
             slotItemData.itemType = item.itemData.itemType;
             slotItemData.count += item.count;
 
-            if (item.cropData != null)
-                slotItemData.cropData.SetCropData(item.cropData);
+            if (item.scriptableCropData != null)
+                slotItemData.cropData.SetCropData(item.scriptableCropData);
         }
 
         public void UseItem()

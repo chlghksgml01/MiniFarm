@@ -10,12 +10,6 @@ public class HoldItem : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
     }
 
-    public void SetHoldItem(ScriptableItemData scriptableItemData, ScriptableCropData scriptableCropData)
-    {
-        itemData.SetItemData(scriptableItemData, scriptableCropData);
-        sprite.sprite = itemData.icon;
-    }
-
     public void SetHoldItem(ItemData newItemData)
     {
         itemData.SetItemData(newItemData);

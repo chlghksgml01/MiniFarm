@@ -25,6 +25,9 @@ public class ItemData
         itemName = newItemData.itemName;
         icon = newItemData.icon;
         itemType = newItemData.itemType;
+
+        if (newItemData.cropData != null)
+            cropData.SetCropData(newItemData.cropData);
     }
 
     public void SetItemData(ScriptableItemData scriptableItemData, ScriptableCropData scriptableCropData)
