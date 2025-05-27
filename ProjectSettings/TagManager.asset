@@ -48,7 +48,7 @@ TagManager:
   - name: Item
     uniqueID: 826969125
     locked: 0
-  - name: Player/Structure
+  - name: Player,Structure
     uniqueID: 867774899
     locked: 0
   - name: HoldItem
@@ -56,6 +56,9 @@ TagManager:
     locked: 0
   - name: Crop
     uniqueID: 405030709
+    locked: 0
+  - name: Enemy
+    uniqueID: 1033332469
     locked: 0
   m_RenderingLayers:
   - Default

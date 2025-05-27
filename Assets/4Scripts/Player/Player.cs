@@ -67,7 +67,6 @@ public class Player : MonoBehaviour
         if (item)
         {
             inventory.AddItem(item);
-            GameManager.Instance.uiManager.inventory_UI.Refresh();
             Destroy(item.gameObject);
         }
     }
@@ -128,7 +127,6 @@ public class Player : MonoBehaviour
         GameManager.Instance.itemManager.itemDict.TryGetValue(cropData.cropName, out Item item);
 
         inventory.AddItem(item);
-        GameManager.Instance.uiManager.inventory_UI.Refresh();
 
         if (!GameManager.Instance.player.holdItem.IsEmpty())
             return;

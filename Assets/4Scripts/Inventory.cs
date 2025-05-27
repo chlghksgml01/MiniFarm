@@ -34,6 +34,8 @@ public class Inventory
 
             if (item.scriptableCropData != null)
                 slotItemData.cropData.SetCropData(item.scriptableCropData);
+
+            GameManager.Instance.uiManager.inventory_UI.Refresh();
         }
 
         public void UseItem()
