@@ -14,11 +14,14 @@ public class PlayerIdleState : PlayerState
 
     public override void UpdateState()
     {
+        if (player.moveInput.magnitude > 0)
+        {
+            stateMachine.ChangeState(player.moveState);
+        }
         base.UpdateState();
     }
 
     public override void ExitState()
     {
-        player.anim.SetBool(animBoolName, true);
     }
 }
