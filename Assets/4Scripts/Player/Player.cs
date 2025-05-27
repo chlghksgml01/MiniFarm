@@ -37,8 +37,8 @@ public class Player : MonoBehaviour
 
         inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
 
-        anim.SetFloat("vertical", -1f);
         anim.SetFloat("horizontal", 0f);
+        anim.SetFloat("vertical", -1f);
     }
 
     void Update()

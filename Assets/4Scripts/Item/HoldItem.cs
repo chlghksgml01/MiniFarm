@@ -23,6 +23,8 @@ public class HoldItem : MonoBehaviour
 
     public void SetEmpty()
     {
+        if (itemData.IsEmpty())
+            return;
         itemData.SetEmpty();
         sprite.sprite = null;
     }
