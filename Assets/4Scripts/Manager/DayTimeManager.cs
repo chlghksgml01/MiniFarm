@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -16,9 +17,14 @@ public class DayTimeManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI timeText;
 
     [Header("Light")]
-    [SerializeField] Light2D globalLight;
-    [SerializeField] Color nightLightColor;
-    [SerializeField] Color dayLightColor = Color.white;
+    [SerializeField] private Light2D globalLight;
+    [SerializeField] private Color nightLightColor;
+    [SerializeField] private Color dayLightColor = Color.white;
+
+    [Header("Slime")]
+    [SerializeField] private int slimeSpawnTime = 19;
+    [SerializeField] private float spawnInterval = 1f;
+    [SerializeField] private SlimeSpawnController spawnController;
 
     const int secondsPerHour = 3600;
 
@@ -26,7 +32,9 @@ public class DayTimeManager : MonoBehaviour
     private float gameTimer = 0f;
     private int hour = 6;
     private int minute = 0;
+    private Coroutine slimeSpawn;
 
+    public event Action SpawnSlime = null;
     public event Action OnDayPassed = null;
 
     private void Awake()
@@ -50,6 +58,17 @@ public class DayTimeManager : MonoBehaviour
 
             hour = (int)(gameTimer / secondsPerHour) % 24;
             minute = (int)(gameTimer / 60) % 60;
+
+            if (gameTimer >= slimeSpawnTime * secondsPerHour && slimeSpawn == null)
+            {
+                slimeSpawn = StartCoroutine(StartSpawnSlime());
+            }
+
+            else if (gameTimer < slimeSpawnTime * secondsPerHour && slimeSpawn != null)
+            {
+                StopCoroutine(slimeSpawn);
+                slimeSpawn = null;
+            }
 
             if (gameTimer >= dayEndTime * secondsPerHour)
             {
@@ -78,5 +97,15 @@ public class DayTimeManager : MonoBehaviour
 
         Color color = Color.Lerp(dayLightColor, nightLightColor, lightLerpTime);
         globalLight.color = color;
+    }
+
+    private IEnumerator StartSpawnSlime()
+    {
+        while (true)
+        {
+            SpawnSlime?.Invoke();
+            float waitTimeInRealSeconds = spawnInterval * secondsPerHour / timeScale;
+            yield return new WaitForSeconds(waitTimeInRealSeconds);
+        }
     }
 }

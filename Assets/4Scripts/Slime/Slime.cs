@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum SlimeState
@@ -10,17 +11,20 @@ public enum SlimeState
 
 public class Slime : MonoBehaviour
 {
+    [Header("Info")]
+    [SerializeField] private int hp = 10;
     [SerializeField] public float speed = 1f;
     [SerializeField] public float angrySpeed = 1.5f;
     [SerializeField] private float patrolRadius = 2f;
+
+    [Header("플레이어 감지")]
     [SerializeField] private float detectionRange = 3f;
-    [SerializeField] private int hp = 10;
     [SerializeField] private float knockbackForce = 5f;
     [SerializeField] private float knockbackTime = 0.2f;
-    [SerializeField] private int spawnTime = 19;
 
     [HideInInspector] private Vector3 moveInput;
     [HideInInspector] private Animator anim;
+
     private Rigidbody2D rigid;
 
     private SlimeState slimeState = SlimeState.Patrol;
