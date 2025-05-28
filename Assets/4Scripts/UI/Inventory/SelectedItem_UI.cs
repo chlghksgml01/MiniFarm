@@ -7,41 +7,45 @@ public class SelectedItem_UI : MonoBehaviour
     [SerializeField] Image iconImage;
     [SerializeField] TextMeshProUGUI textUI;
 
-    public ItemData selectedItemData = new ItemData();
+    public Inventory.Slot selectedSlot;
 
     private void Awake()
     {
         iconImage.raycastTarget = false;
     }
 
-    public void SetSelectedUIItemData(Inventory.Slot slot, bool isSetCount = false)
+    public void SetSelectedUIItemData(Inventory.Slot slot, int _count = -99)
     {
-        selectedItemData.itemName = slot.slotItemData.itemName;
-        selectedItemData.icon = slot.slotItemData.icon;
-        selectedItemData.itemType = slot.slotItemData.itemType;
+        selectedSlot.SetSlotItemData(slot, _count);
+        SetSelectedItemUI();
+    }
 
-        if (isSetCount)
-            selectedItemData.count = slot.slotItemData.count;
-
-        SetCount();
-
-        iconImage.sprite = selectedItemData.icon;
+    public void SetSelectedItemUI()
+    {
+        iconImage.sprite = selectedSlot.slotItemData.icon;
+        SetCount(selectedSlot.itemCount);
     }
 
     public void SetCount(int _count = -99)
     {
-        if(_count != -99)
-            selectedItemData.count = _count;
+        if (_count <= 0)
+        {
+            SetEmpty();
+            return;
+        }
 
-        if (selectedItemData.count > 1)
-            textUI.text = selectedItemData.count.ToString();
+        if (_count != -99)
+            selectedSlot.itemCount = _count;
+
+        if (selectedSlot.itemCount > 1)
+            textUI.text = selectedSlot.itemCount.ToString();
         else
             textUI.text = "";
     }
 
     public void SetEmpty()
     {
-        selectedItemData.SetEmpty();
+        selectedSlot.SetEmpty();
 
         textUI.text = "";
         iconImage.sprite = null;
@@ -50,7 +54,7 @@ public class SelectedItem_UI : MonoBehaviour
 
     public bool IsEmpty()
     {
-        if (selectedItemData.IsEmpty())
+        if (selectedSlot.IsEmpty())
             return true;
         else
             return false;

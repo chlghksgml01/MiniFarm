@@ -148,8 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7fcf0016bb653e45b6223d6f3d5224b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scriptableItemData: {fileID: 11400000, guid: 8baf08bbe8f889a4088613d65d959bb0, type: 2}
-  scriptableCropData: {fileID: 11400000, guid: d5ccc9efa9f1526438a9380145f83b8d, type: 2}
+  scriptableItemData: {fileID: 11400000, guid: d5ccc9efa9f1526438a9380145f83b8d, type: 2}
   count: 1
 --- !u!1 &1754105604331694469
 GameObject:

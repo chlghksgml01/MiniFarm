@@ -49,5 +49,5 @@ public class TileData
 public class CropTileData
 {
     public Vector3Int cropPosition = Vector3Int.zero;
-    public CropData cropData = new CropData();
+    public CropItemData CropItemData = new CropItemData();
 }

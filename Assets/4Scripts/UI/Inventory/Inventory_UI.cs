@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using static Inventory;
 
 public class Inventory_UI : MonoBehaviour
@@ -19,18 +16,13 @@ public class Inventory_UI : MonoBehaviour
     RightClickStrategy rightClick;
     ShiftRightClickStrategy shiftRightClick;
 
-    public DragState dragState = new DragState();
-    public class DragState
-    {
-        public bool isClick = false;
-        public bool isDragging = false;
-    }
+    public bool isDragging = false;
 
     private void Awake()
     {
-        leftClick = new LeftClickStrategy(selectedItem, dragState);
-        rightClick = new RightClickStrategy(selectedItem, dragState);
-        shiftRightClick = new ShiftRightClickStrategy(selectedItem, dragState);
+        leftClick = new LeftClickStrategy(selectedItem);
+        rightClick = new RightClickStrategy(selectedItem);
+        shiftRightClick = new ShiftRightClickStrategy(selectedItem);
 
         for (int i = 0; i < slotsUIs.Count; i++)
         {
@@ -52,15 +44,10 @@ public class Inventory_UI : MonoBehaviour
     void Update()
     {
         KeyInput();
-        if (dragState.isDragging)
+        if (isDragging)
         {
             selectedItem.transform.position = Input.mousePosition;
         }
-    }
-
-    private void LateUpdate()
-    {
-        dragState.isClick = false;
     }
 
     void KeyInput()
@@ -68,21 +55,22 @@ public class Inventory_UI : MonoBehaviour
         if (!GameManager.Instance.uiManager.inventoryPanel.activeSelf)
             return;
 
-        if (!dragState.isClick && Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             SetStrategy(leftClick);
         }
 
-        else if (!dragState.isClick && Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
+        else if (Input.GetMouseButtonDown(1) && Input.GetKey(KeyCode.LeftShift))
         {
             SetStrategy(shiftRightClick);
         }
 
-        else if (!dragState.isClick && Input.GetMouseButtonDown(1))
+        else if (Input.GetMouseButtonDown(1))
         {
             SetStrategy(rightClick);
         }
     }
+
     public void SetStrategy(ISelectionStrategy currentStrategy)
     {
         selectionStrategy = currentStrategy;
@@ -113,10 +101,10 @@ public class Inventory_UI : MonoBehaviour
             }
             else
             {
-                slotsUIs[i].SetEmtpy();
+                slotsUIs[i].SetEmpty();
 
                 if (i < 9)
-                    toolBar_UI.slotsUIs[i].SetEmtpy();
+                    toolBar_UI.slotsUIs[i].SetEmpty();
             }
         }
     }
@@ -124,7 +112,7 @@ public class Inventory_UI : MonoBehaviour
     // 버튼 함수
     public void SortInventory()
     {
-        if (dragState.isDragging)
+        if (isDragging)
         {
             PlaceItem();
         }
@@ -135,13 +123,13 @@ public class Inventory_UI : MonoBehaviour
 
     void PlaceItem()
     {
-        dragState.isDragging = false;
+        isDragging = false;
 
         foreach (Slot slot in inventory.slots)
         {
-            if (selectedItem.selectedItemData.itemName == slot.slotItemData.itemName)
+            if (selectedItem.selectedSlot.slotItemData.itemName == slot.slotItemData.itemName)
             {
-                slot.slotItemData.count += selectedItem.selectedItemData.count;
+                slot.itemCount += selectedItem.selectedSlot.itemCount;
                 selectedItem.SetEmpty();
                 return;
             }
@@ -151,7 +139,7 @@ public class Inventory_UI : MonoBehaviour
         {
             if (slot.IsEmpty())
             {
-                slot.SetSlotItemData(selectedItem.selectedItemData);
+                slot.SetSlotItemData(selectedItem.selectedSlot, 0);
                 selectedItem.SetEmpty();
                 return;
             }
@@ -160,21 +148,21 @@ public class Inventory_UI : MonoBehaviour
 
     public void CloseInventoryUI()
     {
-        if (dragState.isDragging)
+        if (isDragging)
             DropItem();
 
-        dragState.isDragging = false;
+        isDragging = false;
         selectedItem.gameObject.SetActive(false);
     }
 
     void DropItem()
     {
-        GameManager.Instance.player.CreateDropItem(selectedItem, selectedItem.selectedItemData.count);
+        GameManager.Instance.player.CreateDropItem(selectedItem, selectedItem.selectedSlot.itemCount);
     }
 
     public void TrashBin()
     {
         selectedItem.SetEmpty();
-        dragState.isDragging = false;
+        isDragging = false;
     }
 }

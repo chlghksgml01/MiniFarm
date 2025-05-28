@@ -159,10 +159,10 @@ public class TileManager : MonoBehaviour
         TileLogicHelper.SetTiles(selectedTilePos, tileDict);
     }
 
-    public CropData GetSelectedCropData()
+    public CropItemData GetSelectedCropItemData()
     {
-        GameManager.Instance.cropManager.plantedCropsDict.TryGetValue(selectedTilePos, out CropData cropData);
-        return cropData;
+        GameManager.Instance.cropManager.plantedCropsDict.TryGetValue(selectedTilePos, out CropItemData CropItemData);
+        return CropItemData;
     }
 
     private void NewDayTile()
@@ -190,11 +190,11 @@ public class TileManager : MonoBehaviour
     public bool CanHarvest()
     {
         var cropDict = GameManager.Instance.cropManager.plantedCropsDict;
-        cropDict.TryGetValue(selectedTilePos, out CropData cropData);
-        if (cropData == null)
+        cropDict.TryGetValue(selectedTilePos, out CropItemData CropItemData);
+        if (CropItemData == null)
             return false;
 
-        if (cropData.canHarvest == true)
+        if (CropItemData.canHarvest == true)
             return true;
 
         return false;
@@ -223,11 +223,11 @@ public class TileManager : MonoBehaviour
     public string GetSelectedCropName()
     {
         var cropDict = GameManager.Instance.cropManager.plantedCropsDict;
-        cropDict.TryGetValue(selectedTilePos, out CropData cropData);
+        cropDict.TryGetValue(selectedTilePos, out CropItemData CropItemData);
 
-        if (cropData == null)
+        if (CropItemData == null)
             return "";
 
-        return cropData.cropName;
+        return CropItemData.cropName;
     }
 }

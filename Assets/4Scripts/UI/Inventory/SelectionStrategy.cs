@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static Inventory;
-using static Inventory_UI;
 
 public interface ISelectionStrategy
 {
@@ -16,29 +14,23 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
     protected SelectedItem_UI selectedItemUI;
     protected Slot selectedSlot;
-    protected DragState dragState;
     protected List<Slot> slots;
     protected Slot_UI slotUI;
+    Inventory_UI inventoryUI = null;
 
     protected int slotQuantity = 0;
-    protected int dropItemQuantity = 0;
 
-    public BaseClickStrategy(SelectedItem_UI _selectedItem, DragState _dragState)
-    {
-        selectedItemUI = _selectedItem;
-        dragState = _dragState;
-    }
+    public BaseClickStrategy(SelectedItem_UI _selectedItem) => selectedItemUI = _selectedItem;
 
     public virtual void ClickHandle()
     {
-        dragState.isClick = true;
-
         // Canvas에 있는 애들 가져오기
         List<RaycastResult> results = DetectUIUnderCursor();
 
         foreach (var result in results)
         {
-            if (dragState.isDragging &&
+            inventoryUI = GameManager.Instance.uiManager.inventory_UI;
+            if (inventoryUI.isDragging &&
                 (result.gameObject.name == "Sort_Button" || result.gameObject.name == "TrashBin"))
                 return;
 
@@ -51,10 +43,9 @@ public abstract class BaseClickStrategy : ISelectionStrategy
                     slots = GameManager.Instance.player.inventory.slots;
                 selectedSlot = slots[slotUI.slotIdx];
 
-                dragState.isClick = true;
 
                 // 드래깅상태가 아니라면 
-                if (!dragState.isDragging)
+                if (!inventoryUI.isDragging)
                 {
                     // 빈칸이면 return
                     if (selectedSlot.IsEmpty())
@@ -65,7 +56,6 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
                     // 선택모드에 따라 개수 설정
                     DragStart_SetItemQuantity();
-                    selectedItemUI.SetSelectedUIItemData(selectedSlot);
                 }
                 // 드래깅상태라면 : 내려놓기
                 else
@@ -76,7 +66,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
             }
         }
 
-        if (dragState.isDragging)
+        if (inventoryUI.isDragging)
         {
             CompleteStartDrag();
         }
@@ -88,11 +78,10 @@ public abstract class BaseClickStrategy : ISelectionStrategy
                 return;
 
             DropItem();
-            GameManager.Instance.player.CreateDropItem(selectedItemUI, dropItemQuantity);
 
-            if (selectedItemUI.selectedItemData.count == 0)
+            if (selectedSlot.IsEmpty())
             {
-                dragState.isDragging = false;
+                inventoryUI.isDragging = false;
                 selectedItemUI.SetEmpty();
             }
         }
@@ -117,7 +106,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
     void StartItemDrag()
     {
-        dragState.isDragging = true;
+        inventoryUI.isDragging = true;
         selectedItemUI.gameObject.SetActive(true);
     }
 
@@ -126,7 +115,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
         if (selectedSlot == null)
             return;
 
-        if (selectedSlot.slotItemData.count == 0)
+        if (selectedSlot.IsEmpty())
             selectedSlot.SetEmpty();
 
         GameManager.Instance.uiManager.inventory_UI.Refresh();
@@ -137,10 +126,9 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
     protected void CompleteEndDrag()
     {
-        if (selectedItemUI.selectedItemData.count == 0)
+        if (selectedItemUI.IsEmpty())
         {
-            dragState.isDragging = false;
-            selectedItemUI.SetEmpty();
+            inventoryUI.isDragging = false;
         }
 
         GameManager.Instance.uiManager.inventory_UI.Refresh();
@@ -149,14 +137,12 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
 public class LeftClickStrategy : BaseClickStrategy
 {
-    public LeftClickStrategy(SelectedItem_UI selectedItem, DragState dragState)
-        : base(selectedItem, dragState)
-    { }
+    public LeftClickStrategy(SelectedItem_UI selectedItem) : base(selectedItem) { }
 
     protected override void DragStart_SetItemQuantity()
     {
-        selectedItemUI.SetCount(selectedSlot.slotItemData.count);
-        selectedSlot.slotItemData.count = 0;
+        selectedItemUI.SetSelectedUIItemData(selectedSlot);
+        selectedSlot.itemCount = 0;
     }
 
     protected override void DragEnd_SetItemQuantity()
@@ -164,7 +150,7 @@ public class LeftClickStrategy : BaseClickStrategy
         // 슬롯 비어있을 경우
         if (selectedSlot.IsEmpty())
         {
-            selectedSlot.SetSlotItemData(selectedItemUI.selectedItemData);
+            selectedSlot.SetSlotItemData(selectedItemUI.selectedSlot);
             selectedItemUI.SetEmpty();
         }
 
@@ -177,91 +163,90 @@ public class LeftClickStrategy : BaseClickStrategy
 
     protected override void DropItem()
     {
-        dropItemQuantity = selectedItemUI.selectedItemData.count;
-        selectedItemUI.SetCount(0);
+        GameManager.Instance.player.CreateDropItem(selectedItemUI, selectedItemUI.selectedSlot.itemCount);
+        selectedItemUI.SetEmpty();
     }
 
     void SwapItemWithSlot()
     {
         // 같은 아이템
-        if (selectedSlot.slotItemData.itemName == selectedItemUI.selectedItemData.itemName)
+        if (selectedSlot.slotItemData.itemName == selectedItemUI.selectedSlot.slotItemData.itemName)
         {
-            slotQuantity = selectedSlot.slotItemData.count + selectedItemUI.selectedItemData.count;
-            selectedItemUI.SetCount(0);
-            selectedSlot.SetSlotItemData(selectedItemUI.selectedItemData, slotQuantity);
+            slotQuantity = selectedSlot.itemCount + selectedItemUI.selectedSlot.itemCount;
+            selectedSlot.SetSlotItemData(selectedItemUI.selectedSlot, slotQuantity);
             selectedItemUI.SetEmpty();
         }
         // 다른 아이템
         else
         {
             Slot tempslot = new Slot();
-            tempslot.slotItemData.SetItemData(selectedItemUI.selectedItemData);
+            tempslot.slotItemData.SetItemData(selectedItemUI.selectedSlot.slotItemData);
 
-            selectedItemUI.SetSelectedUIItemData(selectedSlot, true);
+            selectedItemUI.SetSelectedUIItemData(selectedSlot);
 
-            selectedSlot.SetSlotItemData(tempslot.slotItemData);
+            selectedItemUI.SetSelectedItemUI();
+
+            selectedSlot.SetSlotItemData(tempslot);
         }
     }
 }
 
 public class RightClickStrategy : BaseClickStrategy
 {
-    public RightClickStrategy(SelectedItem_UI selectedItem, DragState dragState)
-        : base(selectedItem, dragState)
-    { }
+    public RightClickStrategy(SelectedItem_UI selectedItem) : base(selectedItem) { }
 
     protected override void DragStart_SetItemQuantity()
     {
-        selectedItemUI.SetCount(1);
-        selectedSlot.slotItemData.count -= 1;
+        selectedItemUI.SetSelectedUIItemData(selectedSlot, 1);
+        selectedSlot.itemCount -= 1;
     }
 
     protected override void DragEnd_SetItemQuantity()
     {
-        if (!selectedSlot.IsEmpty() && selectedSlot.slotItemData.itemName != selectedItemUI.selectedItemData.itemName)
+        if (!selectedSlot.IsEmpty() && selectedSlot.slotItemData.itemName != selectedItemUI.selectedSlot.slotItemData.itemName)
             return;
 
-        selectedItemUI.SetCount(selectedItemUI.selectedItemData.count - 1);
-        slotQuantity = selectedSlot.slotItemData.count + 1;
-        selectedSlot.SetSlotItemData(selectedItemUI.selectedItemData, slotQuantity);
+        selectedItemUI.SetCount(selectedItemUI.selectedSlot.itemCount - 1);
+        slotQuantity = selectedSlot.itemCount + 1;
+        selectedSlot.SetSlotItemData(selectedItemUI.selectedSlot, slotQuantity);
     }
 
     protected override void DropItem()
     {
-        dropItemQuantity = 1;
-        selectedItemUI.SetCount(selectedItemUI.selectedItemData.count - 1);
+        selectedItemUI.SetCount(selectedItemUI.selectedSlot.itemCount - 1);
+        GameManager.Instance.player.CreateDropItem(selectedItemUI, 1);
     }
 }
 
 public class ShiftRightClickStrategy : BaseClickStrategy
 {
-    public ShiftRightClickStrategy(SelectedItem_UI selectedItem, DragState dragState)
-        : base(selectedItem, dragState)
-    { }
+    public ShiftRightClickStrategy(SelectedItem_UI selectedItem) : base(selectedItem) { }
 
     protected override void DragStart_SetItemQuantity()
     {
-        int count = (int)Mathf.Ceil(selectedSlot.slotItemData.count / 2f);
-        selectedItemUI.SetCount(count);
-        selectedSlot.slotItemData.count -= selectedItemUI.selectedItemData.count;
+        int count = (int)Mathf.Ceil(selectedSlot.itemCount / 2f);
+        selectedItemUI.SetSelectedUIItemData(selectedSlot, count);
+        selectedSlot.itemCount -= selectedItemUI.selectedSlot.itemCount;
     }
 
     protected override void DragEnd_SetItemQuantity()
     {
-        if (!selectedSlot.IsEmpty() && selectedSlot.slotItemData.itemName != selectedItemUI.selectedItemData.itemName)
+        if (!selectedSlot.IsEmpty() && selectedSlot.slotItemData.itemName != selectedItemUI.selectedSlot.slotItemData.itemName)
             return;
 
-        int tempquantity = selectedItemUI.selectedItemData.count;
-        int count = (int)(selectedItemUI.selectedItemData.count / 2f);
+        int tempquantity = selectedItemUI.selectedSlot.itemCount;
+        int count = (int)(selectedItemUI.selectedSlot.itemCount / 2f);
         selectedItemUI.SetCount(count);
-        slotQuantity = selectedSlot.slotItemData.count + (tempquantity - selectedItemUI.selectedItemData.count);
-        selectedSlot.SetSlotItemData(selectedItemUI.selectedItemData, slotQuantity);
+        slotQuantity = selectedSlot.itemCount + (tempquantity - selectedItemUI.selectedSlot.itemCount);
+        selectedSlot.SetSlotItemData(selectedItemUI.selectedSlot, slotQuantity);
     }
 
     protected override void DropItem()
     {
-        dropItemQuantity = (int)Mathf.Ceil(selectedItemUI.selectedItemData.count / 2f);
-        int count = selectedItemUI.selectedItemData.count - dropItemQuantity;
+        int dropItemQuantity = (int)Mathf.Ceil(selectedItemUI.selectedSlot.itemCount / 2f);
+        int count = selectedItemUI.selectedSlot.itemCount - dropItemQuantity;
         selectedItemUI.SetCount(count);
+
+        GameManager.Instance.player.CreateDropItem(selectedItemUI, dropItemQuantity);
     }
 }

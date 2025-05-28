@@ -11,106 +11,112 @@ public class ItemData
 {
     public string itemName = "Item Name";
     public Sprite icon = null;
-    public int count = 0;
     public ItemType itemType = ItemType.None;
+
     public DropItemData dropItemData = new DropItemData();
-    public CropData cropData = new CropData();
+    public CropItemData cropItemData = new CropItemData();
 
-    public void SetItemData(ItemData newItemData, int _count = -99)
+    public void SetItemData(ItemData newItemData)
     {
-        if (_count != -99)
-            count = _count;
-        else
-            count = newItemData.count;
-
         itemName = newItemData.itemName;
         icon = newItemData.icon;
         itemType = newItemData.itemType;
 
-        if (newItemData.cropData != null)
-            cropData.SetCropData(newItemData.cropData);
+        if (!IsDropEmpty())
+            dropItemData.SetDropData(newItemData.dropItemData);
+
+        if (!IsCropEmpty())
+            cropItemData.SetCropItemData(newItemData.cropItemData);
     }
 
-    public bool IsDropItem()
+    public bool IsCropEmpty()
     {
-        return dropItemData.rate == -99f ? true : false;
+        if (itemType == ItemType.Seed && !cropItemData.IsEmpty())
+            return true;
+        return false;
     }
 
-    public float GetItemRate()
+    public bool IsDropEmpty() => dropItemData.IsEmpty();
+
+    public float GetDropRate()
     {
+        if (dropItemData.IsEmpty())
+            return -99;
         return dropItemData.rate;
-    }
-
-    public void SetItemData(ScriptableItemData scriptableItemData, ScriptableCropData scriptableCropData)
-    {
-        itemName = scriptableItemData.itemName;
-        icon = scriptableItemData.icon;
-        count = 1;
-        itemType = scriptableItemData.itemType;
-
-        if (scriptableCropData != null)
-            cropData.SetCropData(scriptableCropData);
-        else
-            cropData.SetEmpty();
     }
 
     public void SetEmpty()
     {
         itemName = "";
         icon = null;
-        count = 0;
         itemType = ItemType.None;
 
-        cropData.SetEmpty();
+        dropItemData.SetEmpty();
+        cropItemData.SetEmpty();
+    }
+
+    public void SetItemData(ScriptableItemData scriptableItemData)
+    {
+        itemName = scriptableItemData.itemName;
+        icon = scriptableItemData.icon;
+        itemType = scriptableItemData.itemType;
+
+        if (scriptableItemData.dropItemData != null)
+            dropItemData.SetDropData(scriptableItemData.dropItemData);
+        else
+            dropItemData.SetEmpty();
+
+        if (scriptableItemData.cropItemData != null)
+            cropItemData.SetCropItemData(scriptableItemData.cropItemData);
+        else
+            cropItemData.SetEmpty();
     }
 
     public bool IsEmpty()
     {
-        if (itemName == "" || itemType == ItemType.None || count == 0)
-            return true;
-        return false;
-    }
-
-    public bool IsCrop()
-    {
-        if (itemType == ItemType.Seed && !cropData.IsEmpty())
+        if (itemName == "" || itemType == ItemType.None)
             return true;
         return false;
     }
 }
 
-public class CropData
+
+[System.Serializable]
+public class DropItemData
 {
-    public string cropName = "";
-    public int growthLevel;
+    public float rate = 0f;
+
+    public bool IsEmpty() => rate == 0f ? true : false;
+
+    public void SetEmpty() => rate = 0f;
+
+    public void SetDropData(DropItemData dropData) => rate = dropData.rate;
+}
+
+[System.Serializable]
+public class CropItemData
+{
+    public string cropName;
     public Tile[] cropTiles;
     public Tile[] wetCropTiles;
+    public int growthLevel;
     public int[] growthDurations;
     public bool isRegrowable;
+    public Sprite harvestedImage;
 
-    public int currentGrowthDuration = 0;
-    public int currentGrowthLevel = 0;
-    public bool isWatered = false;
-    public bool canHarvest = false;
+    [HideInInspector] public int currentGrowthDuration = 0;
+    [HideInInspector] public int currentGrowthLevel = 0;
+    [HideInInspector] public bool isWatered = false;
+    [HideInInspector] public bool canHarvest = false;
 
-    public void SetCropData(ScriptableCropData scriptableCropData)
+    public void SetCropItemData(CropItemData newCropItemData)
     {
-        cropName = scriptableCropData.cropName;
-        cropTiles = scriptableCropData.cropTiles;
-        wetCropTiles = scriptableCropData.wetCropTiles;
-        growthLevel = scriptableCropData.growthLevel;
-        growthDurations = scriptableCropData.growthDurations;
-        isRegrowable = scriptableCropData.isRegrowable;
-    }
-
-    public void SetCropData(CropData newCropData)
-    {
-        cropName = newCropData.cropName;
-        cropTiles = newCropData.cropTiles;
-        wetCropTiles = newCropData.wetCropTiles;
-        growthLevel = newCropData.growthLevel;
-        growthDurations = newCropData.growthDurations;
-        isRegrowable = newCropData.isRegrowable;
+        cropName = newCropItemData.cropName;
+        cropTiles = newCropItemData.cropTiles;
+        wetCropTiles = newCropItemData.wetCropTiles;
+        growthLevel = newCropItemData.growthLevel;
+        growthDurations = newCropItemData.growthDurations;
+        isRegrowable = newCropItemData.isRegrowable;
     }
 
     public void SetEmpty()

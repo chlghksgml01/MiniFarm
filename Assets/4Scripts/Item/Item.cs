@@ -4,7 +4,6 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     public ScriptableItemData scriptableItemData;
-    public ScriptableCropData scriptableCropData;
     public int count = 1;
 
     private TextMeshProUGUI textUI;
@@ -22,8 +21,7 @@ public class Item : MonoBehaviour
             {
                 _itemData = new ItemData();
 
-                _itemData.SetItemData(scriptableItemData, scriptableCropData);
-                _itemData.count = count;
+                _itemData.SetItemData(scriptableItemData);
             }
 
             return _itemData;

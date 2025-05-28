@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 214a70242b2812f47a7a6e9dca553357, type: 3}
+  m_Name: TomatoSeedData
+  m_EditorClassIdentifier: 
+  itemName: TomatoSeed
+  icon: {fileID: 1530993877042961689, guid: aeed4e54ffbb240489345abdbdba2d80, type: 3}
+  itemType: 2
+  price: 2
+  dropItemData:
+    rate: 0
+  cropItemData:
+    cropName: Tomato
+    cropTiles:
+    - {fileID: 11400000, guid: d9a5f5ab925fb35489cce395a7a10b7b, type: 2}
+    - {fileID: 11400000, guid: 75b0689eecad5fb49b86239f1beb932d, type: 2}
+    - {fileID: 11400000, guid: b29688c8fccbf1c49b55d7ac67769f6b, type: 2}
+    - {fileID: 11400000, guid: 9727aeb86dc9a014b839b2274d094263, type: 2}
+    - {fileID: 11400000, guid: b00e709a7caea2047ad94dabe933d3d6, type: 2}
+    - {fileID: 11400000, guid: bbdc1a67593d88841ae56a8bb18645ae, type: 2}
+    wetCropTiles:
+    - {fileID: 11400000, guid: 8e26e7731bb8fee40ad9e20300cde572, type: 2}
+    - {fileID: 11400000, guid: e4587f495fd065344a0424e2abbfbfaa, type: 2}
+    - {fileID: 11400000, guid: 7395025e7d5e07545b06c9b869eafe8a, type: 2}
+    - {fileID: 11400000, guid: d232469b7127abb4fa8da0cc29ea4ced, type: 2}
+    - {fileID: 11400000, guid: df85d0a6809a4e04cb77791cfea056f3, type: 2}
+    - {fileID: 11400000, guid: f4a2843477658df49bc4bf5c23d4fe2c, type: 2}
+    growthLevel: 6
+    growthDurations: 010000000100000001000000010000000100000002000000
+    isRegrowable: 1
+    harvestedImage: {fileID: 5508725064705088119, guid: d283e564552a6b0428b5cfc16c2f763f, type: 3}
+    currentGrowthDuration: 0
+    currentGrowthLevel: 0
+    isWatered: 0
+    canHarvest: 0

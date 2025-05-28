@@ -14,8 +14,8 @@ public static class TileLogicHelper
 
         string cropName = "";
         // 플레이어가 들고있는 씨앗 이름으로 타일 가져오기
-        if (GameManager.Instance.player.holdItem.itemData.IsCrop())
-            cropName = GameManager.Instance.player.holdItem.itemData.cropData.cropName;
+        if (!GameManager.Instance.player.holdItem.itemData.IsCropEmpty())
+            cropName = GameManager.Instance.player.holdItem.itemData.cropItemData.cropName;
 
         // 씨앗 심기
         if (cropName != "" && (tileState == TileState.Tilled || tileState == TileState.Watered))
@@ -39,16 +39,16 @@ public static class TileLogicHelper
 
             // 씨앗 타일 가져오기
             if (tileState == TileState.Tilled)
-                cropSeedTile = GameManager.Instance.player.holdItem.itemData.cropData.cropTiles[0];
+                cropSeedTile = GameManager.Instance.player.holdItem.itemData.cropItemData.cropTiles[0];
             else if (tileState == TileState.Watered)
-                cropSeedTile = GameManager.Instance.player.holdItem.itemData.cropData.wetCropTiles[0];
+                cropSeedTile = GameManager.Instance.player.holdItem.itemData.cropItemData.wetCropTiles[0];
 
             if (cropSeedTile != null)
             {
                 farmFieldMap.SetTile(cellPosition, cropSeedTile);
 
-                cropManager.plantedCropsDict.TryAdd(cellPosition, new CropData());
-                cropManager.plantedCropsDict[cellPosition].SetCropData(GameManager.Instance.player.holdItem.itemData.cropData);
+                cropManager.plantedCropsDict.TryAdd(cellPosition, new CropItemData());
+                cropManager.plantedCropsDict[cellPosition].SetCropItemData(GameManager.Instance.player.holdItem.itemData.cropItemData);
 
                 if (tileState == TileState.Watered)
                     cropManager.plantedCropsDict[cellPosition].isWatered = true;

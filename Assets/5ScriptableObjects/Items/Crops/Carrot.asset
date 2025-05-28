@@ -15,3 +15,18 @@ MonoBehaviour:
   itemName: Carrot
   icon: {fileID: 648987640, guid: 17dea276f36b33d408c810e58a37f79d, type: 3}
   itemType: 1
+  price: 10
+  dropItemData:
+    rate: 0
+  cropItemData:
+    cropName: 
+    cropTiles: []
+    wetCropTiles: []
+    growthLevel: 0
+    growthDurations: 
+    isRegrowable: 0
+    harvestedImage: {fileID: 0}
+    currentGrowthDuration: 0
+    currentGrowthLevel: 0
+    isWatered: 0
+    canHarvest: 0

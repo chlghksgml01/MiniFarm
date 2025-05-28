@@ -8,6 +8,7 @@ public class Inventory
     public class Slot
     {
         public ItemData slotItemData = new ItemData();
+        public int itemCount = 0;
         public int maxAllowed;
 
         public Slot()
@@ -17,7 +18,7 @@ public class Inventory
 
         public bool CanAddItem()
         {
-            if (slotItemData.count < maxAllowed)
+            if (itemCount < maxAllowed)
                 return true;
             return false;
         }
@@ -27,45 +28,45 @@ public class Inventory
             if (item.IsEmpty())
                 return;
 
-            slotItemData.itemName = item.itemData.itemName;
-            slotItemData.icon = item.itemData.icon;
-            slotItemData.itemType = item.itemData.itemType;
-            slotItemData.count += item.count;
-
-            if (item.scriptableCropData != null)
-                slotItemData.cropData.SetCropData(item.scriptableCropData);
+            itemCount++;
+            slotItemData.SetItemData(item.itemData);
 
             GameManager.Instance.uiManager.inventory_UI.Refresh();
         }
 
         public void UseItem()
         {
-            if (slotItemData.count > 0)
+            if (itemCount > 0)
             {
-                slotItemData.count--;
-                if (slotItemData.count <= 0)
+                itemCount--;
+                if (itemCount <= 0)
                     SetEmpty();
             }
         }
 
         public void SetEmpty()
         {
+            itemCount = 0;
             slotItemData.SetEmpty();
         }
 
         public bool IsEmpty()
         {
-            if (slotItemData.IsEmpty())
+            if (slotItemData.IsEmpty() || itemCount <= 0)
                 return true;
             return false;
         }
 
-        public void SetSlotItemData(ItemData itemData, int _count = -99)
+        public void SetSlotItemData(Slot _slot, int _count = -99)
         {
+            slotItemData.SetItemData(_slot.slotItemData);
+
             if (_count != -99)
-                slotItemData.SetItemData(itemData, _count);
+                itemCount = _count;
             else
-                slotItemData.SetItemData(itemData);
+                itemCount = _slot.itemCount;
+
+            GameManager.Instance.uiManager.inventory_UI.Refresh();
         }
     }
 
@@ -127,7 +128,7 @@ public class Inventory
                 // 같은거라면 묶어주기
                 else if (slots[i].slotItemData.itemName.CompareTo(slots[j].slotItemData.itemName) == 0)
                 {
-                    slots[i].slotItemData.count += slots[j].slotItemData.count;
+                    slots[i].itemCount += slots[j].itemCount;
                     slots[j].SetEmpty();
                 }
             }

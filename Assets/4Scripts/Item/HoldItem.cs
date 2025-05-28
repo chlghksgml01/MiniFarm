@@ -31,7 +31,7 @@ public class HoldItem : MonoBehaviour
 
     public bool IsCropSeedHold()
     {
-        if (itemData.itemType == ItemType.Seed && !itemData.cropData.IsEmpty())
+        if (itemData.itemType == ItemType.Seed && !itemData.cropItemData.IsEmpty())
             return true;
         return false;
     }

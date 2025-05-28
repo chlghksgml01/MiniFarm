@@ -151,7 +151,7 @@ public class Player : Entity
         var item = Instantiate(dropItem, bounceBasePos, Quaternion.identity);
         Item _item = item.GetComponent<Item>();
 
-        _item.SpawnItem(true, true, bounceBasePos, selectedItem.selectedItemData, count);
+        _item.SpawnItem(true, true, bounceBasePos, selectedItem.selectedSlot.slotItemData, count);
     }
 
     public void SetHoldItem(ItemData holdItemData = null)
@@ -189,9 +189,9 @@ public class Player : Entity
         stateMachine.ChangeState(pickUpState);
 
         // 현태 선택된 타일에 있는 작물 가져오기
-        CropData cropData = GameManager.Instance.tileManager.GetSelectedCropData();
+        CropItemData CropItemData = GameManager.Instance.tileManager.GetSelectedCropItemData();
 
-        GameManager.Instance.itemManager.itemDict.TryGetValue(cropData.cropName, out Item item);
+        GameManager.Instance.itemManager.itemDict.TryGetValue(CropItemData.cropName, out Item item);
 
         inventory.AddItem(item);
 

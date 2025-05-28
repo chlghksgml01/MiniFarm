@@ -141,16 +141,16 @@ public class Slime : Entity
 
     private GameObject GetRanDomDropItem()
     {
-        int totalRate = 0;
+        float totalRate = 0f;
         foreach (var item in dropItems)
-            totalRate += item.itemData.dropItemData.rate;
+            totalRate += item.itemData.GetDropRate();
 
-        int randomPoint = Random.Range(0, totalRate);
-        int cumulative = 0;
+        float randomPoint = Random.Range(0f, totalRate);
+        float cumulative = 0f;
 
         foreach (var dropItem in dropItems)
         {
-            cumulative += dropItem.itemData.dropItemData.rate;
+            cumulative += dropItem.itemData.GetDropRate();
             if (randomPoint <= cumulative)
                 return dropItem.gameObject;
         }
