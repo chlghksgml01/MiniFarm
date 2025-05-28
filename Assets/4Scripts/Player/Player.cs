@@ -1,4 +1,6 @@
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum playerDir
 {
@@ -10,7 +12,7 @@ public enum playerDir
 
 public class Player : Entity
 {
-
+    [SerializeField] private int maxStemina;
     [SerializeField] private int stemina;
 
     [Header("Item")]
@@ -22,6 +24,10 @@ public class Player : Entity
     [SerializeField] public GameObject SwordColliderLeft;
     [SerializeField] public GameObject SwordColliderDown;
     [SerializeField] public GameObject SwordColliderUp;
+
+    [Header("UI")]
+    [SerializeField] private Image healthBar;
+    [SerializeField] private Image steminaBar;
 
     [HideInInspector] public Inventory inventory;
     [HideInInspector] public Vector3 moveInput;
@@ -90,8 +96,34 @@ public class Player : Entity
         Slime slime = collision.GetComponent<Slime>();
         if (slime != null)
         {
-            hp -= slime.damage;
-            StartCoroutine(FlashFX());
+            Damage(slime.damage);
+        }
+    }
+
+    private void Damage(int _damage)
+    {
+        hp -= _damage;
+        StartCoroutine(FlashFX());
+        SetGague(healthBar, hp, maxHp);
+    }
+
+    private void SetGague(Image gauge, int value, int maxValue)
+    {
+        if (value <= 0)
+        {
+            gauge.fillAmount = 0f;
+            return;
+        }
+
+        float percent = (float)value / maxValue;
+
+        for (float i = 8f; i >= 1f; i--)
+        {
+            if (percent >= 0.125f * i)
+            {
+                gauge.fillAmount = i / 8f;
+                break;
+            }
         }
     }
 
