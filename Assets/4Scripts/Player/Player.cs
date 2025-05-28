@@ -12,8 +12,9 @@ public enum playerDir
 
 public class Player : Entity
 {
-    [SerializeField] private int maxStemina;
-    [SerializeField] private int stemina;
+    [SerializeField] public int maxStamina;
+    [SerializeField] public int stamina;
+    [SerializeField] public int workStaminaCost = 5;
 
     [Header("Item")]
     [SerializeField] private GameObject dropItem;
@@ -26,8 +27,8 @@ public class Player : Entity
     [SerializeField] public GameObject SwordColliderUp;
 
     [Header("UI")]
-    [SerializeField] private Image healthBar;
-    [SerializeField] private Image steminaBar;
+    [SerializeField] public Image healthBar;
+    [SerializeField] public Image staminaBar;
 
     [HideInInspector] public Inventory inventory;
     [HideInInspector] public Vector3 moveInput;
@@ -107,7 +108,13 @@ public class Player : Entity
         SetGague(healthBar, hp, maxHp);
     }
 
-    private void SetGague(Image gauge, int value, int maxValue)
+    public void UseStamina()
+    {
+        stamina -= workStaminaCost;
+        SetGague(staminaBar, stamina, maxStamina);
+    }
+
+    public void SetGague(Image gauge, int value, int maxValue)
     {
         if (value <= 0)
         {

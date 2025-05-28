@@ -12,6 +12,7 @@ public class PlayerWorkingState : PlayerState
     {
         player.anim.SetInteger(animBoolName, (int)player.playerToolType);
         player.moveInput = Vector3.zero;
+        player.UseStamina();
 
         if (player.playerToolType == ToolType.Sword)
         {
