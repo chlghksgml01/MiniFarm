@@ -133,6 +133,12 @@ MonoBehaviour:
   hitMat: {fileID: 2100000, guid: a62d3ed68e04d8b489e3078e08b39144, type: 2}
   angrySpeed: 1.5
   patrolRadius: 3
+  dropItems:
+  - {fileID: 6272279790835434845, guid: 2eb1e709e5c0c0547added36e017bf09, type: 3}
+  - {fileID: 6272279790835434845, guid: 3498ab22416ad764f854b8330b9ea602, type: 3}
+  - {fileID: 6272279790835434845, guid: b9f6af7827fb8324e856bbca01784219, type: 3}
+  - {fileID: 6272279790835434845, guid: de46189330500ce4f9d7e93e59395e16, type: 3}
+  - {fileID: 6272279790835434845, guid: f20113959546606499c329b0ec340901, type: 3}
   detectionRange: 6
   knockbackForce: 5
   knockbackTime: 0.2

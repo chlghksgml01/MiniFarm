@@ -13,6 +13,7 @@ public class ItemData
     public Sprite icon = null;
     public int count = 0;
     public ItemType itemType = ItemType.None;
+    public DropItemData dropItemData = new DropItemData();
     public CropData cropData = new CropData();
 
     public void SetItemData(ItemData newItemData, int _count = -99)
@@ -28,6 +29,16 @@ public class ItemData
 
         if (newItemData.cropData != null)
             cropData.SetCropData(newItemData.cropData);
+    }
+
+    public bool IsDropItem()
+    {
+        return dropItemData.rate == -99f ? true : false;
+    }
+
+    public float GetItemRate()
+    {
+        return dropItemData.rate;
     }
 
     public void SetItemData(ScriptableItemData scriptableItemData, ScriptableCropData scriptableCropData)

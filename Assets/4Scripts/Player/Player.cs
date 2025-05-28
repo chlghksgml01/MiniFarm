@@ -1,4 +1,4 @@
-using UnityEditor;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -142,12 +142,16 @@ public class Player : Entity
             return;
         }
 
-        Vector3 bounceBasePos = new Vector3(transform.position.x + 1.3f, transform.position.y - 1.3f);
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 playerCenter = new Vector2(transform.position.x, transform.position.y + 1f);
+
+        Vector2 mouseDir = (mousePos - playerCenter).normalized * 2.5f;
+        Vector2 bounceBasePos = playerCenter + mouseDir;
 
         var item = Instantiate(dropItem, bounceBasePos, Quaternion.identity);
         Item _item = item.GetComponent<Item>();
 
-        _item.SpawnItem(true, bounceBasePos, selectedItem.selectedItemData, count);
+        _item.SpawnItem(transform, true, bounceBasePos, selectedItem.selectedItemData, count);
     }
 
     public void SetHoldItem(ItemData holdItemData = null)

@@ -8,6 +8,7 @@ public class Item : MonoBehaviour
     public int count = 1;
 
     private TextMeshProUGUI textUI;
+    private Transform dropper;
 
     private ItemData _itemData;
     public ItemData itemData
@@ -90,13 +91,21 @@ public class Item : MonoBehaviour
             }
         }
 
-        bounceBasePos.x += bounceVelocityX * Time.deltaTime;
+        if (dropper == null)
+        {
+            Debug.Log("Item - Dropper ¼³Á¤ ¾ÈµÊ");
+            return;
+        }
+
+        float dirX = (transform.position - dropper.position).normalized.x;
+        bounceBasePos.x += dirX * bounceVelocityX * Time.deltaTime;
         transform.position = bounceBasePos + new Vector3(0, bounceY, 0);
     }
 
 
-    public void SpawnItem(bool _isBouncing, Vector3 bounceBasePos, ItemData _itemData, int _count)
+    public void SpawnItem(Transform _dropper, bool _isBouncing, Vector3 bounceBasePos, ItemData _itemData, int _count)
     {
+        dropper = _dropper;
         isBouncing = _isBouncing;
         BounceBasePos = bounceBasePos;
 

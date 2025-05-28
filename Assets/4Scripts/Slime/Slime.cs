@@ -14,6 +14,7 @@ public class Slime : Entity
     [Header("Info")]
     [SerializeField] public float angrySpeed = 1.5f;
     [SerializeField] private float patrolRadius = 2f;
+    [SerializeField] private Item[] dropItems;
 
     [Header("플레이어 감지")]
     [SerializeField] private float detectionRange = 3f;
@@ -98,17 +99,62 @@ public class Slime : Entity
             hp -= GameManager.Instance.player.damage;
             if (hp <= 0)
             {
-                if (flashCoroutine != null)
-                {
-                    StopCoroutine(flashCoroutine);
-                    flashCoroutine = null;
-                }
-                slimeState = SlimeState.Death;
-                anim.SetTrigger("isDeath");
-                isKnockedBack = true;
-                rigid.linearVelocity = Vector2.zero;
+                Death();
             }
         }
+    }
+
+    private void Death()
+    {
+        if (flashCoroutine != null)
+        {
+            StopCoroutine(flashCoroutine);
+            flashCoroutine = null;
+        }
+
+        slimeState = SlimeState.Death;
+        anim.SetTrigger("isDeath");
+
+        rigid.linearVelocity = Vector2.zero;
+
+        DropItem();
+    }
+
+    private void DropItem()
+    {
+        if (dropItems == null)
+        {
+            Debug.Log("Slime - DropItem 없음");
+            return;
+        }
+
+        int itemRate = Random.Range(0, 100);
+        int itemCount = Random.Range(0, 3);
+
+        if (GetRanDomDropItem() != null)
+        {
+            var item = Instantiate(GetRanDomDropItem(), transform.position, Quaternion.identity);
+            Item spawnItem = item.GetComponent<Item>();
+            spawnItem.SpawnItem(transform, true, transform.position, spawnItem.itemData, itemCount);
+        }
+    }
+
+    private GameObject GetRanDomDropItem()
+    {
+        int totalRate = 0;
+        foreach (var item in dropItems)
+            totalRate += item.itemData.dropItemData.rate;
+
+        int randomPoint = Random.Range(0, totalRate);
+        int cumulative = 0;
+
+        foreach (var dropItem in dropItems)
+        {
+            cumulative += dropItem.itemData.dropItemData.rate;
+            if (randomPoint <= cumulative)
+                return dropItem.gameObject;
+        }
+        return null;
     }
 
     private void Patrol()
