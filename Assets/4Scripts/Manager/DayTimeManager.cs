@@ -14,7 +14,8 @@ public class DayTimeManager : MonoBehaviour
 
     [SerializeField] float timeScale = 60f;
     [SerializeField] float timeInterval = 10f;
-    [SerializeField] TextMeshProUGUI timeText;
+    [SerializeField] TextMeshProUGUI hourUIText;
+    [SerializeField] TextMeshProUGUI minuteUIText;
 
     [Header("Light")]
     [SerializeField] private Light2D globalLight;
@@ -40,7 +41,8 @@ public class DayTimeManager : MonoBehaviour
     private void Awake()
     {
         gameTimer = dayStartTime * secondsPerHour;
-        timeText.text = string.Format("{0:00}:{1:00}", dayStartTime, minute);
+        hourUIText.text = string.Format("{00:00}", dayStartTime);
+        minuteUIText.text = string.Format("{00:00}", minute);
     }
 
     private void Update()
@@ -78,7 +80,8 @@ public class DayTimeManager : MonoBehaviour
             int hourText = hour;
             if (hourText > 24)
                 hourText -= 24;
-            timeText.text = string.Format("{0:00}:{1:00}", hourText, minute);
+            hourUIText.text = string.Format("{00:00}", hourText);
+            minuteUIText.text = string.Format("{00:00}", minute);
 
             UpdateLight();
         }
