@@ -7858,7 +7858,7 @@ MonoBehaviour:
   dayEndTime: 26
   twilightStartTime: 19
   darkestTime: 22
-  timeScale: 0
+  timeScale: 6000
   timeInterval: 1
   hourUIText: {fileID: 1157134613}
   minuteUIText: {fileID: 1666779941}
@@ -7866,8 +7866,9 @@ MonoBehaviour:
   nightLightColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 0}
   dayLightColor: {r: 1, g: 1, b: 1, a: 1}
   slimeSpawnTime: 19
-  spawnInterval: 1
+  spawnInterval: 1000
   spawnController: {fileID: 632928900}
+  isSlimeSpawn: 0
 --- !u!114 &632928899
 MonoBehaviour:
   m_ObjectHideFlags: 0

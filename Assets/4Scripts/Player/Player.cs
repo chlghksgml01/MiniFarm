@@ -64,6 +64,26 @@ public class Player : Entity
         anim.SetFloat("vertical", -1f);
     }
 
+    private void OnEnable()
+    {
+        GameManager.Instance.dayTimeManager.OnDayPassed += ResetStatus;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.dayTimeManager.OnDayPassed -= ResetStatus;
+
+    }
+
+    private void ResetStatus()
+    {
+        hp = maxHp;
+        stamina = maxStamina;
+
+        healthBar.fillAmount = 1f;
+        staminaBar.fillAmount = 1f;
+    }
+
     void Update()
     {
         moveInput.x = Input.GetAxisRaw("Horizontal");
@@ -166,7 +186,7 @@ public class Player : Entity
 
         holdItem.gameObject.SetActive(true);
 
-        var item = GameManager.Instance.itemManager.itemDict[holdItemData.itemName];
+        GameManager.Instance.itemManager.itemDict.TryGetValue(holdItemData.itemName, out Item item);
         if (item.IsEmpty())
             return;
         holdItem.SetHoldItem(item.itemData);

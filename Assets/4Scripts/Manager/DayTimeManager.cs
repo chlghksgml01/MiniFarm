@@ -26,6 +26,7 @@ public class DayTimeManager : MonoBehaviour
     [SerializeField] private int slimeSpawnTime = 19;
     [SerializeField] private float spawnInterval = 1f;
     [SerializeField] private SlimeSpawnController spawnController;
+    [SerializeField] private bool isSlimeSpawn = true;
 
     const int secondsPerHour = 3600;
 
@@ -61,7 +62,7 @@ public class DayTimeManager : MonoBehaviour
             hour = (int)(gameTimer / secondsPerHour) % 24;
             minute = (int)(gameTimer / 60) % 60;
 
-            if (gameTimer >= slimeSpawnTime * secondsPerHour && slimeSpawn == null)
+            if (gameTimer >= slimeSpawnTime * secondsPerHour && slimeSpawn == null && isSlimeSpawn)
             {
                 slimeSpawn = StartCoroutine(StartSpawnSlime());
             }

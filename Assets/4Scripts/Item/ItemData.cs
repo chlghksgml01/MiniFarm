@@ -23,16 +23,16 @@ public class ItemData
         icon = newItemData.icon;
         itemType = newItemData.itemType;
 
-        if (!IsDropEmpty())
+        if (!newItemData.IsDropEmpty())
             dropItemData.SetDropData(newItemData.dropItemData);
 
-        if (!IsCropEmpty())
+        if (!newItemData.IsCropEmpty())
             cropItemData.SetCropItemData(newItemData.cropItemData);
     }
 
     public bool IsCropEmpty()
     {
-        if (itemType == ItemType.Seed && !cropItemData.IsEmpty())
+        if (itemType != ItemType.Seed || cropItemData.IsEmpty())
             return true;
         return false;
     }
@@ -62,12 +62,12 @@ public class ItemData
         icon = scriptableItemData.icon;
         itemType = scriptableItemData.itemType;
 
-        if (scriptableItemData.dropItemData != null)
+        if (!scriptableItemData.dropItemData.IsEmpty())
             dropItemData.SetDropData(scriptableItemData.dropItemData);
         else
             dropItemData.SetEmpty();
 
-        if (scriptableItemData.cropItemData != null)
+        if (!scriptableItemData.cropItemData.IsEmpty())
             cropItemData.SetCropItemData(scriptableItemData.cropItemData);
         else
             cropItemData.SetEmpty();
