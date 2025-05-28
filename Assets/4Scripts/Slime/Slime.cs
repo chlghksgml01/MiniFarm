@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Drawing;
-using Unity.Collections;
 using UnityEngine;
 
 public enum SlimeState
@@ -19,6 +17,7 @@ public class Slime : MonoBehaviour
     [SerializeField] private int hp = 10;
     [SerializeField] private float knockbackForce = 5f;
     [SerializeField] private float knockbackTime = 0.2f;
+    [SerializeField] private int spawnTime = 19;
 
     [HideInInspector] private Vector3 moveInput;
     [HideInInspector] private Animator anim;
@@ -54,6 +53,7 @@ public class Slime : MonoBehaviour
     {
         if (slimeState == SlimeState.Death)
             return;
+
         anim.SetBool("isMoving", moveInput != Vector3.zero);
 
         if (isKnockedBack)
@@ -103,7 +103,14 @@ public class Slime : MonoBehaviour
 
     private void Patrol()
     {
-        CheckAngryState();
+        if (Vector3.Distance(playerTransform.position, transform.position) <= detectionRange)
+        {
+            StopCoroutine(patrolCoroutine);
+            patrolCoroutine = null;
+
+            slimeState = SlimeState.Angry;
+            anim.SetBool("isPlayerDetected", true);
+        }
     }
 
     private void Angry()
@@ -125,19 +132,6 @@ public class Slime : MonoBehaviour
                 transform.Translate(moveInput * angrySpeed * Time.deltaTime);
         }
     }
-
-    private void CheckAngryState()
-    {
-        if (Vector3.Distance(playerTransform.position, transform.position) <= detectionRange)
-        {
-            StopCoroutine(patrolCoroutine);
-            patrolCoroutine = null;
-
-            slimeState = SlimeState.Angry;
-            anim.SetBool("isPlayerDetected", true);
-        }
-    }
-
 
     private IEnumerator StartPatrol()
     {
