@@ -59,4 +59,11 @@ public class SelectedItem_UI : MonoBehaviour
         else
             return false;
     }
+
+    public string GetSelectedItemName()
+    {
+        if (selectedSlot.IsEmpty())
+            return "";
+        return selectedSlot.slotItemData.itemName;
+    }
 }

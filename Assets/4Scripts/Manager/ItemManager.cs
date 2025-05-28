@@ -21,4 +21,13 @@ public class ItemManager : MonoBehaviour
         if (!itemDict.ContainsKey(item.itemData.itemName))
             itemDict.Add(item.itemData.itemName, item);
     }
+
+    public GameObject GetItem(string itemName)
+    {
+        if (itemDict.TryGetValue(itemName, out Item item))
+        {
+            return item.itemPrefab;
+        }
+        return null;
+    }
 }

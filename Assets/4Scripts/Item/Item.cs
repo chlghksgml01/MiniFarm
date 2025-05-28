@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
+    private ItemData _itemData;
     public ScriptableItemData scriptableItemData;
-    public int count = 1;
+    public GameObject itemPrefab;
 
     private TextMeshProUGUI textUI;
     private bool isPlayerDrop;
 
-    private ItemData _itemData;
     public ItemData itemData
     {
         get
@@ -43,12 +43,13 @@ public class Item : MonoBehaviour
     void Awake()
     {
         textUI = GetComponentInChildren<TextMeshProUGUI>();
+        if (textUI == null)
+            Debug.Log("Item - TextMeshProUGUI ¾øÀ½");
     }
 
     private void Start()
     {
         bounceVelocityX = Random.Range(0.4f, 0.6f);
-        SetTextUI();
     }
 
     void Update()
@@ -58,14 +59,6 @@ public class Item : MonoBehaviour
     }
 
     public bool IsEmpty() => itemData.IsEmpty();
-
-    void SetTextUI()
-    {
-        if (count <= 1)
-            textUI.text = "";
-        else
-            textUI.text = count.ToString();
-    }
 
     void BounceItem()
     {
@@ -106,10 +99,18 @@ public class Item : MonoBehaviour
         itemData.itemName = _itemData.itemName;
         itemData.icon = _itemData.icon;
         itemData.itemType = _itemData.itemType;
+        SetCount(_count);
 
         GetComponent<SpriteRenderer>().sprite = _itemData.icon;
-        count = _count;
 
         GameManager.Instance.uiManager.toolBar_UI.CheckSlot();
+    }
+
+    private void SetCount(int count)
+    {
+        if (count > 1)
+            textUI.text = count.ToString();
+        else
+            textUI.text = "";
     }
 }

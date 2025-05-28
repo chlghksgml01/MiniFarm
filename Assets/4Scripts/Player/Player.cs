@@ -17,7 +17,6 @@ public class Player : Entity
     [SerializeField] public int workStaminaCost = 5;
 
     [Header("Item")]
-    [SerializeField] private GameObject dropItem;
     [SerializeField] public HoldItem holdItem;
 
     [Header("Sword")]
@@ -136,18 +135,19 @@ public class Player : Entity
 
     public void CreateDropItem(SelectedItem_UI selectedItem, int count)
     {
-        if (dropItem == null || selectedItem == null)
+        if (selectedItem == null)
         {
             Debug.Log("Player - CreateDropItem ½ÇÆÐ");
             return;
         }
 
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 playerCenter = new Vector2(transform.position.x, transform.position.y + 1f);
+        Vector2 playerPos = new Vector2(transform.position.x - 0.5f, transform.position.y - 1f);
 
-        Vector2 mouseDir = (mousePos - playerCenter).normalized * 2.5f;
-        Vector2 bounceBasePos = playerCenter + mouseDir;
+        Vector2 mouseDir = (mousePos - playerPos).normalized * 2.5f;
+        Vector2 bounceBasePos = playerPos + mouseDir;
 
+        GameObject dropItem = GameManager.Instance.itemManager.GetItem(selectedItem.GetSelectedItemName());
         var item = Instantiate(dropItem, bounceBasePos, Quaternion.identity);
         Item _item = item.GetComponent<Item>();
 
