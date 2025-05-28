@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using NUnit.Framework.Interfaces;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -78,6 +79,8 @@ public class ItemData
             return true;
         return false;
     }
+
+    public bool IsSameItem(ItemData otherData) => itemName == otherData.itemName ? true : false;
 }
 
 

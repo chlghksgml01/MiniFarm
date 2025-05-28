@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [System.Serializable]
@@ -28,7 +29,14 @@ public class Inventory
             if (item.IsEmpty())
                 return;
 
-            itemCount++;
+            if (item.gameObject.GetComponentInChildren<TextMeshProUGUI>().text != "")
+            {
+                int count = int.Parse(item.GetComponentInChildren<TextMeshProUGUI>().text);
+                itemCount += count;
+            }
+            else
+                itemCount++;
+
             slotItemData.SetItemData(item.itemData);
 
             GameManager.Instance.uiManager.inventory_UI.Refresh();
