@@ -135,7 +135,7 @@ public class Slime : Entity
         {
             var item = Instantiate(GetRanDomDropItem(), transform.position, Quaternion.identity);
             Item spawnItem = item.GetComponent<Item>();
-            spawnItem.SpawnItem(transform, true, transform.position, spawnItem.itemData, itemCount);
+            spawnItem.SpawnItem(false, true, transform.position, spawnItem.itemData, itemCount);
         }
     }
 

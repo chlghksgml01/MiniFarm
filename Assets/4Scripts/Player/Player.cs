@@ -151,7 +151,7 @@ public class Player : Entity
         var item = Instantiate(dropItem, bounceBasePos, Quaternion.identity);
         Item _item = item.GetComponent<Item>();
 
-        _item.SpawnItem(transform, true, bounceBasePos, selectedItem.selectedItemData, count);
+        _item.SpawnItem(true, true, bounceBasePos, selectedItem.selectedItemData, count);
     }
 
     public void SetHoldItem(ItemData holdItemData = null)
