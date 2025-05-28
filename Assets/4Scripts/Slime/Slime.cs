@@ -9,11 +9,9 @@ public enum SlimeState
     Death
 }
 
-public class Slime : MonoBehaviour
+public class Slime : Entity
 {
     [Header("Info")]
-    [SerializeField] private int hp = 10;
-    [SerializeField] public float speed = 1f;
     [SerializeField] public float angrySpeed = 1.5f;
     [SerializeField] private float patrolRadius = 2f;
 
@@ -90,13 +88,21 @@ public class Slime : MonoBehaviour
         {
             isKnockedBack = true;
 
+            if (flashCoroutine == null)
+                flashCoroutine = StartCoroutine(FlashFX());
+
             rigid.linearVelocity = Vector2.zero;
             Vector2 knockbackDirection = transform.position - collision.transform.position;
             rigid.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode2D.Impulse);
 
-            hp -= 5;
+            hp -= GameManager.Instance.player.damage;
             if (hp <= 0)
             {
+                if (flashCoroutine != null)
+                {
+                    StopCoroutine(flashCoroutine);
+                    flashCoroutine = null;
+                }
                 slimeState = SlimeState.Death;
                 anim.SetTrigger("isDeath");
                 isKnockedBack = true;

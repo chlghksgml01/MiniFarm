@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9000096370970867910}
   - component: {fileID: -3741043960818242706}
   - component: {fileID: -34366102454874589}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Slime
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -77,8 +77,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1033332469
-  m_SortingLayer: 6
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 1065320421757918789, guid: ce3344fa049cd904797e9ff9e0b18564, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -90,7 +90,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &4973799017941750899
 Animator:
   serializedVersion: 7
@@ -125,11 +125,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af7645443dce3f42a5d4591f5a8b8e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hp: 10
   speed: 1
+  damage: 5
+  flashDuration: 0.1
+  hitMat: {fileID: 2100000, guid: a62d3ed68e04d8b489e3078e08b39144, type: 2}
   angrySpeed: 1.5
   patrolRadius: 3
   detectionRange: 6
-  hp: 10
   knockbackForce: 5
   knockbackTime: 0.2
 --- !u!50 &-3741043960818242706
@@ -189,7 +192,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

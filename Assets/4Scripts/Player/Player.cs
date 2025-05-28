@@ -8,17 +8,22 @@ public enum playerDir
     Right
 }
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
+
+    [SerializeField] private int stemina;
+
+    [Header("Item")]
     [SerializeField] private GameObject dropItem;
-    [SerializeField] public float speed;
+    [SerializeField] public HoldItem holdItem;
+
+    [Header("Sword")]
     [SerializeField] public GameObject SwordColliderRight;
     [SerializeField] public GameObject SwordColliderLeft;
     [SerializeField] public GameObject SwordColliderDown;
     [SerializeField] public GameObject SwordColliderUp;
 
     [HideInInspector] public Inventory inventory;
-
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Animator anim;
 
@@ -29,7 +34,6 @@ public class Player : MonoBehaviour
 
     public PlayerStateMachine stateMachine { get; private set; }
 
-    [SerializeField] public HoldItem holdItem;
     public ToolType playerToolType { get; set; } = ToolType.None;
     public playerDir playerDir { get; set; } = playerDir.Down;
 
@@ -77,10 +81,17 @@ public class Player : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         Item item = collision.GetComponent<Item>();
-        if (item)
+        if (item != null)
         {
             inventory.AddItem(item);
             Destroy(item.gameObject);
+        }
+
+        Slime slime = collision.GetComponent<Slime>();
+        if (slime != null)
+        {
+            hp -= slime.damage;
+            StartCoroutine(FlashFX());
         }
     }
 

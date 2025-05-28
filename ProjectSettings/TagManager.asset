@@ -14,9 +14,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - PlayerAttack
   - 
   - 
   - 
@@ -44,23 +44,8 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Background
-    uniqueID: 3225854121
-    locked: 0
   - name: Item
-    uniqueID: 826969125
-    locked: 0
-  - name: Player,Structure
-    uniqueID: 867774899
-    locked: 0
-  - name: HoldItem
-    uniqueID: 1837855293
-    locked: 0
-  - name: Crop
-    uniqueID: 405030709
-    locked: 0
-  - name: Enemy
-    uniqueID: 1033332469
+    uniqueID: 2406540097
     locked: 0
   m_RenderingLayers:
   - Default
