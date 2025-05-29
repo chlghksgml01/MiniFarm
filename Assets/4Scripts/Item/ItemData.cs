@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices.WindowsRuntime;
-using NUnit.Framework.Interfaces;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,7 +8,7 @@ public enum ItemType
 
 public class ItemData
 {
-    public string itemName = "Item Name";
+    public string itemName = "";
     public Sprite icon = null;
     public ItemType itemType = ItemType.None;
 
@@ -42,7 +40,7 @@ public class ItemData
     public float GetDropRate()
     {
         if (dropItemData.IsEmpty())
-            return -99;
+            Debug.Log("ItemData - GetDropRate dropItemData ¾øÀ½");
         return dropItemData.rate;
     }
 

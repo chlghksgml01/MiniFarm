@@ -11,11 +11,17 @@ public class DayTimeManager : MonoBehaviour
     [SerializeField] int dayEndTime = 26;
     [SerializeField] int twilightStartTime = 19;
     [SerializeField] int darkestTime = 22;
-
     [SerializeField] float timeScale = 60f;
     [SerializeField] float timeInterval = 10f;
+
+    [Header("TimeUI")]
     [SerializeField] TextMeshProUGUI hourUIText;
     [SerializeField] TextMeshProUGUI minuteUIText;
+
+    [Header("NewDayUI")]
+    [SerializeField] float fadeWaitTime = 0.5f;
+    [SerializeField] float fadeInOutDuration = 0.5f;
+    [SerializeField] NewDayFadeInOut newDayFadeInOutImage;
 
     [Header("Light")]
     [SerializeField] private Light2D globalLight;
@@ -76,6 +82,7 @@ public class DayTimeManager : MonoBehaviour
             if (gameTimer >= dayEndTime * secondsPerHour)
             {
                 NextDay();
+                return;
             }
 
             int hourText = hour;
@@ -88,11 +95,24 @@ public class DayTimeManager : MonoBehaviour
         }
     }
 
-    private void NextDay()
+    public void NextDay()
     {
-        gameTimer = dayStartTime * secondsPerHour;
-        hour = dayStartTime;
         OnDayPassed?.Invoke();
+        newDayFadeInOutImage.SetNewDay(fadeInOutDuration, fadeWaitTime);
+
+        StartCoroutine(StartNewDay());
+    }
+
+    private IEnumerator StartNewDay()
+    {
+        yield return new WaitForSecondsRealtime(fadeInOutDuration);
+
+        hour = dayStartTime;
+        gameTimer = dayStartTime * secondsPerHour;
+        globalLight.color = dayLightColor;
+
+        hourUIText.text = string.Format("{00:00}", hour);
+        minuteUIText.text = string.Format("{00:00}", minute);
     }
 
     private void UpdateLight()

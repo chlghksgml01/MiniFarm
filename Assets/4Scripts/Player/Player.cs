@@ -43,6 +43,8 @@ public class Player : Entity
     public ToolType playerToolType { get; set; } = ToolType.None;
     public playerDir playerDir { get; set; } = playerDir.Down;
 
+    bool isDead = false;
+
     private void Awake()
     {
         anim = GetComponentInChildren<Animator>();
@@ -64,21 +66,25 @@ public class Player : Entity
         anim.SetFloat("vertical", -1f);
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        GameManager.Instance.dayTimeManager.OnDayPassed += ResetStatus;
+        base.OnEnable();
+        GameManager.Instance.dayTimeManager.OnDayPassed += SetNewDay;
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.dayTimeManager.OnDayPassed -= ResetStatus;
-
+        GameManager.Instance.dayTimeManager.OnDayPassed -= SetNewDay;
     }
 
-    private void ResetStatus()
+    private void SetNewDay()
     {
         hp = maxHp;
         stamina = maxStamina;
+
+        isDead = false;
+        stateMachine.ChangeState(idleState);
+        moveInput = Vector3.zero;
 
         healthBar.fillAmount = 1f;
         staminaBar.fillAmount = 1f;
@@ -86,6 +92,9 @@ public class Player : Entity
 
     void Update()
     {
+        if (isDead)
+            return;
+
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
 
@@ -116,6 +125,8 @@ public class Player : Entity
         Slime slime = collision.GetComponent<Slime>();
         if (slime != null)
         {
+            if (slime.slimeState == SlimeState.Death)
+                return;
             Damage(slime.damage);
         }
     }
@@ -123,8 +134,14 @@ public class Player : Entity
     private void Damage(int _damage)
     {
         hp -= _damage;
-        StartCoroutine(FlashFX());
         SetGague(healthBar, hp, maxHp);
+        if (hp <= 0 && !isDead)
+        {
+            GameManager.Instance.dayTimeManager.NextDay();
+            isDead = true;
+            anim.SetTrigger("isDeath");
+        }
+        StartCoroutine(FlashFX());
     }
 
     public void UseStamina()
@@ -282,6 +299,13 @@ public class Player : Entity
         if (holdItem.IsEmpty() || holdItem.itemData.itemName == GameManager.Instance.tileManager.GetSelectedCropName())
             return true;
 
+        return false;
+    }
+
+    public bool CanWork()
+    {
+        if (holdItem.IsToolHold() && stamina > 0 && stateMachine.currentState != workingState)
+            return true;
         return false;
     }
 }

@@ -30,19 +30,22 @@ public class PlayerState
 
     public virtual void UpdateState()
     {
+        // 도구 사용
         if (Input.GetMouseButtonDown(0) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
-            && stateMachine.currentState != player.workingState && player.playerToolType != ToolType.None)
+            && player.CanWork())
         {
             GameManager.Instance.tileManager.ChangeTileState();
             stateMachine.ChangeState(player.workingState);
         }
 
+        // 씨앗 심기
         else if (Input.GetMouseButtonDown(1) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
             && player.holdItem.IsCropSeedHold())
         {
             GameManager.Instance.tileManager.ChangeTileState();
         }
 
+        // 작물 수확
         else if ((Input.GetMouseButtonDown(1) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
             && GameManager.Instance.tileManager.CanHarvest()))
         {

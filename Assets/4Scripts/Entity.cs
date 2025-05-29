@@ -17,7 +17,7 @@ public class Entity : MonoBehaviour
     private Material originalMat;
     protected Coroutine flashCoroutine;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         maxHp = hp;
         sprite = GetComponentInChildren<SpriteRenderer>();

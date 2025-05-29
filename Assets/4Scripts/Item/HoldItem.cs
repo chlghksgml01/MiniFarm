@@ -35,4 +35,11 @@ public class HoldItem : MonoBehaviour
             return true;
         return false;
     }
+
+    public bool IsToolHold()
+    {
+        if (!itemData.IsEmpty() && itemData.itemType == ItemType.Tool)
+            return true;
+        return false;
+    }
 }

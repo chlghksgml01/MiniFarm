@@ -26,7 +26,7 @@ public class Slime : Entity
 
     private Rigidbody2D rigid;
 
-    private SlimeState slimeState = SlimeState.Patrol;
+    public SlimeState slimeState = SlimeState.Patrol;
 
     private Transform playerTransform;
     private Coroutine patrolCoroutine;
