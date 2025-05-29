@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1497477844643287398}
   - component: {fileID: 5158462473692910888}
+  - component: {fileID: 2902509603767602581}
   m_Layer: 0
   m_Name: SwordCollider_Right
   m_TagString: PlayerAttack
@@ -78,6 +79,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.1889168, y: 1.1889172}
   m_EdgeRadius: 0
+--- !u!50 &2902509603767602581
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361915673668975475}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &2080708159066243804
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,7 +118,6 @@ GameObject:
   - component: {fileID: 7282898735484896204}
   - component: {fileID: 2880506516904200336}
   - component: {fileID: 940991261157504117}
-  - component: {fileID: 6672458755962310888}
   m_Layer: 0
   m_Name: Visuals
   m_TagString: Untagged
@@ -154,10 +181,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 867774899
-  m_SortingLayer: 3
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -6342744448596609188, guid: c49ed7a8ae686c641b330ad31ec1c86e, type: 3}
+  m_Sprite: {fileID: 8829544955155286540, guid: c49ed7a8ae686c641b330ad31ec1c86e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -202,13 +229,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c69e58a374b4dec44ad1a0b67be82769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!70 &6672458755962310888
+--- !u!1 &3346568013896474770
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2908308375407809043}
+  - component: {fileID: 6341901952977625819}
+  - component: {fileID: 8690016215399374846}
+  m_Layer: 6
+  m_Name: Physics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2908308375407809043
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3346568013896474770}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6320830372756349322}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &6341901952977625819
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2080708159066243804}
+  m_GameObject: {fileID: 3346568013896474770}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -239,6 +299,33 @@ CapsuleCollider2D:
   m_Offset: {x: 0.010913491, y: 0.26464117}
   m_Size: {x: 0.48153347, y: 0.58088887}
   m_Direction: 0
+--- !u!50 &8690016215399374846
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3346568013896474770}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &3673515866810200069
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,6 +336,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1111198954371531849}
   - component: {fileID: 2531010856276460296}
+  - component: {fileID: 2315901702268035991}
   m_Layer: 0
   m_Name: SwordCollider_Up
   m_TagString: PlayerAttack
@@ -317,6 +405,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.3778343, y: 0.876793}
   m_EdgeRadius: 0
+--- !u!50 &2315901702268035991
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3673515866810200069}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &6294748300262194070
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,6 +442,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1200254885926560029}
   - component: {fileID: 3405301814086324736}
+  - component: {fileID: 3348959172770388554}
   m_Layer: 0
   m_Name: SwordCollider_Left
   m_TagString: PlayerAttack
@@ -395,6 +511,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.1971309, y: 1.1889172}
   m_EdgeRadius: 0
+--- !u!50 &3348959172770388554
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6294748300262194070}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &7253529094744555334
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +548,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6608814280376052534}
   - component: {fileID: 1866013023439891200}
+  - component: {fileID: 5970327010833065443}
   m_Layer: 0
   m_Name: SwordCollider_Down
   m_TagString: PlayerAttack
@@ -473,6 +617,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.312124, y: 0.8439379}
   m_EdgeRadius: 0
+--- !u!50 &5970327010833065443
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7253529094744555334}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &7613151609588484325
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,8 +654,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6320830372756349322}
   - component: {fileID: 2291338546584941062}
-  - component: {fileID: 3363399488693892103}
-  - component: {fileID: 3289378362473723201}
+  - component: {fileID: 2544189589496068472}
+  - component: {fileID: 4210683384605655509}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -506,6 +677,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8222808284271729582}
+  - {fileID: 2908308375407809043}
+  - {fileID: 5209120135882240543}
   - {fileID: 6558937044535936830}
   - {fileID: 1497477844643287398}
   - {fileID: 1200254885926560029}
@@ -525,18 +698,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fd581eddeddc14ea7ed695c373e2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropItem: {fileID: 66480898167699907, guid: 2b9ad9bbe0fac8249a9504c70ac28eb2, type: 3}
+  maxHp: 100
+  hp: 100
   speed: 7
+  damage: 5
+  flashDuration: 0.1
+  hitMat: {fileID: 2100000, guid: a62d3ed68e04d8b489e3078e08b39144, type: 2}
+  maxStamina: 100
+  stamina: 100
+  workStaminaCost: 5
+  holdItem: {fileID: 3085691364585730817}
   SwordColliderRight: {fileID: 361915673668975475}
   SwordColliderLeft: {fileID: 6294748300262194070}
   SwordColliderDown: {fileID: 7253529094744555334}
   SwordColliderUp: {fileID: 3673515866810200069}
+  healthBar: {fileID: 0}
+  staminaBar: {fileID: 0}
   inventory:
     slots: []
   moveInput: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
-  holdItem: {fileID: 3085691364585730817}
---- !u!70 &3363399488693892103
+--- !u!70 &2544189589496068472
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -566,14 +748,14 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0022990704, y: 0.4886138}
-  m_Size: {x: 0.7399637, y: 0.7646617}
+  m_Offset: {x: 0.010913491, y: 0.26464117}
+  m_Size: {x: 0.48153347, y: 0.58088887}
   m_Direction: 0
---- !u!50 &3289378362473723201
+--- !u!50 &4210683384605655509
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -600,6 +782,103 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!1 &8981148910289725068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5209120135882240543}
+  - component: {fileID: 8991141498668694108}
+  - component: {fileID: 5594649998134651817}
+  m_Layer: 10
+  m_Name: InteractedCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5209120135882240543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8981148910289725068}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6320830372756349322}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &8991141498668694108
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8981148910289725068}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.008102894, y: 0.619185}
+  m_Size: {x: 0.86025655, y: 1.23837}
+  m_Direction: 0
+--- !u!50 &5594649998134651817
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8981148910289725068}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
 --- !u!1001 &7003810671775508382
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -627,14 +906,14 @@ PrefabInstance:
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 1168926902407322946, guid: 4c70859e0746caa4b850337487e34691, type: 3}
+      objectReference: {fileID: 8902764129226356341, guid: aeed4e54ffbb240489345abdbdba2d80, type: 3}
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_SortingLayer
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_SortingLayerID
-      value: 1837855293
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2305424611817196837, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_WasSpriteAssigned
@@ -654,7 +933,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4194134174828060832, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.27
+      value: -0.14
       objectReference: {fileID: 0}
     - target: {fileID: 4194134174828060832, guid: 1daad76d9ea925c44bc0a7abdfab6ace, type: 3}
       propertyPath: m_LocalPosition.z
