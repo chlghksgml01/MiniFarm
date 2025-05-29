@@ -7,8 +7,10 @@ public class Slot_UI : MonoBehaviour
 {
     [SerializeField] Image itemIcon;
     [SerializeField] TextMeshProUGUI quantityText;
-    public int slotIdx = 0;
 
+    public string itemName = "";
+
+    public int slotIdx = 0;
     public int count = 0;
 
     public void InitializeSlot(int _slotIdx)
@@ -20,8 +22,11 @@ public class Slot_UI : MonoBehaviour
     {
         if (_slot != null)
         {
-            if (_slot.itemCount == 0)
+            if (_slot.IsEmpty())
+            {
+                SetEmpty();
                 return;
+            }
 
             itemIcon.sprite = _slot.slotItemData.icon;
             itemIcon.color = new Color(1, 1, 1, 1);
@@ -32,6 +37,7 @@ public class Slot_UI : MonoBehaviour
                 quantityText.text = "";
 
             count = _slot.itemCount;
+            itemName = _slot.slotItemData.itemName;
         }
     }
 
@@ -41,5 +47,6 @@ public class Slot_UI : MonoBehaviour
         itemIcon.color = new Color(1, 1, 1, 0);
         quantityText.text = "";
         count = 0;
+        itemName = "";
     }
 }

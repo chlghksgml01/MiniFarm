@@ -7,7 +7,8 @@ public class ScriptableItemData : ScriptableObject
     public string itemName;
     public Sprite icon;
     public ItemType itemType;
-    public int price;
+    public int buyPrice;
+    public int sellPrice;
 
     public DropItemData dropItemData;
     public CropItemData cropItemData;

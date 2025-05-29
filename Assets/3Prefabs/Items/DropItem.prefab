@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2305424611817196837}
   - component: {fileID: 6706477105976523911}
   - component: {fileID: 6272279790835434845}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DropItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scriptableItemData: {fileID: 11400000, guid: f05d8a04c300a2a419a55a5827aa6ec5, type: 2}
-  count: 1
+  itemPrefab: {fileID: 0}
 --- !u!1 &5430533674888974394
 GameObject:
   m_ObjectHideFlags: 0

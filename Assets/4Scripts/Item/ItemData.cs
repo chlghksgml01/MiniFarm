@@ -11,6 +11,8 @@ public class ItemData
     public string itemName = "";
     public Sprite icon = null;
     public ItemType itemType = ItemType.None;
+    public int buyPrice = 0;
+    public int sellPrice = 0;
 
     public DropItemData dropItemData = new DropItemData();
     public CropItemData cropItemData = new CropItemData();
@@ -20,6 +22,8 @@ public class ItemData
         itemName = newItemData.itemName;
         icon = newItemData.icon;
         itemType = newItemData.itemType;
+        buyPrice = newItemData.buyPrice;
+        sellPrice = newItemData.sellPrice;
 
         if (!newItemData.IsDropEmpty())
             dropItemData.SetDropData(newItemData.dropItemData);
@@ -49,6 +53,8 @@ public class ItemData
         itemName = "";
         icon = null;
         itemType = ItemType.None;
+        buyPrice = 0;
+        sellPrice = 0;
 
         dropItemData.SetEmpty();
         cropItemData.SetEmpty();
@@ -59,6 +65,8 @@ public class ItemData
         itemName = scriptableItemData.itemName;
         icon = scriptableItemData.icon;
         itemType = scriptableItemData.itemType;
+        buyPrice = scriptableItemData.buyPrice;
+        sellPrice = scriptableItemData.sellPrice;
 
         if (!scriptableItemData.dropItemData.IsEmpty())
             dropItemData.SetDropData(scriptableItemData.dropItemData);

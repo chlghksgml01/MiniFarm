@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public TileManager tileManager;
     public DayTimeManager dayTimeManager;
     public CropManager cropManager;
+    public Store storeManager;
 
     public Player player;
 

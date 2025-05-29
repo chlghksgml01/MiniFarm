@@ -30,4 +30,13 @@ public class ItemManager : MonoBehaviour
         }
         return null;
     }
+
+    public ItemData GetItemData(string itemName)
+    {
+        if (itemDict.TryGetValue(itemName, out Item item))
+        {
+            return item.itemData;
+        }
+        return null;
+    }
 }

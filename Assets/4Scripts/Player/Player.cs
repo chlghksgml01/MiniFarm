@@ -15,6 +15,7 @@ public class Player : Entity
     [SerializeField] public int maxStamina;
     [SerializeField] public int stamina;
     [SerializeField] public int workStaminaCost = 5;
+    [SerializeField] public int gold = 100;
 
     [Header("Item")]
     [SerializeField] public HoldItem holdItem;
@@ -72,11 +73,6 @@ public class Player : Entity
         GameManager.Instance.dayTimeManager.OnDayPassed += SetNewDay;
     }
 
-    private void OnDisable()
-    {
-        GameManager.Instance.dayTimeManager.OnDayPassed -= SetNewDay;
-    }
-
     private void SetNewDay()
     {
         hp = maxHp;
@@ -113,25 +109,8 @@ public class Player : Entity
             transform.Translate(moveInput * speed * Time.fixedDeltaTime);
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        Item item = collision.GetComponent<Item>();
-        if (item != null)
-        {
-            inventory.AddItem(item);
-            Destroy(item.gameObject);
-        }
 
-        Slime slime = collision.GetComponent<Slime>();
-        if (slime != null)
-        {
-            if (slime.slimeState == SlimeState.Death)
-                return;
-            Damage(slime.damage);
-        }
-    }
-
-    private void Damage(int _damage)
+    public void Damage(int _damage)
     {
         hp -= _damage;
         SetGague(healthBar, hp, maxHp);
@@ -184,8 +163,8 @@ public class Player : Entity
         Vector2 mouseDir = (mousePos - playerPos).normalized * 2.5f;
         Vector2 bounceBasePos = playerPos + mouseDir;
 
-        GameObject dropItem = GameManager.Instance.itemManager.GetItem(selectedItem.GetSelectedItemName());
-        var item = Instantiate(dropItem, bounceBasePos, Quaternion.identity);
+        GameObject dropItemPrefab = GameManager.Instance.itemManager.GetItem(selectedItem.GetSelectedItemName());
+        var item = Instantiate(dropItemPrefab, bounceBasePos, Quaternion.identity);
         Item _item = item.GetComponent<Item>();
 
         _item.SpawnItem(true, true, bounceBasePos, selectedItem.selectedSlot.slotItemData, count);
@@ -307,5 +286,17 @@ public class Player : Entity
         if (holdItem.IsToolHold() && stamina > 0 && stateMachine.currentState != workingState)
             return true;
         return false;
+    }
+
+    public void BuyItem(ItemData buyItemData, int buyCount)
+    {
+        gold -= buyItemData.buyPrice * buyCount;
+        inventory.AddItem(buyItemData, buyCount);
+    }
+
+    public void SellItem(ItemData sellItemData, int sellCount)
+    {
+        gold += sellItemData.sellPrice * sellCount;
+        inventory.RemoveItem(sellItemData, sellCount);
     }
 }

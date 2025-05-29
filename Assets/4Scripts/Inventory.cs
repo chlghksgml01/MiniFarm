@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
+using static Inventory;
 
 [System.Serializable]
 public class Inventory
@@ -42,13 +44,31 @@ public class Inventory
             GameManager.Instance.uiManager.inventory_UI.Refresh();
         }
 
-        public void UseItem()
+        public void AddItem(ItemData itemData, int count)
+        {
+            if (itemData.IsEmpty())
+                return;
+
+            itemCount += count;
+
+            slotItemData.SetItemData(itemData);
+
+            GameManager.Instance.uiManager.inventory_UI.Refresh();
+        }
+
+        public void UseItem(int useCount = -99)
         {
             if (itemCount > 0)
             {
-                itemCount--;
+                if (useCount == -99)
+                    itemCount--;
+                else
+                    itemCount -= useCount;
+
                 if (itemCount <= 0)
                     SetEmpty();
+
+                GameManager.Instance.uiManager.inventory_UI.Refresh();
             }
         }
 
@@ -56,6 +76,8 @@ public class Inventory
         {
             itemCount = 0;
             slotItemData.SetEmpty();
+
+            GameManager.Instance.uiManager.inventory_UI.Refresh();
         }
 
         public bool IsEmpty()
@@ -111,6 +133,28 @@ public class Inventory
         }
     }
 
+    public void AddItem(ItemData itemData, int count)
+    {
+        foreach (Slot slot in slots)
+        {
+            if (slot.slotItemData.itemName == itemData.itemName && slot.CanAddItem())
+            {
+                slot.AddItem(itemData, count);
+                return;
+            }
+        }
+
+        foreach (Slot slot in slots)
+        {
+            if (slot.IsEmpty())
+            {
+                slot.AddItem(itemData, count);
+                GameManager.Instance.uiManager.toolBar_UI.CheckSlot();
+                return;
+            }
+        }
+    }
+
     public void SortInventory()
     {
         for (int i = 0; i < slots.Count; i++)
@@ -139,6 +183,35 @@ public class Inventory
                     slots[i].itemCount += slots[j].itemCount;
                     slots[j].SetEmpty();
                 }
+            }
+        }
+    }
+
+    public void RemoveItem(ItemData itemData, int count)
+    {
+        if (itemData.IsEmpty())
+            return;
+
+        List<Slot> removeSlots = slots.Where(slot => slot.slotItemData.itemName == itemData.itemName).ToList();
+        if (removeSlots.Count == 0)
+        {
+            Debug.Log("Inventory - RemoveItem 해당 아이템 없음");
+            return;
+        }
+
+        for (int i = removeSlots.Count - 1; i >= 0; i--)
+        {
+            Slot removeSlot = removeSlots[i];
+
+            if (removeSlot.itemCount >= count)
+            {
+                removeSlot.UseItem(count);
+                return;
+            }
+            else
+            {
+                count -= removeSlot.itemCount;
+                removeSlot.SetEmpty();
             }
         }
     }

@@ -15,7 +15,8 @@ MonoBehaviour:
   itemName: CarrotSeed
   icon: {fileID: 8902764129226356341, guid: aeed4e54ffbb240489345abdbdba2d80, type: 3}
   itemType: 2
-  price: 2
+  buyPrice: 20
+  sellPrice: 2
   dropItemData:
     rate: 0
   cropItemData:

@@ -15,7 +15,8 @@ MonoBehaviour:
   itemName: TomatoSeed
   icon: {fileID: 1530993877042961689, guid: aeed4e54ffbb240489345abdbdba2d80, type: 3}
   itemType: 2
-  price: 2
+  buyPrice: 50
+  sellPrice: 5
   dropItemData:
     rate: 0
   cropItemData:

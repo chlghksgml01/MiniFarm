@@ -15,6 +15,19 @@ MonoBehaviour:
   itemName: Slime_Rainbow
   icon: {fileID: -6839189620729066264, guid: 2430b0fd50f4c864fafa0440fe1ac31b, type: 3}
   itemType: 1
-  price: 100
+  buyPrice: 0
+  sellPrice: 50
   dropItemData:
     rate: 10
+  cropItemData:
+    cropName: 
+    cropTiles: []
+    wetCropTiles: []
+    growthLevel: 0
+    growthDurations: 
+    isRegrowable: 0
+    harvestedImage: {fileID: 0}
+    currentGrowthDuration: 0
+    currentGrowthLevel: 0
+    isWatered: 0
+    canHarvest: 0

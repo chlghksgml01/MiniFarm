@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UI_Manager : MonoBehaviour
@@ -7,19 +6,29 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] public ToolBar_UI toolBar_UI;
     [SerializeField] public GameObject inventoryPanel;
     [SerializeField] public GameObject toolBarPanel;
+    [SerializeField] public GameObject store;
 
     private void Start()
     {
         inventory_UI.Refresh();
         inventoryPanel.SetActive(false);
         toolBarPanel.SetActive(true);
+        store.SetActive(false);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) && !store.activeSelf)
         {
             ToggleInventoryUI();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (store.activeSelf)
+                ToggleStore();
+            if (inventoryPanel.activeSelf)
+                ToggleInventoryUI();
         }
     }
 
@@ -52,6 +61,20 @@ public class UI_Manager : MonoBehaviour
             {
                 inventory_UI.CloseInventoryUI();
             }
+        }
+    }
+
+    public void ToggleStore()
+    {
+        if (!store.activeSelf)
+        {
+            store.SetActive(true);
+            inventoryPanel.SetActive(false);
+            toolBarPanel.SetActive(false);
+        }
+        else
+        {
+            store.SetActive(false);
         }
     }
 }
