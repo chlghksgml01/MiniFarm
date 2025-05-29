@@ -31,7 +31,7 @@ public class Player : Entity
     [SerializeField] public Image staminaBar;
 
     [HideInInspector] public Inventory inventory;
-    [HideInInspector] public Vector3 moveInput;
+    public Vector3 moveInput;
     [HideInInspector] public Animator anim;
 
     [HideInInspector] public PlayerIdleState idleState;
@@ -88,7 +88,7 @@ public class Player : Entity
 
     void Update()
     {
-        if (isDead)
+        if (isDead || GameManager.Instance.uiManager.IsUIOpen())
             return;
 
         moveInput.x = Input.GetAxisRaw("Horizontal");
@@ -116,8 +116,8 @@ public class Player : Entity
         SetGague(healthBar, hp, maxHp);
         if (hp <= 0 && !isDead)
         {
-            GameManager.Instance.dayTimeManager.NextDay();
             isDead = true;
+            GameManager.Instance.dayTimeManager.NextDay();
             anim.SetTrigger("isDeath");
         }
         StartCoroutine(FlashFX());

@@ -77,4 +77,9 @@ public class UI_Manager : MonoBehaviour
             store.SetActive(false);
         }
     }
+
+    public bool IsUIOpen()
+    {
+        return inventoryPanel.activeSelf || store.activeSelf;
+    }
 }
