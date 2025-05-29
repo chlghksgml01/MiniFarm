@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Carrot
   m_EditorClassIdentifier: 
   itemName: Carrot
-  icon: {fileID: 648987640, guid: 17dea276f36b33d408c810e58a37f79d, type: 3}
+  icon: {fileID: 6761164967045977113, guid: d283e564552a6b0428b5cfc16c2f763f, type: 3}
   itemType: 1
   price: 10
   dropItemData:
