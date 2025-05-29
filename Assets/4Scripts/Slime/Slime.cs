@@ -131,15 +131,15 @@ public class Slime : Entity
         int itemRate = Random.Range(0, 100);
         int itemCount = Random.Range(0, 3);
 
-        if (GetRanDomDropItem() != null)
+        if (GetRandomDropItem() != null)
         {
-            var item = Instantiate(GetRanDomDropItem(), transform.position, Quaternion.identity);
+            var item = Instantiate(GetRandomDropItem(), transform.position, Quaternion.identity);
             Item spawnItem = item.GetComponent<Item>();
             spawnItem.SpawnItem(false, true, transform.position, spawnItem.itemData, itemCount);
         }
     }
 
-    private GameObject GetRanDomDropItem()
+    private GameObject GetRandomDropItem()
     {
         float totalRate = 0f;
         foreach (var item in dropItems)

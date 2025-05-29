@@ -75,6 +75,7 @@ public class UI_Manager : MonoBehaviour
         else
         {
             store.SetActive(false);
+            toolBarPanel.SetActive(true);
         }
     }
 
