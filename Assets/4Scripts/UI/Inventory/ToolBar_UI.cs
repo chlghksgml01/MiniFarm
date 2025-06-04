@@ -35,7 +35,7 @@ public class ToolBar_UI : MonoBehaviour
         if (selectedSlotIdx >= slotCount)
             selectedSlotIdx = 0;
 
-        ItemData selectedItemData = GameManager.Instance.player.inventory.slots[selectedSlotIdx].slotItemData;
+        ItemData selectedItemData = GameManager.Instance.player.playerSaveData.inventory.slots[selectedSlotIdx].slotItemData;
 
         if (GameManager.Instance.player.stateMachine.currentState == GameManager.Instance.player.pickUpState)
             return;
@@ -56,11 +56,11 @@ public class ToolBar_UI : MonoBehaviour
     public void UseItem()
     {
         GameManager gameManager = GameManager.Instance;
-        if (gameManager.player.inventory.slots[selectedSlotIdx].slotItemData.IsEmpty())
+        if (gameManager.player.playerSaveData.inventory.slots[selectedSlotIdx].slotItemData.IsEmpty())
             return;
 
-        gameManager.player.inventory.slots[selectedSlotIdx].UseItem();
-        if (gameManager.player.inventory.slots[selectedSlotIdx].IsEmpty())
+        gameManager.player.playerSaveData.inventory.slots[selectedSlotIdx].UseItem();
+        if (gameManager.player.playerSaveData.inventory.slots[selectedSlotIdx].IsEmpty())
             gameManager.player.SetHoldItem();
         gameManager.uiManager.inventory_UI.Refresh();
         CheckSlot();

@@ -47,7 +47,7 @@ public class Store : MonoBehaviour
         {
             player = GameManager.Instance.player;
         }
-        playerGold.text = player.gold.ToString();
+        playerGold.text = player.playerSaveData.gold.ToString();
 
         itemCountTextUI.text = "";
     }
@@ -57,11 +57,11 @@ public class Store : MonoBehaviour
         int selectedItemCount = int.Parse(itemCountTextUI.text);
         if (isStoreClicked)
         {
-            if (selectedItemData.buyPrice * selectedItemCount <= player.gold)
+            if (selectedItemData.buyPrice * selectedItemCount <= player.playerSaveData.gold)
             {
                 player.BuyItem(selectedItemData, selectedItemCount);
                 storePlayerInventory_UI.Refresh();
-                playerGold.text = player.gold.ToString();
+                playerGold.text = player.playerSaveData.gold.ToString();
             }
             else
             {
@@ -73,7 +73,7 @@ public class Store : MonoBehaviour
         {
             player.SellItem(selectedItemData, selectedItemCount);
             storePlayerInventory_UI.Refresh();
-            playerGold.text = player.gold.ToString();
+            playerGold.text = player.playerSaveData.gold.ToString();
         }
 
         itemCountTextUI.text = "";

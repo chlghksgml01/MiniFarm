@@ -38,7 +38,7 @@ public class Inventory_UI : MonoBehaviour
             return;
         }
         selectedItem.gameObject.SetActive(false);
-        inventory = GameManager.Instance.player.inventory;
+        inventory = GameManager.Instance.player.playerSaveData.inventory;
     }
 
     void Update()
@@ -81,7 +81,7 @@ public class Inventory_UI : MonoBehaviour
     {
         if (inventory == null)
         {
-            inventory = GameManager.Instance.player.inventory;
+            inventory = GameManager.Instance.player.playerSaveData.inventory;
         }
 
         if (slotsUIs.Count != inventory.slots.Count)

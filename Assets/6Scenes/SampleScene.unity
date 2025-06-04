@@ -9441,7 +9441,7 @@ MonoBehaviour:
   dayEndTime: 26
   twilightStartTime: 19
   darkestTime: 22
-  timeScale: 6000
+  timeScale: 12000
   timeInterval: 1
   hourUIText: {fileID: 1157134613}
   minuteUIText: {fileID: 1666779941}
@@ -10904,6 +10904,50 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1578700553172858315, guid: c1d445372fd340d4098794acd3b6924c, type: 3}
   m_PrefabInstance: {fileID: 965587513}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &977133159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 977133161}
+  - component: {fileID: 977133160}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &977133160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977133159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb8898b07bcb4be43a594ba6f51cea09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &977133161
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977133159}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -9.5913105, y: 3.1242073, z: -0.039439052}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &993996241 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 322919968833071363, guid: 446870934bb189b429e30cf2622dff97, type: 3}
@@ -107833,6 +107877,10 @@ PrefabInstance:
       propertyPath: staminaBar
       value: 
       objectReference: {fileID: 1311255905}
+    - target: {fileID: 2291338546584941062, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
+      propertyPath: playerData.gold
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 6320830372756349322, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.77
@@ -108360,6 +108408,7 @@ SceneRoots:
   - {fileID: 673298076}
   - {fileID: 1009898804}
   - {fileID: 632928894}
+  - {fileID: 977133161}
   - {fileID: 476412767}
   - {fileID: 1666934646}
   - {fileID: 1475411163}

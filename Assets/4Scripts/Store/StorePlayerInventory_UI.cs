@@ -9,7 +9,7 @@ public class StorePlayerInventory_UI : MonoBehaviour
 
     private void OnEnable()
     {
-        playerInventory = GameManager.Instance.player.inventory;
+        playerInventory = GameManager.Instance.player.playerSaveData.inventory;
         int slotCount = playerInventory.slots.Count;
         for (int i = 0; i < slotCount; i++)
         {

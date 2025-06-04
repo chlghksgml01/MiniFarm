@@ -22,6 +22,10 @@ public class NewDayFadeInOut : MonoBehaviour
         StartCoroutine(FadeInOut(0f, 1f, fadeInOutDuration));
 
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
+
+        DataManager.instance.SaveData();
+        DataManager.instance.LoadData();
+
         yield return new WaitForSecondsRealtime(fadeWaitTime);
 
         StartCoroutine(FadeInOut(1f, 0f, fadeInOutDuration));

@@ -15,7 +15,7 @@ public class Player : Entity
     [SerializeField] public int maxStamina;
     [SerializeField] public int stamina;
     [SerializeField] public int workStaminaCost = 5;
-    [SerializeField] public int gold = 100;
+    [SerializeField] public PlayerSaveData playerSaveData;
 
     [Header("Item")]
     [SerializeField] public HoldItem holdItem;
@@ -30,8 +30,7 @@ public class Player : Entity
     [SerializeField] public Image healthBar;
     [SerializeField] public Image staminaBar;
 
-    [HideInInspector] public Inventory inventory;
-    public Vector3 moveInput;
+    [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Animator anim;
 
     [HideInInspector] public PlayerIdleState idleState;
@@ -61,7 +60,7 @@ public class Player : Entity
 
         stateMachine.Initialize(idleState);
 
-        inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
+        playerSaveData.inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
 
         anim.SetFloat("horizontal", 0f);
         anim.SetFloat("vertical", -1f);
@@ -208,7 +207,7 @@ public class Player : Entity
 
         GameManager.Instance.itemManager.itemDict.TryGetValue(CropItemData.cropName, out Item item);
 
-        inventory.AddItem(item);
+        playerSaveData.inventory.AddItem(item);
 
         if (!GameManager.Instance.player.holdItem.IsEmpty())
             return;
@@ -289,13 +288,13 @@ public class Player : Entity
 
     public void BuyItem(ItemData buyItemData, int buyCount)
     {
-        gold -= buyItemData.buyPrice * buyCount;
-        inventory.AddItem(buyItemData, buyCount);
+        playerSaveData.gold -= buyItemData.buyPrice * buyCount;
+        playerSaveData.inventory.AddItem(buyItemData, buyCount);
     }
 
     public void SellItem(ItemData sellItemData, int sellCount)
     {
-        gold += sellItemData.sellPrice * sellCount;
-        inventory.RemoveItem(sellItemData, sellCount);
+        playerSaveData.gold += sellItemData.sellPrice * sellCount;
+        playerSaveData.inventory.RemoveItem(sellItemData, sellCount);
     }
 }

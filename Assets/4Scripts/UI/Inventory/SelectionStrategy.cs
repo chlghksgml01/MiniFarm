@@ -38,7 +38,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
             {
                 // 클릭한 슬롯UI의 슬롯 가져오기
                 if (slots == null)
-                    slots = GameManager.Instance.player.inventory.slots;
+                    slots = GameManager.Instance.player.playerSaveData.inventory.slots;
                 selectedSlot = slots[slotUI.slotIdx];
 
 

@@ -17,7 +17,7 @@ public class PlayerInteractCollider : MonoBehaviour
         if (collision.CompareTag("Item"))
         {
             Item item = collision.GetComponent<Item>();
-            player.inventory.AddItem(item);
+            player.playerSaveData.inventory.AddItem(item);
             Destroy(item.gameObject);
         }
 

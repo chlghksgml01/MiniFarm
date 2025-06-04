@@ -130,4 +130,41 @@ public class CropManager : MonoBehaviour
         GameManager.Instance.cropManager.plantedCropsDict.Remove(selectedTilePos);
         tileManager.SetTile(tileManager.cropTileMap, selectedTilePos, null);
     }
+
+    public CropSaveData GetCropSaveData()
+    {
+        CropSaveData cropSaveData = new CropSaveData();
+
+        foreach (KeyValuePair<Vector3Int, CropItemData> cropTile in plantedCropsDict)
+        {
+            Vector3Int cropPos = cropTile.Key;
+            CropItemData cropItemData = cropTile.Value;
+            if (cropItemData == null || cropItemData.IsEmpty())
+                continue;
+
+            cropSaveData.cropPos.Add(cropPos);
+            cropSaveData.cropItemData.Add(cropItemData);
+        }
+
+        return cropSaveData;
+    }
+
+    public void SetCropSaveData(CropSaveData cropSaveData)
+    {
+        if (cropSaveData == null || cropSaveData.cropPos.Count == 0)
+            return;
+
+        plantedCropsDict.Clear();
+
+        for (int i = 0; i < cropSaveData.cropPos.Count; i++)
+        {
+            Vector3Int cropPos = cropSaveData.cropPos[i];
+            CropItemData cropItemData = cropSaveData.cropItemData[i];
+            if (cropItemData == null || cropItemData.IsEmpty())
+                continue;
+
+            plantedCropsDict.Add(cropPos, cropItemData);
+            tileManager.SetTile(tileManager.cropTileMap, cropPos, cropItemData.cropTiles[cropItemData.currentGrowthLevel - 1]);
+        }
+    }
 }

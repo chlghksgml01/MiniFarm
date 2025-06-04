@@ -97,15 +97,15 @@ public class DayTimeManager : MonoBehaviour
 
     public void NextDay()
     {
-        OnDayPassed?.Invoke();
         newDayFadeInOutImage.SetNewDay(fadeInOutDuration, fadeWaitTime);
-
         StartCoroutine(StartNewDay());
     }
 
     private IEnumerator StartNewDay()
     {
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
+
+        OnDayPassed?.Invoke();
 
         hour = dayStartTime;
         gameTimer = dayStartTime * secondsPerHour;
