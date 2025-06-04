@@ -15,16 +15,16 @@ public class DayTimeManager : MonoBehaviour
     [SerializeField] float timeInterval = 10f;
 
     [Header("TimeUI")]
-    [SerializeField] TextMeshProUGUI hourUIText;
-    [SerializeField] TextMeshProUGUI minuteUIText;
+    [SerializeField] public TextMeshProUGUI hourUIText;
+    [SerializeField] public TextMeshProUGUI minuteUIText;
 
     [Header("NewDayUI")]
     [SerializeField] float fadeWaitTime = 0.5f;
     [SerializeField] float fadeInOutDuration = 0.5f;
-    [SerializeField] NewDayFadeInOut newDayFadeInOutImage;
+    [SerializeField] public NewDayFadeInOut newDayFadeInOutImage;
 
     [Header("Light")]
-    [SerializeField] private Light2D globalLight;
+    [SerializeField] public Light2D globalLight;
     [SerializeField] private Color nightLightColor;
     [SerializeField] private Color dayLightColor = Color.white;
 
@@ -44,6 +44,8 @@ public class DayTimeManager : MonoBehaviour
 
     public event Action SpawnSlime = null;
     public event Action OnDayPassed = null;
+
+    public bool canPassToNextDay { get; set; } = true;
 
     private void Awake()
     {
@@ -79,7 +81,7 @@ public class DayTimeManager : MonoBehaviour
                 slimeSpawn = null;
             }
 
-            if (gameTimer >= dayEndTime * secondsPerHour)
+            if (gameTimer >= dayEndTime * secondsPerHour && canPassToNextDay)
             {
                 NextDay();
                 return;

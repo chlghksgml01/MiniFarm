@@ -4,21 +4,29 @@ using UnityEngine;
 public class SlimeSpawnController : MonoBehaviour
 {
     [Header("스폰")]
-    [SerializeField] private BoxCollider2D spawnBox;
+    [SerializeField] public BoxCollider2D spawnBox;
     [SerializeField] private GameObject slimePrefab;
 
-    private void OnEnable()
+    private void Start()
     {
         GameManager.Instance.dayTimeManager.SpawnSlime += SpawnSlime;
     }
 
     private void OnDisable()
     {
+        if (GameManager.Instance == null)
+            return;
         GameManager.Instance.dayTimeManager.SpawnSlime -= SpawnSlime;
     }
 
     private void SpawnSlime()
     {
+        if(spawnBox == null)
+        {
+            Debug.Log("SlimeSpawnController - spawnBox 없음");
+            return;
+        }
+
         Instantiate(slimePrefab, GetRandomPointInBox(spawnBox), Quaternion.identity);
     }
 

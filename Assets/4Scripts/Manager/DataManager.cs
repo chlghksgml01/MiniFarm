@@ -36,6 +36,7 @@ public class DataManager : MonoBehaviour
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
+            return;
         }
         instance = this;
 

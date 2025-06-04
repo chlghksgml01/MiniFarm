@@ -1,15 +1,19 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UI_Manager : MonoBehaviour
 {
     [SerializeField] public Inventory_UI inventory_UI;
     [SerializeField] public ToolBar_UI toolBar_UI;
-    [SerializeField] public GameObject inventoryPanel;
-    [SerializeField] public GameObject toolBarPanel;
+    [HideInInspector] public GameObject inventoryPanel;
+    [HideInInspector] public GameObject toolBarPanel;
     [SerializeField] public GameObject store;
 
     private void Start()
     {
+        inventoryPanel = inventory_UI.gameObject;
+        toolBarPanel = toolBar_UI.gameObject;
+
         inventory_UI.Refresh();
         inventoryPanel.SetActive(false);
         toolBarPanel.SetActive(true);

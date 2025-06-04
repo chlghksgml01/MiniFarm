@@ -7,7 +7,7 @@ public class StorePlayerInventory_UI : MonoBehaviour
     [SerializeField] private List<Slot_UI> slotsUIs;
     private Inventory playerInventory;
 
-    private void OnEnable()
+    private void Start()
     {
         playerInventory = GameManager.Instance.player.playerSaveData.inventory;
         int slotCount = playerInventory.slots.Count;

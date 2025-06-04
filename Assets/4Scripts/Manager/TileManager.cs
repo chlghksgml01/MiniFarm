@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public enum MouseDirection
@@ -55,15 +56,26 @@ public class TileManager : MonoBehaviour
         GameManager.Instance.dayTimeManager.OnDayPassed += NewDayTile;
 
         player = GameManager.Instance.player;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
     {
+        if (GameManager.Instance == null)
+            return;
         GameManager.Instance.dayTimeManager.OnDayPassed -= NewDayTile;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        InitializeTileData();
     }
 
     private void InitializeTileData()
     {
+        if (tilledTileMap == null)
+            return;
         // 타일맵 안의 모든 셀 좌표 하나씩 가져오기
         foreach (var position in tilledTileMap.cellBounds.allPositionsWithin)
         {

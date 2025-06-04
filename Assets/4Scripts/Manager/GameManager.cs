@@ -1,16 +1,24 @@
+using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     static GameManager instance;
-    public ItemManager itemManager;
-    public UI_Manager uiManager;
-    public TileManager tileManager;
-    public DayTimeManager dayTimeManager;
-    public CropManager cropManager;
-    public Store storeManager;
+    [HideInInspector] public ItemManager itemManager;
+    [HideInInspector] public UI_Manager uiManager;
+    [HideInInspector] public DayTimeManager dayTimeManager;
+    [HideInInspector] public TileManager tileManager;
+    [HideInInspector] public CropManager cropManager;
+    [HideInInspector] public SlimeSpawnController slimeSpawnController;
+    [HideInInspector] public SceneLoadManager sceneLoadManager;
 
-    public Player player;
+    [Header("Player")]
+    [SerializeField] public Image healthBar;
+    [SerializeField] public Image staminaBar;
+    [HideInInspector] public Player player;
+    [SerializeField] public GameObject playerPrefab;
 
     public static GameManager Instance
     {
@@ -21,7 +29,7 @@ public class GameManager : MonoBehaviour
                 instance = FindFirstObjectByType<GameManager>();
                 if (instance == null)
                 {
-                    Debug.LogError("¾À¿¡ GameManager ¾øÀ½");
+                    Debug.Log("¾À¿¡ GameManager ¾øÀ½");
                 }
             }
             return instance;
@@ -33,6 +41,7 @@ public class GameManager : MonoBehaviour
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
+            return;
         }
         instance = this;
 
@@ -40,8 +49,20 @@ public class GameManager : MonoBehaviour
 
         itemManager = gameObject.GetComponent<ItemManager>();
         uiManager = gameObject.GetComponent<UI_Manager>();
+        dayTimeManager = gameObject.GetComponent<DayTimeManager>();
         tileManager = gameObject.GetComponent<TileManager>();
+        cropManager = gameObject.GetComponent<CropManager>();
+        slimeSpawnController = gameObject.GetComponent<SlimeSpawnController>();
+        sceneLoadManager = gameObject.GetComponent<SceneLoadManager>();
+
+        string sceneName = SceneManager.GetActiveScene().name;
+        if (sceneName == "House")
+            Instantiate(playerPrefab, new Vector3(0.5f, 0f, 0f), Quaternion.identity);
+        else if (sceneName == "Farm")
+            Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
 
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        player.healthBar = healthBar;
+        player.staminaBar = staminaBar;
     }
 }

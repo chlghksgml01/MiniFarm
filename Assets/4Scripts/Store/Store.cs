@@ -37,11 +37,12 @@ public class Store : MonoBehaviour
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
+            return;
         }
         instance = this;
     }
 
-    private void OnEnable()
+    private void Start()
     {
         if (player == null)
         {

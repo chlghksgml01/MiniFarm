@@ -1,5 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public enum playerDir
@@ -47,6 +47,8 @@ public class Player : Entity
 
     private void Awake()
     {
+        DontDestroyOnLoad(this);
+
         anim = GetComponentInChildren<Animator>();
         if (anim == null)
             Debug.Log("Player - anim ¾øÀ½");
@@ -62,14 +64,32 @@ public class Player : Entity
 
         playerSaveData.inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
 
-        anim.SetFloat("horizontal", 0f);
-        anim.SetFloat("vertical", -1f);
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        if (currentSceneName == "House")
+        {
+            anim.SetFloat("horizontal", 0f);
+            anim.SetFloat("vertical", 1f);
+            transform.position = new Vector3(0.5f, 0f, 0f);
+        }
+        else if (currentSceneName == "Farm")
+        {
+            anim.SetFloat("horizontal", 0f);
+            anim.SetFloat("vertical", -1f);
+            transform.position = new Vector3(0f, 0f, 0f);
+        }
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
         GameManager.Instance.dayTimeManager.OnDayPassed += SetNewDay;
+    }
+
+    private void OnDisable()
+    {
+        if (GameManager.Instance == null)
+            return;
+        GameManager.Instance.dayTimeManager.OnDayPassed -= SetNewDay;
     }
 
     private void SetNewDay()
