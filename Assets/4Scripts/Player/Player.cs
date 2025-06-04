@@ -109,7 +109,6 @@ public class Player : Entity
             transform.Translate(moveInput * speed * Time.fixedDeltaTime);
     }
 
-
     public void Damage(int _damage)
     {
         hp -= _damage;

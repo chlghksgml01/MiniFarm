@@ -558,7 +558,8 @@ GameObject:
   - component: {fileID: 6320830372756349322}
   - component: {fileID: 2291338546584941062}
   - component: {fileID: 3154548862488017935}
-  m_Layer: 0
+  - component: {fileID: 7974370763199301877}
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -580,7 +581,6 @@ Transform:
   m_Children:
   - {fileID: 8222808284271729582}
   - {fileID: 5209120135882240543}
-  - {fileID: 7523734643662360609}
   - {fileID: 6558937044535936830}
   - {fileID: 1497477844643287398}
   - {fileID: 1200254885926560029}
@@ -648,45 +648,13 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!1 &7805676811086840041
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7523734643662360609}
-  - component: {fileID: 3838055451110100944}
-  m_Layer: 6
-  m_Name: PlayerPhysics
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7523734643662360609
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7805676811086840041}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6320830372756349322}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &3838055451110100944
+--- !u!70 &7974370763199301877
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7805676811086840041}
+  m_GameObject: {fileID: 7613151609588484325}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -728,6 +696,7 @@ GameObject:
   - component: {fileID: 5209120135882240543}
   - component: {fileID: 8991141498668694108}
   - component: {fileID: 5594649998134651817}
+  - component: {fileID: 1304154087551403948}
   m_Layer: 9
   m_Name: InteractedCollider
   m_TagString: Untagged
@@ -802,7 +771,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -814,6 +783,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
+--- !u!114 &1304154087551403948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8981148910289725068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36d333bce752d4e4688d707bebceaed4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7003810671775508382
 PrefabInstance:
   m_ObjectHideFlags: 0

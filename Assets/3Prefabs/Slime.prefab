@@ -142,6 +142,8 @@ MonoBehaviour:
   detectionRange: 6
   knockbackForce: 5
   knockbackTime: 0.2
+  attackDelay: 0.5
+  slimeState: 0
 --- !u!50 &-3741043960818242706
 Rigidbody2D:
   serializedVersion: 5

@@ -20,6 +20,7 @@ public class Slime : Entity
     [SerializeField] private float detectionRange = 3f;
     [SerializeField] private float knockbackForce = 5f;
     [SerializeField] private float knockbackTime = 0.2f;
+    [SerializeField] public float attackDelay = 0.1f;
 
     [HideInInspector] private Vector3 moveInput;
     [HideInInspector] private Animator anim;
@@ -85,6 +86,7 @@ public class Slime : Entity
     {
         if (slimeState == SlimeState.Death)
             return;
+
         if (collision.CompareTag("PlayerAttack") && !isKnockedBack)
         {
             isKnockedBack = true;
