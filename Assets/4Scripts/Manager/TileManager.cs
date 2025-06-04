@@ -187,39 +187,6 @@ public class TileManager : MonoBehaviour
         }
     }
 
-    public bool CanHarvest()
-    {
-        var cropDict = GameManager.Instance.cropManager.plantedCropsDict;
-        cropDict.TryGetValue(selectedTilePos, out CropItemData CropItemData);
-        if (CropItemData == null)
-            return false;
-
-        if (CropItemData.canHarvest == true)
-            return true;
-
-        return false;
-    }
-
-    public void HarvestCrop()
-    {
-        if (!CanHarvest())
-        {
-            Debug.LogWarning("TileManager - 수확할 작물 없음");
-            return;
-        }
-
-        player.SetPlayerDirection(mouseDirection);
-
-        if (GameManager.Instance.cropManager.plantedCropsDict[selectedTilePos].isWatered)
-            tileDict[selectedTilePos].tileState = TileState.Watered;
-        else
-            tileDict[selectedTilePos].tileState = TileState.Tilled;
-
-        GameManager.Instance.cropManager.plantedCropsDict.Remove(selectedTilePos);
-
-        cropTileMap.SetTile(selectedTilePos, null);
-    }
-
     public string GetSelectedCropName()
     {
         var cropDict = GameManager.Instance.cropManager.plantedCropsDict;
@@ -230,4 +197,6 @@ public class TileManager : MonoBehaviour
 
         return CropItemData.cropName;
     }
+
+    public void SetTile(Tilemap tileMap, Vector3Int tilePos, TileBase tile) => tileMap.SetTile(tilePos, tile);
 }

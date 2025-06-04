@@ -22,6 +22,7 @@ public static class TileLogicHelper
         {
             PlantCrop(cellPosition, tileDict, tileState, tileManager, cropName);
         }
+        // 도구 사용
         else
         {
             ApplyTool(cellPosition, tileDict, centerTileData, tileState, tileManager);

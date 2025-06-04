@@ -47,12 +47,12 @@ public class PlayerState
 
         // 작물 수확
         else if ((Input.GetMouseButtonDown(1) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
-            && GameManager.Instance.tileManager.CanHarvest()))
+            && GameManager.Instance.cropManager.CanHarvest()))
         {
             if (player.CanHarvest())
             {
                 player.HarvestCrop();
-                GameManager.Instance.tileManager.HarvestCrop();
+                GameManager.Instance.cropManager.HarvestCrop();
             }
         }
     }

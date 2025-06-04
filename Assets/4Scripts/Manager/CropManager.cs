@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
 public class CropManager : MonoBehaviour
@@ -39,7 +40,7 @@ public class CropManager : MonoBehaviour
             return;
 
         CropItemData.isWatered = true;
-        Tile wetCropTile = CropItemData.wetCropTiles[CropItemData.currentGrowthLevel];
+        Tile wetCropTile = CropItemData.wetCropTiles[CropItemData.currentGrowthLevel - 1];
         tileManager.cropTileMap.SetTile(tileManager.selectedTilePos, wetCropTile);
     }
 
@@ -48,28 +49,85 @@ public class CropManager : MonoBehaviour
         foreach (KeyValuePair<Vector3Int, CropItemData> cropTile in plantedCropsDict)
         {
             Vector3Int cropPos = cropTile.Key;
-            CropItemData CropItemData = cropTile.Value;
+            CropItemData cropItemData = cropTile.Value;
 
-            if (CropItemData.isWatered && CropItemData.currentGrowthLevel < CropItemData.growthLevel - 1)
+            if (cropItemData.isWatered && cropItemData.currentGrowthLevel < cropItemData.growthLevel)
             {
-                CropItemData.currentGrowthDuration++;
-                if (CropItemData.currentGrowthLevel >= CropItemData.growthLevel - 1)
-                    CropItemData.currentGrowthLevel = CropItemData.growthLevel - 1;
+                cropItemData.currentGrowthDuration++;
+                if (cropItemData.currentGrowthLevel >= cropItemData.growthLevel)
+                    cropItemData.currentGrowthLevel = cropItemData.growthLevel;
 
-                if (CropItemData.currentGrowthDuration >= CropItemData.growthDurations[CropItemData.currentGrowthLevel])
+                if (cropItemData.currentGrowthDuration >= cropItemData.growthDurations[cropItemData.currentGrowthLevel])
                 {
-                    CropItemData.currentGrowthDuration = 0;
-                    CropItemData.currentGrowthLevel++;
-                    Tile nextLevelCropTile = CropItemData.cropTiles[CropItemData.currentGrowthLevel];
+                    cropItemData.currentGrowthDuration = 0;
+                    cropItemData.currentGrowthLevel++;
+                    Tile nextLevelCropTile = cropItemData.cropTiles[cropItemData.currentGrowthLevel - 1];
                     tileManager.cropTileMap.SetTile(cropPos, nextLevelCropTile);
                 }
             }
-            if (CropItemData.currentGrowthLevel >= CropItemData.growthLevel - 1)
-                CropItemData.canHarvest = true;
+            if (cropItemData.currentGrowthLevel >= cropItemData.growthLevel)
+                cropItemData.canHarvest = true;
 
-            CropItemData.isWatered = false;
+            cropItemData.isWatered = false;
             tileManager.wateringTileMap.SetTile(cropPos, null);
-            tileManager.cropTileMap.SetTile(cropPos, CropItemData.cropTiles[CropItemData.currentGrowthLevel]);
+            tileManager.cropTileMap.SetTile(cropPos, cropItemData.cropTiles[cropItemData.currentGrowthLevel - 1]);
         }
+    }
+
+    public bool CanHarvest()
+    {
+        TileManager tileManager = GameManager.Instance.tileManager;
+        Vector3Int selectedTilePos = tileManager.selectedTilePos;
+
+        var cropDict = GameManager.Instance.cropManager.plantedCropsDict;
+        cropDict.TryGetValue(selectedTilePos, out CropItemData CropItemData);
+        if (CropItemData == null)
+            return false;
+
+        if (CropItemData.canHarvest == true)
+            return true;
+
+        return false;
+    }
+
+    public void HarvestCrop()
+    {
+        TileManager tileManager = GameManager.Instance.tileManager;
+        Vector3Int selectedTilePos = tileManager.selectedTilePos;
+
+        if (!CanHarvest())
+        {
+            Debug.LogWarning("TileManager - 수확할 작물 없음");
+            return;
+        }
+
+        GameManager.Instance.player.SetPlayerDirection(tileManager.mouseDirection);
+
+        CropItemData cropItemData = GameManager.Instance.cropManager.plantedCropsDict[selectedTilePos];
+
+        if (cropItemData.isRegrowable)
+        {
+            cropItemData.canHarvest = false;
+            cropItemData.currentGrowthLevel = cropItemData.growthLevel - 1;
+            cropItemData.currentGrowthDuration = 0;
+
+            if (cropItemData.isWatered)
+                tileManager.SetTile(tileManager.cropTileMap, selectedTilePos, cropItemData.wetCropTiles[cropItemData.wetCropTiles.Length - 2]);
+            else
+                tileManager.SetTile(tileManager.cropTileMap, selectedTilePos, cropItemData.cropTiles[cropItemData.cropTiles.Length - 2]);
+
+            return;
+        }
+
+        else
+        {
+            if (cropItemData.isWatered)
+                tileManager.tileDict[selectedTilePos].tileState = TileState.Watered;
+            else
+                tileManager.tileDict[selectedTilePos].tileState = TileState.Tilled;
+        }
+
+        GameManager.Instance.cropManager.plantedCropsDict.Remove(selectedTilePos);
+        tileManager.SetTile(tileManager.cropTileMap, selectedTilePos, null);
     }
 }

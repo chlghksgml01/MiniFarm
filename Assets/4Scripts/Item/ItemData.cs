@@ -108,11 +108,11 @@ public class CropItemData
     public string cropName;
     public Tile[] cropTiles;
     public Tile[] wetCropTiles;
-    public int growthLevel;
     public int[] growthDurations;
     public bool isRegrowable;
     public Sprite harvestedImage;
 
+    [HideInInspector] public int growthLevel;
     [HideInInspector] public int currentGrowthDuration = 0;
     [HideInInspector] public int currentGrowthLevel = 0;
     [HideInInspector] public bool isWatered = false;
@@ -120,12 +120,19 @@ public class CropItemData
 
     public void SetCropItemData(CropItemData newCropItemData)
     {
+        if (newCropItemData.wetCropTiles.Length != newCropItemData.cropTiles.Length)
+        {
+            Debug.Log("타일 제대로 안넣음");
+        }
+
         cropName = newCropItemData.cropName;
         cropTiles = newCropItemData.cropTiles;
         wetCropTiles = newCropItemData.wetCropTiles;
-        growthLevel = newCropItemData.growthLevel;
         growthDurations = newCropItemData.growthDurations;
         isRegrowable = newCropItemData.isRegrowable;
+
+        growthLevel = cropTiles.Length;
+        currentGrowthLevel = 1;
     }
 
     public void SetEmpty()
@@ -133,10 +140,10 @@ public class CropItemData
         cropName = "";
         cropTiles = null;
         wetCropTiles = null;
-        growthLevel = 0;
         growthDurations = null;
         isRegrowable = false;
 
+        growthLevel = 0;
         currentGrowthDuration = 0;
         currentGrowthLevel = 0;
         isWatered = false;
