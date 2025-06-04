@@ -179,6 +179,7 @@ public class LeftClickStrategy : BaseClickStrategy
         else
         {
             Slot tempslot = new Slot();
+            tempslot.itemCount = 1;
             tempslot.slotItemData.SetItemData(selectedItemUI.selectedSlot.slotItemData);
 
             selectedItemUI.SetSelectedUIItemData(selectedSlot);
