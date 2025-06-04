@@ -1,7 +1,5 @@
-
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
 public class CropManager : MonoBehaviour
@@ -46,7 +44,7 @@ public class CropManager : MonoBehaviour
 
     public void NewDayCrop()
     {
-        if (GameManager.Instance.tileManager == null)
+        if (GameManager.Instance.tileManager == null || GameManager.Instance.cropManager.plantedCropsDict.Count == 0)
             return;
 
         foreach (KeyValuePair<Vector3Int, CropItemData> cropTile in plantedCropsDict)

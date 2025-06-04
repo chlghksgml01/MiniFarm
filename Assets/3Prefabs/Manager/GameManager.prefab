@@ -58,6 +58,8 @@ MonoBehaviour:
   cropManager: {fileID: 6438177313553398301}
   slimeSpawnController: {fileID: 0}
   sceneLoadManager: {fileID: 0}
+  healthBar: {fileID: 0}
+  staminaBar: {fileID: 0}
   player: {fileID: 0}
   playerPrefab: {fileID: 7613151609588484325, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
 --- !u!114 &38490482852750421
@@ -120,7 +122,7 @@ MonoBehaviour:
   dayEndTime: 26
   twilightStartTime: 19
   darkestTime: 22
-  timeScale: 0
+  timeScale: 6000
   timeInterval: 1
   hourUIText: {fileID: 0}
   minuteUIText: {fileID: 0}

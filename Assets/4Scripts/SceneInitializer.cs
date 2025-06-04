@@ -1,10 +1,6 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 public class SceneInitializer : MonoBehaviour
 {
