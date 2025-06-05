@@ -181,8 +181,9 @@ public class Player : Entity
         Vector2 mouseDir = (mousePos - playerPos).normalized * 2.5f;
         Vector2 bounceBasePos = playerPos + mouseDir;
 
-        GameObject dropItemPrefab = GameManager.Instance.itemManager.GetItem(selectedItem.GetSelectedItemName());
-        var item = Instantiate(dropItemPrefab, bounceBasePos, Quaternion.identity);
+        GameObject dropItemPrefab = GameManager.Instance.itemManager.GetItemPrefab(selectedItem.GetSelectedItemName());
+        GameObject item = Instantiate(dropItemPrefab, bounceBasePos, Quaternion.identity);
+        GameManager.Instance.itemManager.DropItem(dropItemPrefab, bounceBasePos, count);
         Item _item = item.GetComponent<Item>();
 
         _item.SpawnItem(true, true, bounceBasePos, selectedItem.selectedSlot.slotItemData, count);

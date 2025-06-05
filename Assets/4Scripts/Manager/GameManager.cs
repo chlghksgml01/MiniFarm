@@ -56,12 +56,12 @@ public class GameManager : MonoBehaviour
         player.healthBar = healthBar;
         player.staminaBar = staminaBar;
 
+        sceneLoadManager = gameObject.GetComponent<SceneLoadManager>();
         itemManager = gameObject.GetComponent<ItemManager>();
         uiManager = gameObject.GetComponent<UI_Manager>();
         dayTimeManager = gameObject.GetComponent<DayTimeManager>();
         tileManager = gameObject.GetComponent<TileManager>();
         cropManager = gameObject.GetComponent<CropManager>();
         slimeSpawnController = gameObject.GetComponent<SlimeSpawnController>();
-        sceneLoadManager = gameObject.GetComponent<SceneLoadManager>();
     }
 }

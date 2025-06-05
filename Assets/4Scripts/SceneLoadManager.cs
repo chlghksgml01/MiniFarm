@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,22 +9,23 @@ public class SceneLoadManager : MonoBehaviour
     [SerializeField] private float fadeInOutDuration = 0.5f;
     [SerializeField] private Image fadeInOutImage;
 
+    public event Action SceneLoad = null;
+
+    public void StartLoadScene(string sceneName)
+    {
+        StartCoroutine(LoadScene(sceneName));
+    }
+
     public IEnumerator LoadScene(string sceneName)
     {
         GameManager.Instance.dayTimeManager.canPassToNextDay = false;
 
         StartCoroutine(FadeInOut(0f, 1f, fadeInOutDuration));
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
-        asyncLoad.allowSceneActivation = false;
-
-        while (asyncLoad.progress < 0.9f)
-        {
-            yield return null;
-        }
-
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
-        asyncLoad.allowSceneActivation = true;
+
+        SceneManager.LoadScene(sceneName);
+        yield return new WaitForSecondsRealtime(fadeInOutDuration);
+        SceneLoad?.Invoke();
 
         if (sceneName == "Farm")
             GameManager.Instance.player.transform.position = Vector3.zero;

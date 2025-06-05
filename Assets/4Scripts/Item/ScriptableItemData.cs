@@ -10,6 +10,6 @@ public class ScriptableItemData : ScriptableObject
     public int buyPrice;
     public int sellPrice;
 
-    public DropItemData dropItemData;
+    public EnemyDropItemData dropItemData;
     public CropItemData cropItemData;
 }

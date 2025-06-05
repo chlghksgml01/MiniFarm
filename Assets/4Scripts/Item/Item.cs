@@ -7,7 +7,7 @@ public class Item : MonoBehaviour
     public ScriptableItemData scriptableItemData;
     public GameObject itemPrefab;
 
-    private TextMeshProUGUI textUI;
+    public TextMeshProUGUI textUI;
     private bool isPlayerDrop;
 
     public ItemData itemData
@@ -26,7 +26,7 @@ public class Item : MonoBehaviour
 
             return _itemData;
         }
-        private set { _itemData = value; }
+        set { _itemData = value; }
     }
     #region DropItemBounce
     bool isBouncing = false;

@@ -14,7 +14,7 @@ public class ItemData
     public int buyPrice = 0;
     public int sellPrice = 0;
 
-    public DropItemData dropItemData = new DropItemData();
+    public EnemyDropItemData dropItemData = new EnemyDropItemData();
     public CropItemData cropItemData = new CropItemData();
 
     public void SetItemData(ItemData newItemData)
@@ -91,7 +91,7 @@ public class ItemData
 
 
 [System.Serializable]
-public class DropItemData
+public class EnemyDropItemData
 {
     public float rate = 0f;
 
@@ -99,7 +99,7 @@ public class DropItemData
 
     public void SetEmpty() => rate = 0f;
 
-    public void SetDropData(DropItemData dropData) => rate = dropData.rate;
+    public void SetDropData(EnemyDropItemData dropData) => rate = dropData.rate;
 }
 
 [System.Serializable]

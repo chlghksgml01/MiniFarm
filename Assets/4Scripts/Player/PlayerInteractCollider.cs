@@ -18,6 +18,7 @@ public class PlayerInteractCollider : MonoBehaviour
         {
             Item item = collision.GetComponent<Item>();
             player.playerSaveData.inventory.AddItem(item);
+            GameManager.Instance.itemManager.RemoveDropItem(item);
             Destroy(item.gameObject);
         }
 
