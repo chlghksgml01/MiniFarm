@@ -44,7 +44,8 @@ public class CropManager : MonoBehaviour
 
     public void NewDayCrop()
     {
-        if (GameManager.Instance.tileManager == null || GameManager.Instance.cropManager.plantedCropsDict.Count == 0)
+        TileManager tileManager = GameManager.Instance.tileManager;
+        if (tileManager == null || GameManager.Instance.cropManager.plantedCropsDict.Count == 0)
             return;
 
         foreach (KeyValuePair<Vector3Int, CropItemData> cropTile in plantedCropsDict)
@@ -63,15 +64,15 @@ public class CropManager : MonoBehaviour
                     cropItemData.currentGrowthDuration = 0;
                     cropItemData.currentGrowthLevel++;
                     Tile nextLevelCropTile = cropItemData.cropTiles[cropItemData.currentGrowthLevel - 1];
-                    GameManager.Instance.tileManager.cropTileMap.SetTile(cropPos, nextLevelCropTile);
+                    tileManager.SetTile(tileManager.cropTileMap, cropPos, nextLevelCropTile);
                 }
             }
             if (cropItemData.currentGrowthLevel >= cropItemData.growthLevel)
                 cropItemData.canHarvest = true;
 
             cropItemData.isWatered = false;
-            GameManager.Instance.tileManager.wateringTileMap.SetTile(cropPos, null);
-            GameManager.Instance.tileManager.cropTileMap.SetTile(cropPos, cropItemData.cropTiles[cropItemData.currentGrowthLevel - 1]);
+            tileManager.SetTile(tileManager.wateringTileMap, cropPos, null);
+            tileManager.SetTile(tileManager.cropTileMap, cropPos, cropItemData.cropTiles[cropItemData.currentGrowthLevel - 1]);
         }
     }
 

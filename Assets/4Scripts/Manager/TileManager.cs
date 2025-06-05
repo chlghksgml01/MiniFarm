@@ -70,6 +70,52 @@ public class TileManager : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         InitializeTileData();
+
+        RefreshCropTileStates();
+    }
+
+    private void RefreshCropTileStates()
+    {
+        if (tilledTileMap == null)
+            return;
+        CropManager cropManager = GameManager.Instance.cropManager;
+
+        foreach (KeyValuePair<Vector3Int, TileData> tile in tileDict)
+        {
+            if (tile.Value.tileState != TileState.None && tile.Value.tileState != TileState.Empty)
+            {
+                tileDict[tile.Key].tileState = TileState.Tilled;
+                TileLogicHelper.UpdateTiles(tile.Key, tileDict, tileDict[tile.Key]);
+            }
+
+            else if (tile.Value.tileState == TileState.Watered)
+            {
+                wateringTileMap.SetTile(tile.Key, wateringTile);
+                tileDict[tile.Key].tileState = TileState.Watered;
+            }
+        }
+
+        foreach (KeyValuePair<Vector3Int, CropItemData> plantedCropData in cropManager.plantedCropsDict)
+        {
+            if (tileDict.ContainsKey(plantedCropData.Key))
+            {
+                if (plantedCropData.Value.isWatered)
+                {
+                    int growthIndex = plantedCropData.Value.currentGrowthLevel - 1;
+                    cropTileMap.SetTile(plantedCropData.Key, plantedCropData.Value.wetCropTiles[growthIndex]);
+                    wateringTileMap.SetTile(plantedCropData.Key, wateringTile);
+                }
+
+                else
+                {
+                    int growthIndex = plantedCropData.Value.currentGrowthLevel - 1;
+                    cropTileMap.SetTile(plantedCropData.Key, plantedCropData.Value.cropTiles[growthIndex]);
+
+                    tileDict[plantedCropData.Key].tileState = TileState.Planted;
+                }
+
+            }
+        }
     }
 
     private void InitializeTileData()
@@ -182,7 +228,8 @@ public class TileManager : MonoBehaviour
         var wateredTiles = tileDict.Where(pair => pair.Value.tileState == TileState.Watered);
         foreach (var wateredTile in wateredTiles)
         {
-            wateringTileMap.SetTile(wateredTile.Key, null);
+            if (wateringTileMap != null)
+                wateringTileMap.SetTile(wateredTile.Key, null);
             wateredTile.Value.tileState = TileState.Tilled;
         }
 
@@ -192,7 +239,8 @@ public class TileManager : MonoBehaviour
             bool isReset = Random.Range(0, 100) <= resetTileChance;
             if (isReset)
             {
-                tilledTileMap.SetTile(tilledTile.Key, null);
+                if (tilledTileMap != null)
+                    tilledTileMap.SetTile(tilledTile.Key, null);
                 tilledTile.Value.tileState = TileState.Empty;
                 TileLogicHelper.ResetConnectedTiles(tilledTile.Key, tileDict);
             }
@@ -210,5 +258,9 @@ public class TileManager : MonoBehaviour
         return CropItemData.cropName;
     }
 
-    public void SetTile(Tilemap tileMap, Vector3Int tilePos, TileBase tile) => tileMap.SetTile(tilePos, tile);
+    public void SetTile(Tilemap tileMap, Vector3Int tilePos, TileBase tile)
+    {
+        if (tileMap != null)
+            tileMap.SetTile(tilePos, tile);
+    }
 }

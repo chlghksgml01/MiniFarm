@@ -46,14 +46,6 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(this);
 
-        itemManager = gameObject.GetComponent<ItemManager>();
-        uiManager = gameObject.GetComponent<UI_Manager>();
-        dayTimeManager = gameObject.GetComponent<DayTimeManager>();
-        tileManager = gameObject.GetComponent<TileManager>();
-        cropManager = gameObject.GetComponent<CropManager>();
-        slimeSpawnController = gameObject.GetComponent<SlimeSpawnController>();
-        sceneLoadManager = gameObject.GetComponent<SceneLoadManager>();
-
         string sceneName = SceneManager.GetActiveScene().name;
         if (sceneName == "House")
             Instantiate(playerPrefab, new Vector3(0.5f, 0f, 0f), Quaternion.identity);
@@ -63,5 +55,13 @@ public class GameManager : MonoBehaviour
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
         player.healthBar = healthBar;
         player.staminaBar = staminaBar;
+
+        itemManager = gameObject.GetComponent<ItemManager>();
+        uiManager = gameObject.GetComponent<UI_Manager>();
+        dayTimeManager = gameObject.GetComponent<DayTimeManager>();
+        tileManager = gameObject.GetComponent<TileManager>();
+        cropManager = gameObject.GetComponent<CropManager>();
+        slimeSpawnController = gameObject.GetComponent<SlimeSpawnController>();
+        sceneLoadManager = gameObject.GetComponent<SceneLoadManager>();
     }
 }

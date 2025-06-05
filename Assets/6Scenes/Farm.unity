@@ -98031,6 +98031,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3244598930569121036}
     - target: {fileID: 3793216011849168464, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
+      propertyPath: timeScale
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 3793216011849168464, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
       propertyPath: hourUIText
       value: 
       objectReference: {fileID: 1157134613}
