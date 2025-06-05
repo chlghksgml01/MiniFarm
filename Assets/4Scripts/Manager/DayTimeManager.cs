@@ -117,7 +117,7 @@ public class DayTimeManager : MonoBehaviour
         minuteUIText.text = string.Format("{00:00}", minute);
     }
 
-    private void UpdateLight()
+    public void UpdateLight()
     {
         float lightLerpTime = Mathf.InverseLerp(twilightStartTime * secondsPerHour, darkestTime * secondsPerHour, gameTimer);
 

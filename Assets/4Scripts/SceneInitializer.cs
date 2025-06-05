@@ -16,6 +16,7 @@ public class SceneInitializer : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.dayTimeManager.globalLight = globalLight;
+        GameManager.Instance.dayTimeManager.UpdateLight();
 
         if (spawnBox != null)
             GameManager.Instance.slimeSpawnController.spawnBox = spawnBox;
