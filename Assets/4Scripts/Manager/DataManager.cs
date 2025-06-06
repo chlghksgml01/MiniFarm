@@ -1,17 +1,18 @@
 using UnityEngine;
 using System.IO;
 using Unity.VisualScripting;
+using System.Collections.Generic;
 
 public class DataManager : MonoBehaviour
 {
     private string path;
     private string playerSaveFileName = "player_save.json";
-    private string cropSaveFileName = "crop_save.json";
+    private string tileSaveFileName = "tile_save.json";
     private string dropItemSaveFileName = "dropItem_save.json";
 
     public string saveFileName = "default";
 
-    private CropSaveData cropSaveData = new CropSaveData();
+    private List<TileSaveData> tileSaveData = new List<TileSaveData>();
 
     public static DataManager instance;
 
@@ -58,7 +59,7 @@ public class DataManager : MonoBehaviour
     public void SaveData()
     {
         SavePlayer();
-        SaveCrop();
+        SaveTile();
         SaveDropItem();
         Debug.Log("Save Data");
     }
@@ -75,14 +76,12 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(Path.Combine(path, playerSaveFileName), json);
     }
 
-    private void SaveCrop()
+    private void SaveTile()
     {
-        cropSaveData = GameManager.Instance.cropManager.GetCropSaveData();
-        if (cropSaveData.cropPos.Count == 0)
-            return;
+        tileSaveData = GameManager.Instance.tileManager.GetTileData();
 
-        string json = JsonUtility.ToJson(cropSaveData);
-        File.WriteAllText(Path.Combine(path, cropSaveFileName), json);
+        string json = JsonUtility.ToJson(tileSaveData);
+        File.WriteAllText(Path.Combine(path, tileSaveFileName), json);
     }
 
     private void SaveDropItem()
@@ -94,7 +93,7 @@ public class DataManager : MonoBehaviour
     public void LoadData()
     {
         LoadPlayer();
-        LoadCrop();
+        LoadTile();
         LoadDropItem();
         Debug.Log("Load Data");
     }
@@ -110,15 +109,16 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    private void LoadCrop()
+    private void LoadTile()
     {
-        string fullPath = Path.Combine(path, cropSaveFileName);
+        string fullPath = Path.Combine(path, tileSaveFileName);
 
         if (File.Exists(fullPath))
         {
             string data = File.ReadAllText(fullPath);
-            cropSaveData = JsonUtility.FromJson<CropSaveData>(data);
-            GameManager.Instance.cropManager.SetCropSaveData(cropSaveData);
+            tileSaveData = JsonUtility.FromJson<List<TileSaveData>>(data);
+
+            GameManager.Instance.tileManager.LoadTileData(tileSaveData);
         }
     }
 

@@ -80,6 +80,7 @@ public class TileManager : MonoBehaviour
             return;
         CropManager cropManager = GameManager.Instance.cropManager;
 
+        // 괭이질/물 준 타일
         foreach (KeyValuePair<Vector3Int, TileData> tile in tileDict)
         {
             if (tile.Value.tileState != TileState.None && tile.Value.tileState != TileState.Empty)
@@ -95,6 +96,7 @@ public class TileManager : MonoBehaviour
             }
         }
 
+        // 작물 심은 타일
         foreach (KeyValuePair<Vector3Int, CropItemData> plantedCropData in cropManager.plantedCropsDict)
         {
             if (tileDict.ContainsKey(plantedCropData.Key))
@@ -262,5 +264,39 @@ public class TileManager : MonoBehaviour
     {
         if (tileMap != null)
             tileMap.SetTile(tilePos, tile);
+    }
+
+    public List<TileSaveData> GetTileData()
+    {
+        List<TileSaveData> tileSaveDatas = new List<TileSaveData>();
+        foreach (KeyValuePair<Vector3Int, TileData> pair in tileDict)
+        {
+            if (pair.Value.tileState == TileState.Empty || pair.Value.tileState == TileState.None)
+                continue;
+            TileSaveData tileSaveData = new TileSaveData();
+
+            tileSaveData.tilePos = pair.Key;
+            tileSaveData.tileData = pair.Value;
+            if (pair.Value.tileState == TileState.Planted)
+            {
+                CropItemData cropItemData = GameManager.Instance.cropManager.GetCropData(pair.Key);
+                tileSaveData.cropItemData = cropItemData;
+            }
+
+            tileSaveDatas.Add(tileSaveData);
+        }
+        return tileSaveDatas;
+    }
+
+    public void LoadTileData(List<TileSaveData> tileSaveDatas)
+    {
+        foreach (TileSaveData tileSaveData in tileSaveDatas)
+        {
+            tileDict.Add(tileSaveData.tilePos, tileSaveData.tileData);
+            if (tileSaveData.cropItemData != null && tileSaveData.tileData.tileState == TileState.Planted)
+            {
+                GameManager.Instance.cropManager.SetCropData(tileSaveData.tilePos, tileSaveData.cropItemData);
+            }
+        }
     }
 }

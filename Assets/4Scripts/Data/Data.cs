@@ -12,8 +12,18 @@ public class PlayerSaveData
 [System.Serializable]
 public class CropSaveData
 {
-    public List<Vector3Int> cropPos = new List<Vector3Int>();
-    public List<CropItemData> cropItemData = new List<CropItemData>();
+    public string cropName;
+    public int currentGrowthDuration = 0;
+    public int currentGrowthLevel = 0;
+    public bool canHarvest = false;
+}
+
+[System.Serializable]
+public class TileSaveData
+{
+    public Vector3Int tilePos = new Vector3Int();
+    public TileData tileData = new TileData();
+    public CropItemData cropItemData = new CropItemData();
 }
 
 [System.Serializable]

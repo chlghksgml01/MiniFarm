@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -135,43 +136,14 @@ public class CropManager : MonoBehaviour
         tileManager.SetTile(tileManager.cropTileMap, selectedTilePos, null);
     }
 
-    public CropSaveData GetCropSaveData()
+    public CropItemData GetCropData(Vector3Int pos)
     {
-        CropSaveData cropSaveData = new CropSaveData();
-
-        foreach (KeyValuePair<Vector3Int, CropItemData> cropTile in plantedCropsDict)
-        {
-            Vector3Int cropPos = cropTile.Key;
-            CropItemData cropItemData = cropTile.Value;
-            if (cropItemData == null || cropItemData.IsEmpty())
-                continue;
-
-            cropSaveData.cropPos.Add(cropPos);
-            cropSaveData.cropItemData.Add(cropItemData);
-        }
-
-        return cropSaveData;
+        plantedCropsDict.TryGetValue(pos, out CropItemData cropItemData);
+        return cropItemData;
     }
 
-    public void SetCropSaveData(CropSaveData cropSaveData)
+    public void SetCropData(Vector3Int pos, CropItemData cropItemData)
     {
-        if (GameManager.Instance.tileManager == null)
-            return;
-
-        if (cropSaveData == null || cropSaveData.cropPos.Count == 0)
-            return;
-
-        plantedCropsDict.Clear();
-
-        for (int i = 0; i < cropSaveData.cropPos.Count; i++)
-        {
-            Vector3Int cropPos = cropSaveData.cropPos[i];
-            CropItemData cropItemData = cropSaveData.cropItemData[i];
-            if (cropItemData == null || cropItemData.IsEmpty())
-                continue;
-
-            plantedCropsDict.Add(cropPos, cropItemData);
-            GameManager.Instance.tileManager.SetTile(GameManager.Instance.tileManager.cropTileMap, cropPos, cropItemData.cropTiles[cropItemData.currentGrowthLevel - 1]);
-        }
+        plantedCropsDict.Add(pos, cropItemData);
     }
 }

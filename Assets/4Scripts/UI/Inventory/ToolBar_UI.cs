@@ -27,6 +27,8 @@ public class ToolBar_UI : MonoBehaviour
 
     private void OnDisable()
     {
+        if (SceneLoadManager.Instance == null)
+            return;
         SceneLoadManager.Instance.SceneLoad -= SetToolBarInventory;
     }
 

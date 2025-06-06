@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[System.Serializable]
 public enum TileState
 {
     None,
@@ -9,6 +10,7 @@ public enum TileState
     Planted,
 }
 
+[System.Serializable]
 public enum TileConnectedState
 {
     None,
@@ -30,6 +32,7 @@ public enum TileConnectedState
     VerticalCenter
 }
 
+[System.Serializable]
 public enum TileConnectedDir
 {
     None = 0,
@@ -39,6 +42,7 @@ public enum TileConnectedDir
     Right = 1 << 3
 }
 
+[System.Serializable]
 public class TileData
 {
     public TileState tileState = TileState.Empty;
