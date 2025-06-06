@@ -136,14 +136,23 @@ public class CropManager : MonoBehaviour
         tileManager.SetTile(tileManager.cropTileMap, selectedTilePos, null);
     }
 
-    public CropItemData GetCropData(Vector3Int pos)
+    public void SaveCropData(CropSaveData cropSaveData, Vector3Int pos)
+    {
+        CropItemData cropItemData = GetCropData(pos);
+
+        cropSaveData.cropName = cropItemData.cropName;
+        cropSaveData.currentGrowthDuration = cropItemData.currentGrowthDuration;
+        cropSaveData.currentGrowthLevel = cropItemData.currentGrowthLevel;
+        cropSaveData.canHarvest = cropItemData.canHarvest;
+    }
+
+    private CropItemData GetCropData(Vector3Int pos)
     {
         plantedCropsDict.TryGetValue(pos, out CropItemData cropItemData);
         return cropItemData;
     }
 
-    public void SetCropData(Vector3Int pos, CropItemData cropItemData)
+    public void LoadCropData(Vector3Int pos, CropSaveData cropSaveData)
     {
-        plantedCropsDict.Add(pos, cropItemData);
     }
 }

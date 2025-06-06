@@ -277,11 +277,9 @@ public class TileManager : MonoBehaviour
 
             tileSaveData.tilePos = pair.Key;
             tileSaveData.tileData = pair.Value;
+
             if (pair.Value.tileState == TileState.Planted)
-            {
-                CropItemData cropItemData = GameManager.Instance.cropManager.GetCropData(pair.Key);
-                tileSaveData.cropItemData = cropItemData;
-            }
+                GameManager.Instance.cropManager.SaveCropData(tileSaveData.cropSaveData, pair.Key);
 
             tileSaveDatas.Add(tileSaveData);
         }
@@ -293,9 +291,9 @@ public class TileManager : MonoBehaviour
         foreach (TileSaveData tileSaveData in tileSaveDatas)
         {
             tileDict.Add(tileSaveData.tilePos, tileSaveData.tileData);
-            if (tileSaveData.cropItemData != null && tileSaveData.tileData.tileState == TileState.Planted)
+            if (tileSaveData.cropSaveData != null && tileSaveData.tileData.tileState == TileState.Planted)
             {
-                GameManager.Instance.cropManager.SetCropData(tileSaveData.tilePos, tileSaveData.cropItemData);
+                GameManager.Instance.cropManager.LoadCropData(tileSaveData.tilePos, tileSaveData.cropSaveData);
             }
         }
     }

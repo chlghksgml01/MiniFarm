@@ -23,7 +23,7 @@ public class TileSaveData
 {
     public Vector3Int tilePos = new Vector3Int();
     public TileData tileData = new TileData();
-    public CropItemData cropItemData = new CropItemData();
+    public CropSaveData cropSaveData = new CropSaveData();
 }
 
 [System.Serializable]
