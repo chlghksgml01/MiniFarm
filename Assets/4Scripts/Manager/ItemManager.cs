@@ -64,7 +64,7 @@ public class ItemManager : MonoBehaviour
 
     public void DropItem(GameObject dropItem, Vector2 pos, int count)
     {
-        DropItemData dropItemData = SetDropItemData(dropItem, count);
+        DropItemData dropItemData = SetDropItemData(dropItem, pos, count);
 
         if (SceneManager.GetActiveScene().name == "House")
             houseDropItems.Add(dropItemData);
@@ -73,14 +73,14 @@ public class ItemManager : MonoBehaviour
             farmDropItems.Add(dropItemData);
     }
 
-    private DropItemData SetDropItemData(GameObject dropItem, int count)
+    private DropItemData SetDropItemData(GameObject dropItem, Vector2 pos, int count)
     {
         DropItemData dropItemData = new DropItemData();
 
         ItemData itemData = dropItem.GetComponent<Item>().itemData;
 
         dropItemData.itemData.SetItemData(itemData);
-        dropItemData.pos = dropItem.transform.position;
+        dropItemData.pos = pos;
         dropItemData.count = count;
 
         return dropItemData;

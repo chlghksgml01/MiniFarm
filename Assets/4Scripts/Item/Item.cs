@@ -89,7 +89,6 @@ public class Item : MonoBehaviour
         transform.position = bounceBasePos + new Vector3(0, bounceY, 0);
     }
 
-
     public void SpawnItem(bool _isPlayerDrop, bool _isBouncing, Vector3 bounceBasePos, ItemData _itemData, int _count)
     {
         isPlayerDrop = _isPlayerDrop;
