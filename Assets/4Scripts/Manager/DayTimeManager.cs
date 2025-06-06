@@ -108,6 +108,8 @@ public class DayTimeManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
         OnDayPassed?.Invoke();
+        yield return null;
+        DataManager.instance.SaveData();
 
         hour = dayStartTime;
         gameTimer = dayStartTime * secondsPerHour;

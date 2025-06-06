@@ -154,8 +154,9 @@ public class CropManager : MonoBehaviour
 
     public void LoadCropData(Vector3Int pos, CropSaveData cropSaveData)
     {
-        ItemData itemData = GameManager.Instance.itemManager.GetItemData(cropSaveData.cropName);
-        itemData.cropItemData = GameManager.Instance.itemManager.GetItemData(cropSaveData.cropName).cropItemData;
+        ItemData itemData = new ItemData();
+        itemData.SetItemData(GameManager.Instance.itemManager.GetItemData(cropSaveData.cropName));
+        itemData.cropItemData.SetCropItemData(GameManager.Instance.itemManager.GetItemData(cropSaveData.cropName).cropItemData);
 
         itemData.cropItemData.currentGrowthDuration = cropSaveData.currentGrowthDuration;
         itemData.cropItemData.currentGrowthLevel = cropSaveData.currentGrowthLevel;

@@ -12,7 +12,6 @@ public class DataManager : MonoBehaviour
     public string saveFileName = "default";
 
     private TileSaveDatas tileSaveDatas = new TileSaveDatas();
-    //private List<TileSaveData> tileSaveData = new List<TileSaveData>();
 
     public static DataManager instance;
 
@@ -79,10 +78,8 @@ public class DataManager : MonoBehaviour
     private void SaveTile()
     {
         tileSaveDatas = GameManager.Instance.tileManager.GetTileData();
-        //tileSaveData = GameManager.Instance.tileManager.GetTileData();
 
         string json = JsonUtility.ToJson(tileSaveDatas);
-        //string json = JsonUtility.ToJson(tileSaveData);
         File.WriteAllText(Path.Combine(path, tileSaveFileName), json);
     }
 

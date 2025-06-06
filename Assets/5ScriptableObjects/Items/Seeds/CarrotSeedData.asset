@@ -22,6 +22,7 @@ MonoBehaviour:
     rate: 0
   cropItemData:
     cropName: Carrot
+    cropSeedName: CarrotSeed
     cropTiles:
     - {fileID: 11400000, guid: 9583fef43b71abb438e431f6c8bf8e84, type: 2}
     - {fileID: 11400000, guid: f2767b08b79d863458a3a3496eeaef25, type: 2}
