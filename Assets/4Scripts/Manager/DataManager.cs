@@ -7,11 +7,14 @@ public class DataManager : MonoBehaviour
     private string path;
     private string playerSaveFileName = "player_save.json";
     private string cropSaveFileName = "crop_save.json";
+    private string dropItemSaveFileName = "dropItem_save.json";
+
     private string saveFiles = "default";
     private Player player;
 
     private PlayerSaveData playerSaveData = new PlayerSaveData();
     private CropSaveData cropSaveData = new CropSaveData();
+    private DropItemDatas dropItemSaveData = new DropItemDatas();
 
     public static DataManager instance;
 
@@ -63,6 +66,7 @@ public class DataManager : MonoBehaviour
     {
         SavePlayer();
         SaveCrop();
+        SaveDropItem();
     }
 
     private void SavePlayer()
@@ -88,10 +92,19 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(Path.Combine(path, cropSaveFileName), json);
     }
 
+    private void SaveDropItem()
+    {
+        dropItemSaveData = GameManager.Instance.itemManager.GetDropItemData();
+
+        string json = JsonUtility.ToJson(dropItemSaveData);
+        File.WriteAllText(Path.Combine(path, dropItemSaveFileName), json);
+    }
+
     public void LoadData()
     {
         LoadPlayer();
         LoadCrop();
+        LoadDropItem();
     }
 
     private void LoadPlayer()
@@ -114,6 +127,18 @@ public class DataManager : MonoBehaviour
             string data = File.ReadAllText(fullPath);
             cropSaveData = JsonUtility.FromJson<CropSaveData>(data);
             GameManager.Instance.cropManager.SetCropSaveData(cropSaveData);
+        }
+    }
+
+    private void LoadDropItem()
+    {
+        string fullPath = Path.Combine(path, dropItemSaveFileName);
+
+        if (File.Exists(fullPath))
+        {
+            string data = File.ReadAllText(fullPath);
+            dropItemSaveData = JsonUtility.FromJson<DropItemDatas>(data);
+            GameManager.Instance.itemManager.CreateItem();
         }
     }
 }

@@ -24,7 +24,6 @@ public class NewDayFadeInOut : MonoBehaviour
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
         DataManager.instance.SaveData();
-        DataManager.instance.LoadData();
 
         yield return new WaitForSecondsRealtime(fadeWaitTime);
 

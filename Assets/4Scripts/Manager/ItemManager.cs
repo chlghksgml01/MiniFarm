@@ -8,7 +8,7 @@ public class ItemManager : MonoBehaviour
 {
     public Item[] items;
     public Dictionary<string, Item> itemDict = new Dictionary<string, Item>();
-    private DropItem dropItem = new DropItem();
+    private DropItemDatas dropItemData = new DropItemDatas();
 
     private void Awake()
     {
@@ -59,10 +59,10 @@ public class ItemManager : MonoBehaviour
         DropItemData dropItemData = SetDropItemData(_dropItem, pos, count);
 
         if (SceneManager.GetActiveScene().name == "House")
-            dropItem.houseDropItems.Add(dropItemData);
+            this.dropItemData.houseDropItems.Add(dropItemData);
 
         else if (SceneManager.GetActiveScene().name == "Farm")
-            dropItem.farmDropItems.Add(dropItemData);
+            this.dropItemData.farmDropItems.Add(dropItemData);
     }
 
     private DropItemData SetDropItemData(GameObject _dropItem, Vector2 pos, int count)
@@ -83,9 +83,9 @@ public class ItemManager : MonoBehaviour
         string sceneName = SceneManager.GetActiveScene().name;
 
         if (sceneName == "House")
-            RemoveDropItemMethod(dropItem.houseDropItems, _dropItem);
+            RemoveDropItemMethod(dropItemData.houseDropItems, _dropItem);
         if (sceneName == "Farm")
-            RemoveDropItemMethod(dropItem.farmDropItems, _dropItem);
+            RemoveDropItemMethod(dropItemData.farmDropItems, _dropItem);
     }
 
     private void RemoveDropItemMethod(List<DropItemData> dropItems, Item dropItem)
@@ -102,14 +102,14 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    private void CreateItem()
+    public void CreateItem()
     {
         string sceneName = SceneManager.GetActiveScene().name;
 
         if (sceneName == "House")
-            CreateItemMethod(dropItem.houseDropItems);
+            CreateItemMethod(dropItemData.houseDropItems);
         else if (sceneName == "Farm")
-            CreateItemMethod(dropItem.farmDropItems);
+            CreateItemMethod(dropItemData.farmDropItems);
     }
 
     private void CreateItemMethod(List<DropItemData> dropItems)
@@ -123,4 +123,6 @@ public class ItemManager : MonoBehaviour
             item.GetComponent<SpriteRenderer>().sprite = dropItemData.itemData.icon;
         }
     }
+
+    public DropItemDatas GetDropItemData() => dropItemData;
 }

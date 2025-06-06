@@ -24,7 +24,7 @@ public class DropItemData
 }
 
 [System.Serializable]
-public class DropItem
+public class DropItemDatas
 {
     public List<DropItemData> houseDropItems = new List<DropItemData>();
     public List<DropItemData> farmDropItems = new List<DropItemData>();
