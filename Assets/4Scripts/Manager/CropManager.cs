@@ -140,7 +140,7 @@ public class CropManager : MonoBehaviour
     {
         CropItemData cropItemData = GetCropData(pos);
 
-        cropSaveData.cropName = cropItemData.cropName;
+        cropSaveData.cropName = cropItemData.cropName + "Seed";
         cropSaveData.currentGrowthDuration = cropItemData.currentGrowthDuration;
         cropSaveData.currentGrowthLevel = cropItemData.currentGrowthLevel;
         cropSaveData.canHarvest = cropItemData.canHarvest;
@@ -154,5 +154,13 @@ public class CropManager : MonoBehaviour
 
     public void LoadCropData(Vector3Int pos, CropSaveData cropSaveData)
     {
+        ItemData itemData = GameManager.Instance.itemManager.GetItemData(cropSaveData.cropName);
+        itemData.cropItemData = GameManager.Instance.itemManager.GetItemData(cropSaveData.cropName).cropItemData;
+
+        itemData.cropItemData.currentGrowthDuration = cropSaveData.currentGrowthDuration;
+        itemData.cropItemData.currentGrowthLevel = cropSaveData.currentGrowthLevel;
+        itemData.cropItemData.canHarvest = cropSaveData.canHarvest;
+
+        plantedCropsDict.Add(pos, itemData.cropItemData);
     }
 }

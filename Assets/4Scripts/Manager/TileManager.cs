@@ -266,9 +266,9 @@ public class TileManager : MonoBehaviour
             tileMap.SetTile(tilePos, tile);
     }
 
-    public List<TileSaveData> GetTileData()
+    public TileSaveDatas GetTileData()
     {
-        List<TileSaveData> tileSaveDatas = new List<TileSaveData>();
+        TileSaveDatas tileSaveDatas = new TileSaveDatas();
         foreach (KeyValuePair<Vector3Int, TileData> pair in tileDict)
         {
             if (pair.Value.tileState == TileState.Empty || pair.Value.tileState == TileState.None)
@@ -281,14 +281,14 @@ public class TileManager : MonoBehaviour
             if (pair.Value.tileState == TileState.Planted)
                 GameManager.Instance.cropManager.SaveCropData(tileSaveData.cropSaveData, pair.Key);
 
-            tileSaveDatas.Add(tileSaveData);
+            tileSaveDatas.tileSaveDatas.Add(tileSaveData);
         }
         return tileSaveDatas;
     }
 
-    public void LoadTileData(List<TileSaveData> tileSaveDatas)
+    public void LoadTileData(TileSaveDatas tileSaveDatas)
     {
-        foreach (TileSaveData tileSaveData in tileSaveDatas)
+        foreach (TileSaveData tileSaveData in tileSaveDatas.tileSaveDatas)
         {
             tileDict.Add(tileSaveData.tilePos, tileSaveData.tileData);
             if (tileSaveData.cropSaveData != null && tileSaveData.tileData.tileState == TileState.Planted)
@@ -297,4 +297,36 @@ public class TileManager : MonoBehaviour
             }
         }
     }
+
+    //public List<TileSaveData> GetTileData()
+    //{
+    //    List<TileSaveData> tileSaveDatas = new List<TileSaveData>();
+    //    foreach (KeyValuePair<Vector3Int, TileData> pair in tileDict)
+    //    {
+    //        if (pair.Value.tileState == TileState.Empty || pair.Value.tileState == TileState.None)
+    //            continue;
+    //        TileSaveData tileSaveData = new TileSaveData();
+
+    //        tileSaveData.tilePos = pair.Key;
+    //        tileSaveData.tileData = pair.Value;
+
+    //        if (pair.Value.tileState == TileState.Planted)
+    //            GameManager.Instance.cropManager.SaveCropData(tileSaveData.cropSaveData, pair.Key);
+
+    //        tileSaveDatas.Add(tileSaveData);
+    //    }
+    //    return tileSaveDatas;
+    //}
+
+    //public void LoadTileData(List<TileSaveData> tileSaveDatas)
+    //{
+    //    foreach (TileSaveData tileSaveData in tileSaveDatas)
+    //    {
+    //        tileDict.Add(tileSaveData.tilePos, tileSaveData.tileData);
+    //        if (tileSaveData.cropSaveData != null && tileSaveData.tileData.tileState == TileState.Planted)
+    //        {
+    //            GameManager.Instance.cropManager.LoadCropData(tileSaveData.tilePos, tileSaveData.cropSaveData);
+    //        }
+    //    }
+    //}
 }

@@ -27,6 +27,12 @@ public class TileSaveData
 }
 
 [System.Serializable]
+public class TileSaveDatas
+{
+    public List<TileSaveData> tileSaveDatas = new List<TileSaveData>();
+}
+
+[System.Serializable]
 public class DropItemData
 {
     public ItemData itemData = new ItemData();

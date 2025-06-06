@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.IO;
-using Unity.VisualScripting;
 using System.Collections.Generic;
 
 public class DataManager : MonoBehaviour
@@ -12,7 +11,8 @@ public class DataManager : MonoBehaviour
 
     public string saveFileName = "default";
 
-    private List<TileSaveData> tileSaveData = new List<TileSaveData>();
+    private TileSaveDatas tileSaveDatas = new TileSaveDatas();
+    //private List<TileSaveData> tileSaveData = new List<TileSaveData>();
 
     public static DataManager instance;
 
@@ -78,9 +78,11 @@ public class DataManager : MonoBehaviour
 
     private void SaveTile()
     {
-        tileSaveData = GameManager.Instance.tileManager.GetTileData();
+        tileSaveDatas = GameManager.Instance.tileManager.GetTileData();
+        //tileSaveData = GameManager.Instance.tileManager.GetTileData();
 
-        string json = JsonUtility.ToJson(tileSaveData);
+        string json = JsonUtility.ToJson(tileSaveDatas);
+        //string json = JsonUtility.ToJson(tileSaveData);
         File.WriteAllText(Path.Combine(path, tileSaveFileName), json);
     }
 
@@ -116,9 +118,9 @@ public class DataManager : MonoBehaviour
         if (File.Exists(fullPath))
         {
             string data = File.ReadAllText(fullPath);
-            tileSaveData = JsonUtility.FromJson<List<TileSaveData>>(data);
+            tileSaveDatas = JsonUtility.FromJson<TileSaveDatas>(data);
 
-            GameManager.Instance.tileManager.LoadTileData(tileSaveData);
+            GameManager.Instance.tileManager.LoadTileData(tileSaveDatas);
         }
     }
 

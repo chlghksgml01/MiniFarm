@@ -20,7 +20,7 @@ public static class TileLogicHelper
         // 씨앗 심기
         if (cropName != "" && (tileState == TileState.Tilled || tileState == TileState.Watered))
         {
-            PlantCrop(cellPosition, tileDict, tileState, tileManager, cropName);
+            PlantCrop(cellPosition, tileDict, tileState, tileManager);
         }
         // 도구 사용
         else
@@ -29,7 +29,7 @@ public static class TileLogicHelper
         }
     }
 
-    private static void PlantCrop(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileState tileState, TileManager tileManager, string cropName)
+    private static void PlantCrop(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileState tileState, TileManager tileManager)
     {
         CropManager cropManager = GameManager.Instance.cropManager;
         Tilemap farmFieldMap = tileManager.cropTileMap;
@@ -69,54 +69,54 @@ public static class TileLogicHelper
         switch (playerToolType)
         {
             case ToolType.Hoe:
-                if (tileState == TileState.Empty)
-                {
-                    tileDict[cellPosition].tileState = TileState.Tilled;
-                    UpdateTiles(cellPosition, tileDict, centerTileData);
-                }
-                else if (tileState == TileState.Planted)
-                {
-                    if (cropManager.plantedCropsDict.ContainsKey(cellPosition))
-                        cropManager.plantedCropsDict.Remove(cellPosition);
+            if (tileState == TileState.Empty)
+            {
+                tileDict[cellPosition].tileState = TileState.Tilled;
+                UpdateTiles(cellPosition, tileDict, centerTileData);
+            }
+            else if (tileState == TileState.Planted)
+            {
+                if (cropManager.plantedCropsDict.ContainsKey(cellPosition))
+                    cropManager.plantedCropsDict.Remove(cellPosition);
 
-                    tileManager.cropTileMap.SetTile(cellPosition, null);
+                tileManager.cropTileMap.SetTile(cellPosition, null);
 
-                    tileDict[cellPosition].tileState = TileState.Tilled;
-                }
-                break;
+                tileDict[cellPosition].tileState = TileState.Tilled;
+            }
+            break;
 
             case ToolType.WateringCan:
-                if (tileState == TileState.Tilled || tileState == TileState.Planted)
+            if (tileState == TileState.Tilled || tileState == TileState.Planted)
+            {
+                Tilemap wateringMap = tileManager.wateringTileMap;
+                wateringMap.SetTile(cellPosition, tileManager.wateringTile);
+                if (tileState == TileState.Tilled)
+                    tileDict[cellPosition].tileState = TileState.Watered;
+                if (tileState == TileState.Planted)
                 {
-                    Tilemap wateringMap = tileManager.wateringTileMap;
-                    wateringMap.SetTile(cellPosition, tileManager.wateringTile);
-                    if (tileState == TileState.Tilled)
-                        tileDict[cellPosition].tileState = TileState.Watered;
-                    if (tileState == TileState.Planted)
-                    {
-                        cropManager.WaterCropTile(cellPosition);
-                    }
+                    cropManager.WaterCropTile(cellPosition);
                 }
-                break;
+            }
+            break;
 
             case ToolType.Pickaxe:
-                if (tileState != TileState.Empty)
-                {
-                    if (cropManager.plantedCropsDict.ContainsKey(cellPosition))
-                        cropManager.plantedCropsDict.Remove(cellPosition);
+            if (tileState != TileState.Empty)
+            {
+                if (cropManager.plantedCropsDict.ContainsKey(cellPosition))
+                    cropManager.plantedCropsDict.Remove(cellPosition);
 
-                    tileManager.cropTileMap.SetTile(cellPosition, null);
-                    tileManager.wateringTileMap.SetTile(cellPosition, null);
-                    interactableMap.SetTile(cellPosition, tileManager.emptyTile);
+                tileManager.cropTileMap.SetTile(cellPosition, null);
+                tileManager.wateringTileMap.SetTile(cellPosition, null);
+                interactableMap.SetTile(cellPosition, tileManager.emptyTile);
 
-                    tileDict[cellPosition].tileConnectedDir = TileConnectedDir.None;
-                    tileDict[cellPosition].tileState = TileState.Empty;
+                tileDict[cellPosition].tileConnectedDir = TileConnectedDir.None;
+                tileDict[cellPosition].tileState = TileState.Empty;
 
-                    ResetConnectedTiles(cellPosition, tileDict);
-                }
-                break;
+                ResetConnectedTiles(cellPosition, tileDict);
+            }
+            break;
             default:
-                break;
+            break;
         }
     }
 
@@ -233,83 +233,83 @@ public static class TileLogicHelper
         {
             // 상하좌우 연결
             case TileConnectedDir.Up | TileConnectedDir.Down | TileConnectedDir.Left | TileConnectedDir.Right:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.Center;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.Center;
+            break;
 
             // 상하좌 연결
             case TileConnectedDir.Up | TileConnectedDir.Down | TileConnectedDir.Left:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.RightCenter;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.RightCenter;
+            break;
 
             // 상하우 연결
             case TileConnectedDir.Up | TileConnectedDir.Down | TileConnectedDir.Right:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.LeftCenter;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.LeftCenter;
+            break;
 
             // 상좌우 연결
             case TileConnectedDir.Up | TileConnectedDir.Left | TileConnectedDir.Right:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.DownCenter;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.DownCenter;
+            break;
 
             // 하좌우 연결
             case TileConnectedDir.Down | TileConnectedDir.Left | TileConnectedDir.Right:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.UpCenter;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.UpCenter;
+            break;
 
             // 상하 연결
             case TileConnectedDir.Up | TileConnectedDir.Down:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.VerticalCenter;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.VerticalCenter;
+            break;
 
             // 상좌 연결
             case TileConnectedDir.Up | TileConnectedDir.Left:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.RightDown;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.RightDown;
+            break;
 
             // 상우 연결
             case TileConnectedDir.Up | TileConnectedDir.Right:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.LeftDown;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.LeftDown;
+            break;
 
             // 하좌 연결
             case TileConnectedDir.Down | TileConnectedDir.Left:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.RightUp;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.RightUp;
+            break;
 
             // 하우 연결
             case TileConnectedDir.Down | TileConnectedDir.Right:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.LeftUp;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.LeftUp;
+            break;
 
             // 좌우 연결
             case TileConnectedDir.Left | TileConnectedDir.Right:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.HorizontalCenter;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.HorizontalCenter;
+            break;
 
             // 위쪽 연결
             case TileConnectedDir.Up:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.Down;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.Down;
+            break;
 
             // 아래쪽 연결
             case TileConnectedDir.Down:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.Up;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.Up;
+            break;
 
             // 오른쪽 연결
             case TileConnectedDir.Right:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.Left;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.Left;
+            break;
 
             // 왼쪽 연결
             case TileConnectedDir.Left:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.Right;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.Right;
+            break;
 
             // 연결X
             default:
-                tileDict[cellPosition].tileConnectedState = TileConnectedState.One;
-                break;
+            tileDict[cellPosition].tileConnectedState = TileConnectedState.One;
+            break;
         }
     }
 }
