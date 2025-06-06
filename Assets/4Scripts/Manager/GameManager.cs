@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public TileManager tileManager;
     [HideInInspector] public CropManager cropManager;
     [HideInInspector] public SlimeSpawnController slimeSpawnController;
-    [HideInInspector] public SceneLoadManager sceneLoadManager;
 
     [Header("Player")]
     [SerializeField] public Image healthBar;
@@ -56,7 +55,6 @@ public class GameManager : MonoBehaviour
         player.healthBar = healthBar;
         player.staminaBar = staminaBar;
 
-        sceneLoadManager = gameObject.GetComponent<SceneLoadManager>();
         itemManager = gameObject.GetComponent<ItemManager>();
         uiManager = gameObject.GetComponent<UI_Manager>();
         dayTimeManager = gameObject.GetComponent<DayTimeManager>();

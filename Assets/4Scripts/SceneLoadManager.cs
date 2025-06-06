@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,20 +12,60 @@ public class SceneLoadManager : MonoBehaviour
 
     public event Action SceneLoad = null;
 
-    public void StartLoadScene(string sceneName)
+    public static SceneLoadManager instance;
+
+    public static SceneLoadManager Instance
     {
-        StartCoroutine(LoadScene(sceneName));
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<SceneLoadManager>();
+                if (instance == null)
+                {
+                    Debug.LogError("¾À¿¡ SceneLoadManager ¾øÀ½");
+                }
+            }
+            return instance;
+        }
     }
 
-    public IEnumerator LoadScene(string sceneName)
+    private void Awake()
     {
-        GameManager.Instance.dayTimeManager.canPassToNextDay = false;
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+
+        DontDestroyOnLoad(this);
+    }
+
+    public void StartLoadScene(string sceneName, bool isGameStart)
+    {
+        StartCoroutine(LoadScene(sceneName, isGameStart));
+        fadeInOutImage.transform.SetAsLastSibling();
+    }
+
+    public IEnumerator LoadScene(string sceneName, bool isGameStart)
+    {
+        if (!isGameStart)
+            GameManager.Instance.dayTimeManager.canPassToNextDay = false;
 
         StartCoroutine(FadeInOut(0f, 1f, fadeInOutDuration));
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
-        SceneManager.LoadScene(sceneName);
+        AsyncOperation asyncOp = SceneManager.LoadSceneAsync(sceneName);
+
+        while (!asyncOp.isDone)
+            yield return null;
+
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
+
+        if (isGameStart)
+            DataManager.instance.LoadData();
+
         SceneLoad?.Invoke();
 
         if (sceneName == "Farm")

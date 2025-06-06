@@ -19,12 +19,12 @@ public class ItemManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.sceneLoadManager.SceneLoad += CreateItem;
+        SceneLoadManager.Instance.SceneLoad += CreateItem;
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.sceneLoadManager.SceneLoad -= CreateItem;
+        SceneLoadManager.Instance.SceneLoad -= CreateItem;
     }
 
     void AddItem(Item item)

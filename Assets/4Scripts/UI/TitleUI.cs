@@ -4,6 +4,8 @@ public class TitleUI : MonoBehaviour
 {
     [SerializeField] private GameObject Title;
     [SerializeField] private GameObject Save;
+    [SerializeField] private GameObject[] SaveImage;
+    [SerializeField] private GameObject[] NewSaveImage;
 
     private void Awake()
     {
@@ -15,11 +17,21 @@ public class TitleUI : MonoBehaviour
     {
         Title.SetActive(false);
         Save.SetActive(true);
+
+        for (int i = 0; i < 3; i++)
+        {
+            string fileName = $"Save{i + 1}";
+            bool exists = DataManager.instance.IsFileExist(fileName);
+
+            SaveImage[i].SetActive(exists);
+            NewSaveImage[i].SetActive(!exists);
+        }
     }
 
-    public void StartSaveButton()
+    public void StartSaveButton(string saveFileName)
     {
-
+        DataManager.instance.saveFileName = saveFileName;
+        SceneLoadManager.instance.StartLoadScene("House", true);
     }
 
     public void DeleteButton()

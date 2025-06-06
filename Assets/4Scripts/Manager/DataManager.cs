@@ -9,8 +9,7 @@ public class DataManager : MonoBehaviour
     private string cropSaveFileName = "crop_save.json";
     private string dropItemSaveFileName = "dropItem_save.json";
 
-    private string saveFiles = "default";
-    private Player player;
+    public string saveFileName = "default";
 
     private PlayerSaveData playerSaveData = new PlayerSaveData();
     private CropSaveData cropSaveData = new CropSaveData();
@@ -45,13 +44,8 @@ public class DataManager : MonoBehaviour
 
         DontDestroyOnLoad(this);
 
-        path = Path.Combine(Application.dataPath, "..", "Saves", saveFiles);
+        path = Path.Combine(Application.dataPath, "..", "Saves", saveFileName);
         CreateFile();
-    }
-
-    private void Start()
-    {
-        player = GameManager.Instance.player;
     }
 
     public void CreateFile()
@@ -71,7 +65,7 @@ public class DataManager : MonoBehaviour
 
     private void SavePlayer()
     {
-        if (player == null)
+        if (GameManager.Instance.player == null)
         {
             Debug.LogError("DataManager - Player ¾øÀ½");
             return;
@@ -140,5 +134,11 @@ public class DataManager : MonoBehaviour
             dropItemSaveData = JsonUtility.FromJson<DropItemDatas>(data);
             GameManager.Instance.itemManager.CreateItem();
         }
+    }
+
+    public bool IsFileExist(string _saveFileName)
+    {
+        path = Path.Combine(Application.dataPath, "..", "Saves", _saveFileName);
+        return Directory.Exists(path);
     }
 }
