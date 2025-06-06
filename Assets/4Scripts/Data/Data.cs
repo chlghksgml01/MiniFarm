@@ -16,6 +16,7 @@ public class CropSaveData
     public List<CropItemData> cropItemData = new List<CropItemData>();
 }
 
+[System.Serializable]
 public class DropItemData
 {
     public ItemData itemData = new ItemData();

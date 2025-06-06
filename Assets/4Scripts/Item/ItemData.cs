@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[System.Serializable]
 public enum ItemType
 {
     None, Consumable, Seed, Tool
 }
 
+[System.Serializable]
 public class ItemData
 {
     public string itemName = "";

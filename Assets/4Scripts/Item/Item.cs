@@ -6,7 +6,7 @@ public class Item : MonoBehaviour
     private ItemData _itemData;
     public ScriptableItemData scriptableItemData;
 
-    public TextMeshProUGUI textUI;
+    public TextMeshProUGUI textUI { get; set; }
     private bool isPlayerDrop;
 
     public ItemData itemData
@@ -16,10 +16,9 @@ public class Item : MonoBehaviour
             if (scriptableItemData == null)
                 return null;
 
-            if (_itemData == null)
+            if (_itemData == null || _itemData.IsEmpty())
             {
                 _itemData = new ItemData();
-
                 _itemData.SetItemData(scriptableItemData);
             }
 

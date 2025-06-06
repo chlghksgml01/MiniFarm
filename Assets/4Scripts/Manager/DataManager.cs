@@ -50,6 +50,7 @@ public class DataManager : MonoBehaviour
 
     public void CreateFile()
     {
+        path = Path.Combine(Application.dataPath, "..", "Saves", saveFileName);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TitleUI : MonoBehaviour
 {
@@ -31,6 +32,7 @@ public class TitleUI : MonoBehaviour
     public void StartSaveButton(string saveFileName)
     {
         DataManager.instance.saveFileName = saveFileName;
+        DataManager.instance.CreateFile();
         SceneLoadManager.instance.StartLoadScene("House", true);
     }
 

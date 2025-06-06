@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5747094402504279099}
   - component: {fileID: 5892755114719432618}
-  - component: {fileID: 1465371775027949022}
   - component: {fileID: 38490482852750421}
   - component: {fileID: 1020951914719666859}
   - component: {fileID: 3793216011849168464}
@@ -57,25 +56,10 @@ MonoBehaviour:
   tileManager: {fileID: 0}
   cropManager: {fileID: 6438177313553398301}
   slimeSpawnController: {fileID: 0}
-  sceneLoadManager: {fileID: 0}
   healthBar: {fileID: 0}
   staminaBar: {fileID: 0}
   player: {fileID: 0}
   playerPrefab: {fileID: 7613151609588484325, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
---- !u!114 &1465371775027949022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4920566309791694972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 565b5dce39d678c4696dacc39d4a7fde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadeInOutDuration: 0.5
-  fadeInOutImage: {fileID: 0}
 --- !u!114 &38490482852750421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,7 +72,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d652090fa406f8641a6f1625ae4e35f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropItemPrefab: {fileID: 66480898167699907, guid: 2b9ad9bbe0fac8249a9504c70ac28eb2, type: 3}
   items:
   - {fileID: 6272279790835434845, guid: 5ff6edeb19ced0b488932c73dd6e75d0, type: 3}
   - {fileID: 6272279790835434845, guid: 6907eaf94f9020a468eac49b9f1cc6f9, type: 3}
@@ -104,7 +87,6 @@ MonoBehaviour:
   - {fileID: 6272279790835434845, guid: b9f6af7827fb8324e856bbca01784219, type: 3}
   - {fileID: 6272279790835434845, guid: de46189330500ce4f9d7e93e59395e16, type: 3}
   - {fileID: 6272279790835434845, guid: f20113959546606499c329b0ec340901, type: 3}
-  dropItems: []
 --- !u!114 &1020951914719666859
 MonoBehaviour:
   m_ObjectHideFlags: 0
