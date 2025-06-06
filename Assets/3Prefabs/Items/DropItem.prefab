@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6272279790835434845}
   m_Layer: 10
   m_Name: DropItem
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scriptableItemData: {fileID: 11400000, guid: f05d8a04c300a2a419a55a5827aa6ec5, type: 2}
   itemPrefab: {fileID: 0}
+  textUI: {fileID: 0}
 --- !u!1 &5430533674888974394
 GameObject:
   m_ObjectHideFlags: 0

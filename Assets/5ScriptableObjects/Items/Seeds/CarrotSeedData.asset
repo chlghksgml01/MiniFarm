@@ -17,6 +17,7 @@ MonoBehaviour:
   itemType: 2
   buyPrice: 20
   sellPrice: 2
+  itemPrefab: {fileID: 66480898167699907, guid: 5ff6edeb19ced0b488932c73dd6e75d0, type: 3}
   dropItemData:
     rate: 0
   cropItemData:
@@ -29,10 +30,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 35299c9b6039b024db3b4a53ceb767f2, type: 2}
     - {fileID: 11400000, guid: 5a9c2fd5636c8c3499cf6b4ecc4e9682, type: 2}
     - {fileID: 11400000, guid: 53aa6fd890ccc194799c3e3b6a4dbe57, type: 2}
-    growthLevel: 3
     growthDurations: 010000000100000001000000
     isRegrowable: 0
     harvestedImage: {fileID: 6761164967045977113, guid: d283e564552a6b0428b5cfc16c2f763f, type: 3}
+    growthLevel: 3
     currentGrowthDuration: 0
     currentGrowthLevel: 0
     isWatered: 0

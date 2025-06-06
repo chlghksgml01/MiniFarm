@@ -13,6 +13,7 @@ public class ItemData
     public ItemType itemType = ItemType.None;
     public int buyPrice = 0;
     public int sellPrice = 0;
+    public GameObject itemPrefab;
 
     public EnemyDropItemData dropItemData = new EnemyDropItemData();
     public CropItemData cropItemData = new CropItemData();
@@ -67,6 +68,7 @@ public class ItemData
         itemType = scriptableItemData.itemType;
         buyPrice = scriptableItemData.buyPrice;
         sellPrice = scriptableItemData.sellPrice;
+        itemPrefab = scriptableItemData.itemPrefab;
 
         if (!scriptableItemData.dropItemData.IsEmpty())
             dropItemData.SetDropData(scriptableItemData.dropItemData);

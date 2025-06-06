@@ -15,3 +15,20 @@ MonoBehaviour:
   itemName: WateringCan
   icon: {fileID: 21300000, guid: bfb434fca4851a44789064f64df05429, type: 3}
   itemType: 3
+  buyPrice: 0
+  sellPrice: 0
+  itemPrefab: {fileID: 66480898167699907, guid: 721502e27fbb74644a962057a7396773, type: 3}
+  dropItemData:
+    rate: 0
+  cropItemData:
+    cropName: 
+    cropTiles: []
+    wetCropTiles: []
+    growthDurations: 
+    isRegrowable: 0
+    harvestedImage: {fileID: 0}
+    growthLevel: 0
+    currentGrowthDuration: 0
+    currentGrowthLevel: 0
+    isWatered: 0
+    canHarvest: 0

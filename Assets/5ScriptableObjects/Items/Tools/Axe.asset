@@ -15,3 +15,20 @@ MonoBehaviour:
   itemName: Axe
   icon: {fileID: 21300000, guid: 6ec5037bc8f7d264ca5c8eac703baa34, type: 3}
   itemType: 3
+  buyPrice: 0
+  sellPrice: 0
+  itemPrefab: {fileID: 66480898167699907, guid: 5cb7b73f4526c8d4ead3b9608cde011c, type: 3}
+  dropItemData:
+    rate: 0
+  cropItemData:
+    cropName: 
+    cropTiles: []
+    wetCropTiles: []
+    growthDurations: 
+    isRegrowable: 0
+    harvestedImage: {fileID: 0}
+    growthLevel: 0
+    currentGrowthDuration: 0
+    currentGrowthLevel: 0
+    isWatered: 0
+    canHarvest: 0

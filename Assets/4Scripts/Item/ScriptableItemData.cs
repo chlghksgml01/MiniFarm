@@ -9,6 +9,7 @@ public class ScriptableItemData : ScriptableObject
     public ItemType itemType;
     public int buyPrice;
     public int sellPrice;
+    public GameObject itemPrefab;
 
     public EnemyDropItemData dropItemData;
     public CropItemData cropItemData;

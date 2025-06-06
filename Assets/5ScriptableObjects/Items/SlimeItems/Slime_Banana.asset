@@ -17,16 +17,17 @@ MonoBehaviour:
   itemType: 1
   buyPrice: 0
   sellPrice: 20
+  itemPrefab: {fileID: 66480898167699907, guid: 2eb1e709e5c0c0547added36e017bf09, type: 3}
   dropItemData:
     rate: 25
   cropItemData:
     cropName: 
     cropTiles: []
     wetCropTiles: []
-    growthLevel: 0
     growthDurations: 
     isRegrowable: 0
     harvestedImage: {fileID: 0}
+    growthLevel: 0
     currentGrowthDuration: 0
     currentGrowthLevel: 0
     isWatered: 0

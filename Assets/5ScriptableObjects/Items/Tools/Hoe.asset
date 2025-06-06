@@ -15,3 +15,20 @@ MonoBehaviour:
   itemName: Hoe
   icon: {fileID: 21300000, guid: 803e49a2570761048b1d983df97045b4, type: 3}
   itemType: 3
+  buyPrice: 0
+  sellPrice: 0
+  itemPrefab: {fileID: 66480898167699907, guid: 13c49f467961d0043aecfa4abf2c1230, type: 3}
+  dropItemData:
+    rate: 0
+  cropItemData:
+    cropName: 
+    cropTiles: []
+    wetCropTiles: []
+    growthDurations: 
+    isRegrowable: 0
+    harvestedImage: {fileID: 0}
+    growthLevel: 0
+    currentGrowthDuration: 0
+    currentGrowthLevel: 0
+    isWatered: 0
+    canHarvest: 0

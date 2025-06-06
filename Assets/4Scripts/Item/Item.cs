@@ -5,7 +5,6 @@ public class Item : MonoBehaviour
 {
     private ItemData _itemData;
     public ScriptableItemData scriptableItemData;
-    public GameObject itemPrefab;
 
     public TextMeshProUGUI textUI;
     private bool isPlayerDrop;
