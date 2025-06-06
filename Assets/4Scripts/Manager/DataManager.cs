@@ -1,15 +1,15 @@
 using UnityEngine;
 using System.IO;
-using System.Collections.Generic;
 
 public class DataManager : MonoBehaviour
 {
+    private string saveRootFolderName = "Saves";
+    public string saveFolderName = "TempPath";
+
     private string path;
     private string playerSaveFileName = "player_save.json";
     private string tileSaveFileName = "tile_save.json";
     private string dropItemSaveFileName = "dropItem_save.json";
-
-    public string saveFileName = "default";
 
     private TileSaveDatas tileSaveDatas = new TileSaveDatas();
 
@@ -41,22 +41,20 @@ public class DataManager : MonoBehaviour
         instance = this;
 
         DontDestroyOnLoad(this);
-
-        path = Path.Combine(Application.dataPath, "..", "Saves", saveFileName);
-        CreateFile();
     }
 
-    public void CreateFile()
+    public void CreateFolder()
     {
-        path = Path.Combine(Application.dataPath, "..", "Saves", saveFileName);
+        path = Path.Combine(Application.persistentDataPath, saveRootFolderName, saveFolderName);
+
         if (!Directory.Exists(path))
-        {
             Directory.CreateDirectory(path);
-        }
     }
 
     public void SaveData()
     {
+        CreateFolder();
+
         SavePlayer();
         SaveTile();
         SaveDropItem();
@@ -78,7 +76,6 @@ public class DataManager : MonoBehaviour
     private void SaveTile()
     {
         tileSaveDatas = GameManager.Instance.tileManager.GetTileData();
-
         string json = JsonUtility.ToJson(tileSaveDatas);
         File.WriteAllText(Path.Combine(path, tileSaveFileName), json);
     }
@@ -91,6 +88,8 @@ public class DataManager : MonoBehaviour
 
     public void LoadData()
     {
+        path = Path.Combine(Application.persistentDataPath, saveRootFolderName, saveFolderName);
+
         LoadPlayer();
         LoadTile();
         LoadDropItem();
@@ -133,9 +132,24 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    public bool IsFileExist(string _saveFileName)
+    public bool IsFolderExist(string _saveFolderName)
     {
-        path = Path.Combine(Application.dataPath, "..", "Saves", _saveFileName);
-        return Directory.Exists(path);
+        string folderPath = Path.Combine(Application.persistentDataPath, saveRootFolderName, _saveFolderName);
+        return Directory.Exists(folderPath);
+    }
+
+    public void DeleteSaveFile(string _saveFolderName)
+    {
+        string folderPath = Path.Combine(Application.persistentDataPath, saveRootFolderName, _saveFolderName);
+
+        if (Directory.Exists(folderPath))
+        {
+            Directory.Delete(folderPath, true);
+            Debug.Log("폴더 삭제 완료");
+        }
+        else
+        {
+            Debug.Log("삭제할 폴더 없음");
+        }
     }
 }

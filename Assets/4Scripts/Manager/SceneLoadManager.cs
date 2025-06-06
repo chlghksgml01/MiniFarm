@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -64,14 +63,30 @@ public class SceneLoadManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
         if (isGameStart)
+        {
             DataManager.instance.LoadData();
+            GameObject bed = GameObject.Find("BedNextDayCollider");
+            bed.GetComponent<Bed>().isPassDay = true;
+        }
 
         SceneLoad?.Invoke();
 
-        if (sceneName == "Farm")
-            GameManager.Instance.player.transform.position = Vector3.zero;
+        Player player = GameManager.Instance.player;
+        if (sceneName == "Farm" && !isGameStart)
+        {
+            player.transform.position = Vector3.zero;
+            player.LookDown();
+        }
+        else if (sceneName == "House" && isGameStart)
+        {
+            player.transform.position = new Vector3(3.32f, 1.4f);
+            player.LookDown();
+        }
         else if (sceneName == "House")
-            GameManager.Instance.player.transform.position = new Vector3(0.5f, 0f, 0f);
+        {
+            player.transform.position = new Vector3(0.5f, 0f, 0f);
+            player.LookUp();
+        }
 
         StartCoroutine(FadeInOut(1f, 0f, fadeInOutDuration));
 

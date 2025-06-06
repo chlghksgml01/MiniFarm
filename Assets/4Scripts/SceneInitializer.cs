@@ -30,6 +30,5 @@ public class SceneInitializer : MonoBehaviour
         }
         if (farmSelectedTileMap != null)
             tileManager.farmSelectedTileMap = farmSelectedTileMap;
-
     }
 }

@@ -63,20 +63,6 @@ public class Player : Entity
         stateMachine.Initialize(idleState);
 
         playerSaveData.inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
-
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        if (currentSceneName == "House")
-        {
-            anim.SetFloat("horizontal", 0f);
-            anim.SetFloat("vertical", 1f);
-            transform.position = new Vector3(0.5f, 0f, 0f);
-        }
-        else if (currentSceneName == "Farm")
-        {
-            anim.SetFloat("horizontal", 0f);
-            anim.SetFloat("vertical", -1f);
-            transform.position = new Vector3(0f, 0f, 0f);
-        }
     }
 
     protected override void OnEnable()
@@ -242,23 +228,23 @@ public class Player : Entity
         switch (holdItem.itemData.itemName)
         {
             case "Hoe":
-                playerToolType = ToolType.Hoe;
-                break;
+            playerToolType = ToolType.Hoe;
+            break;
             case "Pickaxe":
-                playerToolType = ToolType.Pickaxe;
-                break;
+            playerToolType = ToolType.Pickaxe;
+            break;
             case "Axe":
-                playerToolType = ToolType.Axe;
-                break;
+            playerToolType = ToolType.Axe;
+            break;
             case "WateringCan":
-                playerToolType = ToolType.WateringCan;
-                break;
+            playerToolType = ToolType.WateringCan;
+            break;
             case "Sword":
-                playerToolType = ToolType.Sword;
-                break;
+            playerToolType = ToolType.Sword;
+            break;
             default:
-                playerToolType = ToolType.None;
-                break;
+            playerToolType = ToolType.None;
+            break;
         }
     }
 
@@ -267,28 +253,28 @@ public class Player : Entity
         switch (mouseDirection)
         {
             case MouseDirection.Up:
-                playerDir = playerDir.Up;
-                anim.SetFloat("vertical", 1f);
-                anim.SetFloat("horizontal", 0f);
-                break;
+            playerDir = playerDir.Up;
+            anim.SetFloat("vertical", 1f);
+            anim.SetFloat("horizontal", 0f);
+            break;
             case MouseDirection.Center:
             case MouseDirection.Down:
-                playerDir = playerDir.Down;
-                anim.SetFloat("vertical", -1f);
-                anim.SetFloat("horizontal", 0f);
-                break;
+            playerDir = playerDir.Down;
+            anim.SetFloat("vertical", -1f);
+            anim.SetFloat("horizontal", 0f);
+            break;
             case MouseDirection.Right:
             case MouseDirection.UpRight:
             case MouseDirection.DownRight:
-                playerDir = playerDir.Right;
-                anim.SetFloat("horizontal", 1f);
-                break;
+            playerDir = playerDir.Right;
+            anim.SetFloat("horizontal", 1f);
+            break;
             case MouseDirection.Left:
             case MouseDirection.UpLeft:
             case MouseDirection.DownLeft:
-                playerDir = playerDir.Left;
-                anim.SetFloat("horizontal", -1f);
-                break;
+            playerDir = playerDir.Left;
+            anim.SetFloat("horizontal", -1f);
+            break;
         }
     }
 
@@ -317,5 +303,17 @@ public class Player : Entity
     {
         playerSaveData.gold += sellItemData.sellPrice * sellCount;
         playerSaveData.inventory.RemoveItem(sellItemData, sellCount);
+    }
+
+    public void LookDown()
+    {
+        anim.SetFloat("horizontal", 0f);
+        anim.SetFloat("vertical", -1f);
+    }
+
+    public void LookUp()
+    {
+        anim.SetFloat("horizontal", 0f);
+        anim.SetFloat("vertical", 1f);
     }
 }

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TitleUI : MonoBehaviour
 {
@@ -21,24 +20,27 @@ public class TitleUI : MonoBehaviour
 
         for (int i = 0; i < 3; i++)
         {
-            string fileName = $"Save{i + 1}";
-            bool exists = DataManager.instance.IsFileExist(fileName);
+            string folderName = $"Save{i + 1}";
+            bool exists = DataManager.instance.IsFolderExist(folderName);
 
             SaveImage[i].SetActive(exists);
             NewSaveImage[i].SetActive(!exists);
         }
     }
 
-    public void StartSaveButton(string saveFileName)
+    public void StartSaveButton(string saveFolderName)
     {
-        DataManager.instance.saveFileName = saveFileName;
-        DataManager.instance.CreateFile();
+        DataManager.instance.saveFolderName = saveFolderName;
         SceneLoadManager.Instance.StartLoadScene("House", true);
     }
 
-    public void DeleteButton()
+    public void DeleteButton(string saveFolderName)
     {
+        DataManager.instance.DeleteSaveFile(saveFolderName);
 
+        int index = (int)saveFolderName[saveFolderName.Length - 1] - 1;
+        SaveImage[index].SetActive(false);
+        NewSaveImage[index].SetActive(true);
     }
 
     public void BackButton()
