@@ -33,7 +33,7 @@ public class TitleUI : MonoBehaviour
     {
         DataManager.instance.saveFileName = saveFileName;
         DataManager.instance.CreateFile();
-        SceneLoadManager.instance.StartLoadScene("House", true);
+        SceneLoadManager.Instance.StartLoadScene("House", true);
     }
 
     public void DeleteButton()

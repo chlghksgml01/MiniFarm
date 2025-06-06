@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,27 @@ public class ToolBar_UI : MonoBehaviour
     {
         slotCount = slotsUIs.Count;
         initialSelectedUIPosX = selectedUI.transform.position.x;
+        StartCoroutine(RegisterEvent());
+    }
+
+    private IEnumerator RegisterEvent()
+    {
+        yield return null;
+        SceneLoadManager.Instance.SceneLoad += SetToolBarInventory;
+    }
+
+    private void OnDisable()
+    {
+        SceneLoadManager.Instance.SceneLoad -= SetToolBarInventory;
+    }
+
+    private void Start()
+    {
+        if (SceneLoadManager.Instance == null)
+        {
+            Debug.Log("Inventory_UI - SceneLoadManager ¾øÀ½");
+            return;
+        }
     }
 
     private void Update()
@@ -53,6 +75,19 @@ public class ToolBar_UI : MonoBehaviour
         selectedUI.transform.position = nextSelectedUIPos;
     }
 
+    public void SetToolBarInventory()
+    {
+        Inventory inventory = GameManager.Instance.player.playerSaveData.inventory;
+
+        for (int i = 0; i < slotsUIs.Count; i++)
+        {
+            if (!inventory.slots[i].IsEmpty())
+                slotsUIs[i].SetItem(inventory.slots[i]);
+            else
+                slotsUIs[i].SetEmpty();
+        }
+    }
+
     public void UseItem()
     {
         GameManager gameManager = GameManager.Instance;
@@ -63,6 +98,7 @@ public class ToolBar_UI : MonoBehaviour
         if (gameManager.player.playerSaveData.inventory.slots[selectedSlotIdx].IsEmpty())
             gameManager.player.SetHoldItem();
         gameManager.uiManager.inventory_UI.Refresh();
+
         CheckSlot();
     }
 }

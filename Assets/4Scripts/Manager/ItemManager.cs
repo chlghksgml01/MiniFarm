@@ -8,7 +8,7 @@ public class ItemManager : MonoBehaviour
 {
     public Item[] items;
     public Dictionary<string, Item> itemDict = new Dictionary<string, Item>();
-    private DropItemDatas dropItemData = new DropItemDatas();
+    public DropItemDatas dropItemData { get; set; } = new DropItemDatas();
 
     private void Awake()
     {
@@ -19,12 +19,18 @@ public class ItemManager : MonoBehaviour
 
     private void Start()
     {
+        if (SceneLoadManager.Instance == null)
+        {
+            Debug.Log("ItemManager - SceneLoadManager ¾øÀ½");
+            return;
+        }
         SceneLoadManager.Instance.SceneLoad += CreateItem;
     }
 
     private void OnDisable()
     {
-        SceneLoadManager.Instance.SceneLoad -= CreateItem;
+        if (SceneLoadManager.Instance != null)
+            SceneLoadManager.Instance.SceneLoad -= CreateItem;
     }
 
     void AddItem(Item item)
@@ -123,6 +129,4 @@ public class ItemManager : MonoBehaviour
             item.GetComponent<SpriteRenderer>().sprite = dropItemData.itemData.icon;
         }
     }
-
-    public DropItemDatas GetDropItemData() => dropItemData;
 }

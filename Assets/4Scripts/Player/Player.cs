@@ -15,7 +15,7 @@ public class Player : Entity
     [SerializeField] public int maxStamina;
     [SerializeField] public int stamina;
     [SerializeField] public int workStaminaCost = 5;
-    [SerializeField] public PlayerSaveData playerSaveData;
+    [SerializeField] public PlayerSaveData playerSaveData = new PlayerSaveData();
 
     [Header("Item")]
     [SerializeField] public HoldItem holdItem;

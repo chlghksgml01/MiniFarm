@@ -12,7 +12,7 @@ public class SceneLoadManager : MonoBehaviour
 
     public event Action SceneLoad = null;
 
-    public static SceneLoadManager instance;
+    private static SceneLoadManager instance;
 
     public static SceneLoadManager Instance
     {
@@ -23,7 +23,7 @@ public class SceneLoadManager : MonoBehaviour
                 instance = FindFirstObjectByType<SceneLoadManager>();
                 if (instance == null)
                 {
-                    Debug.LogError("¾À¿¡ SceneLoadManager ¾øÀ½");
+                    Debug.Log("¾À¿¡ SceneLoadManager ¾øÀ½");
                 }
             }
             return instance;

@@ -11,9 +11,7 @@ public class DataManager : MonoBehaviour
 
     public string saveFileName = "default";
 
-    private PlayerSaveData playerSaveData = new PlayerSaveData();
     private CropSaveData cropSaveData = new CropSaveData();
-    private DropItemDatas dropItemSaveData = new DropItemDatas();
 
     public static DataManager instance;
 
@@ -62,6 +60,7 @@ public class DataManager : MonoBehaviour
         SavePlayer();
         SaveCrop();
         SaveDropItem();
+        Debug.Log("Save Data");
     }
 
     private void SavePlayer()
@@ -72,8 +71,7 @@ public class DataManager : MonoBehaviour
             return;
         }
 
-        string json = string.Empty;
-        json = JsonUtility.ToJson(playerSaveData);
+        string json = JsonUtility.ToJson(GameManager.Instance.player.playerSaveData);
         File.WriteAllText(Path.Combine(path, playerSaveFileName), json);
     }
 
@@ -89,9 +87,7 @@ public class DataManager : MonoBehaviour
 
     private void SaveDropItem()
     {
-        dropItemSaveData = GameManager.Instance.itemManager.GetDropItemData();
-
-        string json = JsonUtility.ToJson(dropItemSaveData);
+        string json = JsonUtility.ToJson(GameManager.Instance.itemManager.dropItemData);
         File.WriteAllText(Path.Combine(path, dropItemSaveFileName), json);
     }
 
@@ -100,6 +96,7 @@ public class DataManager : MonoBehaviour
         LoadPlayer();
         LoadCrop();
         LoadDropItem();
+        Debug.Log("Load Data");
     }
 
     private void LoadPlayer()
@@ -109,7 +106,7 @@ public class DataManager : MonoBehaviour
         if (File.Exists(fullPath))
         {
             string data = File.ReadAllText(fullPath);
-            playerSaveData = JsonUtility.FromJson<PlayerSaveData>(data);
+            GameManager.Instance.player.playerSaveData = JsonUtility.FromJson<PlayerSaveData>(data);
         }
     }
 
@@ -132,7 +129,7 @@ public class DataManager : MonoBehaviour
         if (File.Exists(fullPath))
         {
             string data = File.ReadAllText(fullPath);
-            dropItemSaveData = JsonUtility.FromJson<DropItemDatas>(data);
+            GameManager.Instance.itemManager.dropItemData = JsonUtility.FromJson<DropItemDatas>(data);
             GameManager.Instance.itemManager.CreateItem();
         }
     }

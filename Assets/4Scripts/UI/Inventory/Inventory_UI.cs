@@ -39,6 +39,12 @@ public class Inventory_UI : MonoBehaviour
         }
         selectedItem.gameObject.SetActive(false);
         inventory = GameManager.Instance.player.playerSaveData.inventory;
+
+        if (SceneLoadManager.Instance == null)
+        {
+            Debug.Log("Inventory_UI - SceneLoadManager 없음");
+            return;
+        }
     }
 
     void Update()
@@ -79,10 +85,7 @@ public class Inventory_UI : MonoBehaviour
 
     public void Refresh()
     {
-        if (inventory == null)
-        {
-            inventory = GameManager.Instance.player.playerSaveData.inventory;
-        }
+        inventory = GameManager.Instance.player.playerSaveData.inventory;
 
         if (slotsUIs.Count != inventory.slots.Count)
         {
@@ -93,20 +96,12 @@ public class Inventory_UI : MonoBehaviour
         for (int i = 0; i < slotsUIs.Count; i++)
         {
             if (!inventory.slots[i].IsEmpty())
-            {
                 slotsUIs[i].SetItem(inventory.slots[i]);
-
-                if (i < 9)
-                    toolBar_UI.slotsUIs[i].SetItem(inventory.slots[i]);
-            }
             else
-            {
                 slotsUIs[i].SetEmpty();
-
-                if (i < 9)
-                    toolBar_UI.slotsUIs[i].SetEmpty();
-            }
         }
+
+        toolBar_UI.SetToolBarInventory();
     }
 
     // 버튼 함수
