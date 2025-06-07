@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Item : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class Item : MonoBehaviour
 
     public TextMeshProUGUI textUI { get; set; }
     private bool isPlayerDrop;
+    public bool isPickable = false;
 
     public ItemData itemData
     {
@@ -27,30 +29,27 @@ public class Item : MonoBehaviour
         set { _itemData = value; }
     }
     #region DropItemBounce
-    bool isBouncing = false;
-    Vector3 bounceBasePos;
-    float bounceY = 0f;
-    float bounceVelocityX = 0.5f;
-    float bounceVelocityY = 3f;
-    float gravity = 9f;
-    float bounceDamping = 0.7f;
+    private bool isBouncing = false;
+    private Vector3 bounceBasePos;
+    private float bounceY = 0f;
+    private float bounceVelocityX = 0.5f;
+    private float bounceVelocityY = 3f;
+    private float gravity = 9f;
+    private float bounceDamping = 0.7f;
     #endregion
 
     public Vector3 BounceBasePos { get { return bounceBasePos; } set { bounceBasePos = value; } }
 
-    void Awake()
+    private void Awake()
     {
         textUI = GetComponentInChildren<TextMeshProUGUI>();
         if (textUI == null)
             Debug.Log("Item - TextMeshProUGUI 없음");
-    }
 
-    private void Start()
-    {
         bounceVelocityX = Random.Range(0.4f, 0.6f);
     }
 
-    void Update()
+    private void Update()
     {
         if (isBouncing)
             BounceItem();
@@ -58,7 +57,7 @@ public class Item : MonoBehaviour
 
     public bool IsEmpty() => itemData.IsEmpty();
 
-    void BounceItem()
+    private void BounceItem()
     {
         // bounceVelocityY : 가속도
         bounceVelocityY -= gravity * Time.deltaTime;
@@ -77,10 +76,12 @@ public class Item : MonoBehaviour
             {
                 bounceVelocityY = 0f;
                 isBouncing = false;
+                isPickable = true;
             }
         }
 
         float dirX = 1f;
+
         if (isPlayerDrop)
             dirX = (transform.position - GameManager.Instance.player.transform.position).normalized.x;
         bounceBasePos.x += dirX * bounceVelocityX * Time.deltaTime;
@@ -109,5 +110,12 @@ public class Item : MonoBehaviour
             textUI.text = count.ToString();
         else
             textUI.text = "";
+    }
+
+    public void SetGiftItem()
+    {
+        bounceVelocityX = Random.Range(-1f, 1f);
+        bounceVelocityY = Random.Range(4f, 5f);
+        isPickable = false;
     }
 }

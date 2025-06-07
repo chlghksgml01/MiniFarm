@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public enum playerDir
@@ -43,7 +42,8 @@ public class Player : Entity
     public ToolType playerToolType { get; set; } = ToolType.None;
     public playerDir playerDir { get; set; } = playerDir.Down;
 
-    bool isDead = false;
+    private bool isDead = false;
+    public bool hasSleptInBed { get; set; } = false;
 
     private void Awake()
     {
@@ -81,14 +81,17 @@ public class Player : Entity
     private void SetNewDay()
     {
         hp = maxHp;
-        stamina = maxStamina;
+        if (hasSleptInBed)
+            stamina = maxStamina;
+        else
+            stamina /= 2;
+
+        staminaBar.fillAmount = 1f;
+        SetGague(staminaBar, stamina, maxStamina);
 
         isDead = false;
         stateMachine.ChangeState(idleState);
         moveInput = Vector3.zero;
-
-        healthBar.fillAmount = 1f;
-        staminaBar.fillAmount = 1f;
     }
 
     void Update()

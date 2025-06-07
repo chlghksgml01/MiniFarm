@@ -14,18 +14,37 @@ public class PlayerInteractCollider : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Item"))
-        {
-            Item item = collision.GetComponent<Item>();
-            player.playerSaveData.inventory.AddItem(item);
-            GameManager.Instance.itemManager.RemoveDropItem(item);
-            Destroy(item.gameObject);
-        }
+        GetItem(collision);
 
         if (collision.CompareTag("Enemy"))
         {
             Slime slime = collision.GetComponent<Slime>();
             playerDamage = StartCoroutine(DamagePlayer(slime));
+        }
+
+        if (collision.CompareTag("Gift"))
+        {
+            GameManager.Instance.isGiftGet = true;
+            collision.GetComponent<Gift>().OpenGift();
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        GetItem(collision);
+    }
+
+    private void GetItem(Collider2D collision)
+    {
+        if (collision.CompareTag("Item"))
+        {
+            Item item = collision.GetComponent<Item>();
+            if (!item.isPickable)
+                return;
+
+            player.playerSaveData.inventory.AddItem(item);
+            GameManager.Instance.itemManager.RemoveDropItem(item);
+            Destroy(item.gameObject);
         }
     }
 

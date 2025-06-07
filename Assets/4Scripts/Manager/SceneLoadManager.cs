@@ -79,11 +79,13 @@ public class SceneLoadManager : MonoBehaviour
         }
         else if (sceneName == "House" && isGameStart)
         {
+            GameManager.Instance.CreateGift();
             player.transform.position = new Vector3(3.32f, 1.4f);
             player.LookDown();
         }
         else if (sceneName == "House")
         {
+            GameManager.Instance.CreateGift();
             player.transform.position = new Vector3(0.5f, 0f, 0f);
             player.LookUp();
         }

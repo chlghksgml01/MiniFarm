@@ -50,6 +50,8 @@ public class DayTimeManager : MonoBehaviour
     private void Awake()
     {
         gameTimer = dayStartTime * secondsPerHour;
+        if (hourUIText == null || minuteUIText == null)
+            return;
         hourUIText.text = string.Format("{00:00}", dayStartTime);
         minuteUIText.text = string.Format("{00:00}", minute);
     }
@@ -84,6 +86,7 @@ public class DayTimeManager : MonoBehaviour
             if (gameTimer >= dayEndTime * secondsPerHour && canPassToNextDay)
             {
                 NextDay();
+                GameManager.Instance.player.hasSleptInBed = false;
                 return;
             }
 

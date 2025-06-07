@@ -17,6 +17,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] public Image staminaBar;
     [HideInInspector] public Player player;
     [SerializeField] public GameObject playerPrefab;
+    [Header("Gift")]
+    [SerializeField] private GameObject Gift;
+
+    public bool isGiftGet = false;
 
     public static GameManager Instance
     {
@@ -61,5 +65,11 @@ public class GameManager : MonoBehaviour
         tileManager = gameObject.GetComponent<TileManager>();
         cropManager = gameObject.GetComponent<CropManager>();
         slimeSpawnController = gameObject.GetComponent<SlimeSpawnController>();
+    }
+
+    public void CreateGift()
+    {
+        if (!isGiftGet)
+            Instantiate(Gift);
     }
 }

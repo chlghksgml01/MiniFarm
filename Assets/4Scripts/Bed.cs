@@ -10,6 +10,7 @@ public class Bed : MonoBehaviour
             && Mathf.Abs(transform.position.x - collision.transform.position.x) <= 0.1f)
         {
             isPassDay = true;
+            GameManager.Instance.player.hasSleptInBed = true;
             GameManager.Instance.dayTimeManager.NextDay();
         }
     }

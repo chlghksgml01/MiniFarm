@@ -102,6 +102,7 @@ public class DataManager : MonoBehaviour
 
         if (File.Exists(fullPath))
         {
+            GameManager.Instance.isGiftGet = true;
             string data = File.ReadAllText(fullPath);
             GameManager.Instance.player.playerSaveData = JsonUtility.FromJson<PlayerSaveData>(data);
         }

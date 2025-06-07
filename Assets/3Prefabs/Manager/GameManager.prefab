@@ -60,6 +60,7 @@ MonoBehaviour:
   staminaBar: {fileID: 0}
   player: {fileID: 0}
   playerPrefab: {fileID: 7613151609588484325, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
+  Gift: {fileID: 8437575237915871898, guid: 43a586a9eef275844a29c5c400b6edac, type: 3}
 --- !u!114 &38490482852750421
 MonoBehaviour:
   m_ObjectHideFlags: 0

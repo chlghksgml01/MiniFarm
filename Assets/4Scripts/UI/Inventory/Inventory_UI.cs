@@ -51,7 +51,8 @@ public class Inventory_UI : MonoBehaviour
 
     private void OnEnable()
     {
-        GoldUI.text = GameManager.Instance.player.playerSaveData.gold.ToString();
+        if (GameManager.Instance.player != null)
+            GoldUI.text = GameManager.Instance.player.playerSaveData.gold.ToString();
     }
 
     void Update()

@@ -46,8 +46,8 @@ public class PlayerState
         }
 
         // 작물 수확
-        else if ((Input.GetMouseButtonDown(1) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
-            && GameManager.Instance.cropManager.CanHarvest()))
+        else if (Input.GetMouseButtonDown(1) && !GameManager.Instance.uiManager.inventoryPanel.activeSelf
+            && GameManager.Instance.cropManager.CanHarvest())
         {
             if (player.CanHarvest())
             {
