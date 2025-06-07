@@ -2,14 +2,11 @@ using UnityEngine;
 
 public class Bed : MonoBehaviour
 {
-    private bool canPassDay = true;
+    private bool canPassDay = false;
 
     private void Awake()
     {
-        Debug.Log(transform.GetInstanceID());
-        if (SceneLoadManager.Instance.prevSceneName == "Title" || GameManager.Instance.player.isDead)
-            canPassDay = false;
-        else if (SceneLoadManager.Instance.prevSceneName == "Farm")
+        if (SceneLoadManager.Instance.prevSceneName == "Farm")
             canPassDay = true;
     }
 
