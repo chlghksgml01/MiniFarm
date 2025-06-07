@@ -14,6 +14,11 @@ public class UI_Manager : MonoBehaviour
         inventoryPanel = inventory_UI.gameObject;
         toolBarPanel = toolBar_UI.gameObject;
 
+        InitializeUI();
+    }
+
+    public void InitializeUI()
+    {
         inventory_UI.Refresh();
         inventoryPanel.SetActive(false);
         toolBarPanel.SetActive(true);

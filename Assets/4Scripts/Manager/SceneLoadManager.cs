@@ -56,6 +56,7 @@ public class SceneLoadManager : MonoBehaviour
     {
         isSceneLoading = true;
         prevSceneName = SceneManager.GetActiveScene().name;
+        SetBGM(sceneName);
 
         if (GameManager.Instance != null)
             GameManager.Instance.dayTimeManager.SetTimeStop(true);
@@ -81,16 +82,27 @@ public class SceneLoadManager : MonoBehaviour
 
         SceneLoad?.Invoke();
 
-        SetPlayerSceneLoad(sceneName, isNextDay);
+        SetSceneLoadData(sceneName, isNextDay);
 
         StartCoroutine(FadeInOut(1f, 0f, fadeInOutDuration));
 
         isSceneLoading = false;
         GameManager.Instance.dayTimeManager.SetTimeStop(false);
+        GameManager.Instance.uiManager.InitializeUI();
         sceneLoadCoroutine = null;
     }
 
-    private void SetPlayerSceneLoad(string sceneName, bool isNextDay)
+    private void SetBGM(string sceneName)
+    {
+        if (prevSceneName == "Title")
+            SoundManager.Instance.bgmManager.ChangeBGM(BGMNAME.InGame);
+        else if (sceneName == "Title")
+            SoundManager.Instance.bgmManager.ChangeBGM(BGMNAME.Title);
+        else
+            SoundManager.Instance.bgmManager.ChangeBGM(BGMNAME.None);
+    }
+
+    private void SetSceneLoadData(string sceneName, bool isNextDay)
     {
         Player player = GameManager.Instance.player;
 
@@ -120,7 +132,6 @@ public class SceneLoadManager : MonoBehaviour
             player.transform.position = new Vector3(3.32f, 1.4f);
             player.LookDown();
         }
-
     }
 
     private IEnumerator FadeInOut(float startAlpha, float endAlpha, float fadeInOutDuration)

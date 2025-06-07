@@ -621,6 +621,8 @@ MonoBehaviour:
   SwordColliderUp: {fileID: 3673515866810200069}
   healthBar: {fileID: 0}
   staminaBar: {fileID: 0}
+  houseFootsteps: {fileID: 8300000, guid: d17c0cc3cbadb6145b5320f4e9237a33, type: 3}
+  farmFootsteps: {fileID: 8300000, guid: 7266013f41540854d8ec2ebbb868cb34, type: 3}
   moveInput: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
   isDead: 0

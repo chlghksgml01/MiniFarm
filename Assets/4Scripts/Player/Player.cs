@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public enum playerDir
@@ -30,6 +31,10 @@ public class Player : Entity
     [Header("UI")]
     [SerializeField] public Image healthBar;
     [SerializeField] public Image staminaBar;
+
+    [Header("SFX")]
+    [SerializeField] public AudioClip houseFootsteps;
+    [SerializeField] public AudioClip farmFootsteps;
 
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Animator anim;
@@ -106,6 +111,16 @@ public class Player : Entity
 
         // 단위벡터-> 대각선으로 가도 같은 속도로 이동하게끔
         moveInput = moveInput.normalized;
+
+        if (moveInput.magnitude != 0 && !SoundManager.Instance.sfxManager.isPlaying())
+        {
+            if (SceneManager.GetActiveScene().name == "Farm")
+                SoundManager.Instance.sfxManager.Play(farmFootsteps);
+            else if (SceneManager.GetActiveScene().name == "House")
+                SoundManager.Instance.sfxManager.Play(houseFootsteps);
+        }
+        else
+            SoundManager.Instance.sfxManager.Stop();
 
         if (stateMachine.currentState != workingState && stateMachine.currentState != pickUpState)
         {

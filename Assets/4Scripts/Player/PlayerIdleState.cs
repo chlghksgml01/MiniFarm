@@ -14,7 +14,7 @@ public class PlayerIdleState : PlayerState
 
     public override void UpdateState()
     {
-        if (player.moveInput.magnitude > 0)
+        if (player.moveInput.magnitude != 0)
         {
             stateMachine.ChangeState(player.moveState);
         }

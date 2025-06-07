@@ -35,5 +35,6 @@ public class InGameCanvas : MonoBehaviour
     public void ExitButton()
     {
         SceneLoadManager.Instance.StartLoadScene("Title", false, false);
+        Time.timeScale = 1f;
     }
 }
