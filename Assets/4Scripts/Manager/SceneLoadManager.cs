@@ -49,8 +49,8 @@ public class SceneLoadManager : MonoBehaviour
 
     public IEnumerator LoadScene(string sceneName, bool isGameStart)
     {
-        if (!isGameStart)
-            GameManager.Instance.dayTimeManager.canPassToNextDay = false;
+        if (GameManager.Instance != null)
+            GameManager.Instance.dayTimeManager.SetTimeStop(true);
 
         StartCoroutine(FadeInOut(0f, 1f, fadeInOutDuration));
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
@@ -92,7 +92,7 @@ public class SceneLoadManager : MonoBehaviour
 
         StartCoroutine(FadeInOut(1f, 0f, fadeInOutDuration));
 
-        GameManager.Instance.dayTimeManager.canPassToNextDay = true;
+        GameManager.Instance.dayTimeManager.SetTimeStop(false);
     }
 
     private IEnumerator FadeInOut(float startAlpha, float endAlpha, float fadeInOutDuration)

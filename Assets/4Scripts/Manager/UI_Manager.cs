@@ -71,12 +71,14 @@ public class UI_Manager : MonoBehaviour
     {
         if (!store.activeSelf)
         {
+            GameManager.Instance.dayTimeManager.SetTimeStop(true);
             store.SetActive(true);
             inventoryPanel.SetActive(false);
             toolBarPanel.SetActive(false);
         }
         else
         {
+            GameManager.Instance.dayTimeManager.SetTimeStop(false);
             store.SetActive(false);
             toolBarPanel.SetActive(true);
         }

@@ -3,24 +3,25 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class DayTimeManager : MonoBehaviour
 {
     [Header("Time")]
-    [SerializeField] int dayStartTime = 6;
-    [SerializeField] int dayEndTime = 26;
-    [SerializeField] int twilightStartTime = 19;
-    [SerializeField] int darkestTime = 22;
-    [SerializeField] float timeScale = 60f;
-    [SerializeField] float timeInterval = 10f;
+    [SerializeField] private int dayStartTime = 6;
+    [SerializeField] private int dayEndTime = 26;
+    [SerializeField] private int twilightStartTime = 19;
+    [SerializeField] private int darkestTime = 22;
+    [SerializeField] private float timeScale = 60f;
+    [SerializeField] private float timeInterval = 10f;
 
     [Header("TimeUI")]
     [SerializeField] public TextMeshProUGUI hourUIText;
     [SerializeField] public TextMeshProUGUI minuteUIText;
 
     [Header("NewDayUI")]
-    [SerializeField] float fadeWaitTime = 0.5f;
-    [SerializeField] float fadeInOutDuration = 0.5f;
+    [SerializeField] private float fadeWaitTime = 0.5f;
+    [SerializeField] private float fadeInOutDuration = 0.5f;
     [SerializeField] public NewDayFadeInOut newDayFadeInOutImage;
 
     [Header("Light")]
@@ -45,7 +46,7 @@ public class DayTimeManager : MonoBehaviour
     public event Action SpawnSlime = null;
     public event Action OnDayPassed = null;
 
-    public bool canPassToNextDay { get; set; } = true;
+    public bool timeStop = false;
 
     private void Awake()
     {
@@ -58,7 +59,14 @@ public class DayTimeManager : MonoBehaviour
 
     private void Update()
     {
-        UpdateTime();
+        if (timeStop)
+        {
+            int a = 0;
+        }
+        if (!timeStop)
+        {
+            UpdateTime();
+        }
     }
 
     private void UpdateTime()
@@ -83,7 +91,7 @@ public class DayTimeManager : MonoBehaviour
                 slimeSpawn = null;
             }
 
-            if (gameTimer >= dayEndTime * secondsPerHour && canPassToNextDay)
+            if (gameTimer >= dayEndTime * secondsPerHour)
             {
                 NextDay();
                 GameManager.Instance.player.hasSleptInBed = false;
@@ -138,5 +146,21 @@ public class DayTimeManager : MonoBehaviour
             float waitTimeInRealSeconds = spawnInterval * secondsPerHour / timeScale;
             yield return new WaitForSeconds(waitTimeInRealSeconds);
         }
+    }
+
+    public void SetTimeStop(bool stop)
+    {
+        timeStop = stop;
+        Image image = hourUIText.GetComponentInParent<Image>();
+        if (image == null)
+        {
+            Debug.Log("이미지 없음");
+            return;
+        }
+
+        if (stop)
+            image.color = new Color(0.8f, 0.8f, 0.8f);
+        else
+            image.color = Color.white;
     }
 }
