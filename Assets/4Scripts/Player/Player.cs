@@ -96,7 +96,7 @@ public class Player : Entity
 
     void Update()
     {
-        if (isDead || GameManager.Instance.uiManager.IsUIOpen())
+        if (isDead || GameManager.Instance.uiManager.IsUIOpen() || Time.timeScale == 0)
             return;
 
         moveInput.x = Input.GetAxisRaw("Horizontal");
@@ -306,6 +306,20 @@ public class Player : Entity
     {
         playerSaveData.gold += sellItemData.sellPrice * sellCount;
         playerSaveData.inventory.RemoveItem(sellItemData, sellCount);
+    }
+
+    public void SetPlayerPos()
+    {
+        if (hasSleptInBed)
+        {
+            transform.position = new Vector3(3.32f, 1.4f);
+            LookDown();
+        }
+        else
+        {
+            transform.position = new Vector3(3.32f, 1.4f);
+            LookUp();
+        }
     }
 
     public void LookDown()

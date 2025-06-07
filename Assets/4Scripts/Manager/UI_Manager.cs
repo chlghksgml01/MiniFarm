@@ -7,6 +7,7 @@ public class UI_Manager : MonoBehaviour
     [HideInInspector] public GameObject inventoryPanel;
     [HideInInspector] public GameObject toolBarPanel;
     [SerializeField] public GameObject store;
+    [SerializeField] public GameObject option;
 
     private void Start()
     {
@@ -17,6 +18,7 @@ public class UI_Manager : MonoBehaviour
         inventoryPanel.SetActive(false);
         toolBarPanel.SetActive(true);
         store.SetActive(false);
+        option.SetActive(false);
     }
 
     private void Update()
@@ -32,6 +34,8 @@ public class UI_Manager : MonoBehaviour
                 ToggleStore();
             if (inventoryPanel.activeSelf)
                 ToggleInventoryUI();
+            if (!inventoryPanel.activeSelf && !store.activeSelf)
+                ToggleOption();
         }
     }
 
@@ -81,6 +85,20 @@ public class UI_Manager : MonoBehaviour
             GameManager.Instance.dayTimeManager.SetTimeStop(false);
             store.SetActive(false);
             toolBarPanel.SetActive(true);
+        }
+    }
+
+    private void ToggleOption()
+    {
+        if (option.activeSelf)
+        {
+            option.SetActive(false);
+            Time.timeScale = 1f;
+        }
+        else
+        {
+            option.SetActive(true);
+            Time.timeScale = 0f;
         }
     }
 

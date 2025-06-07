@@ -31,14 +31,14 @@ public class TitleUI : MonoBehaviour
     public void StartSaveButton(string saveFolderName)
     {
         DataManager.instance.saveFolderName = saveFolderName;
-        SceneLoadManager.Instance.StartLoadScene("House", true);
+        SceneLoadManager.Instance.StartLoadScene("House", true, false);
     }
 
     public void DeleteButton(string saveFolderName)
     {
         DataManager.instance.DeleteSaveFile(saveFolderName);
 
-        int index = (int)saveFolderName[saveFolderName.Length - 1] - 1;
+        int index = saveFolderName[saveFolderName.Length - 1] - '0' - 1;
         SaveImage[index].SetActive(false);
         NewSaveImage[index].SetActive(true);
     }

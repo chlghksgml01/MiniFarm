@@ -41,13 +41,13 @@ public class SceneLoadManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    public void StartLoadScene(string sceneName, bool isGameStart)
+    public void StartLoadScene(string sceneName, bool isGameStart, bool isNextDay)
     {
-        StartCoroutine(LoadScene(sceneName, isGameStart));
+        StartCoroutine(LoadScene(sceneName, isGameStart, isNextDay));
         fadeInOutImage.transform.SetAsLastSibling();
     }
 
-    public IEnumerator LoadScene(string sceneName, bool isGameStart)
+    private IEnumerator LoadScene(string sceneName, bool isGameStart, bool isNextDay)
     {
         if (GameManager.Instance != null)
             GameManager.Instance.dayTimeManager.SetTimeStop(true);
@@ -59,6 +59,9 @@ public class SceneLoadManager : MonoBehaviour
 
         while (!asyncOp.isDone)
             yield return null;
+
+        if (isNextDay)
+            StartCoroutine(GameManager.Instance.dayTimeManager.StartNewDay());
 
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
@@ -77,19 +80,11 @@ public class SceneLoadManager : MonoBehaviour
             player.transform.position = Vector3.zero;
             player.LookDown();
         }
-        else if (sceneName == "House" && isGameStart)
-        {
-            GameManager.Instance.CreateGift();
-            player.transform.position = new Vector3(3.32f, 1.4f);
-            player.LookDown();
-        }
         else if (sceneName == "House")
         {
             GameManager.Instance.CreateGift();
-            player.transform.position = new Vector3(0.5f, 0f, 0f);
-            player.LookUp();
+            player.SetPlayerPos();
         }
-
         StartCoroutine(FadeInOut(1f, 0f, fadeInOutDuration));
 
         GameManager.Instance.dayTimeManager.SetTimeStop(false);

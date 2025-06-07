@@ -13937,18 +13937,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1982757038795392153, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1982757038795392153, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1982757038795392153, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2123962943740387135, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -14471,7 +14459,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5418855885403141735, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000006914139
+      value: -0.00020521446
       objectReference: {fileID: 0}
     - target: {fileID: 5661650098608138701, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
       propertyPath: m_AnchorMax.y
@@ -15222,7 +15210,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4414544203045641479, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
@@ -15587,17 +15576,6 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
---- !u!114 &1207501524 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6382893296357274744, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
-  m_PrefabInstance: {fileID: 869162312}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1f426660c1c7244871d443048fca6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1207501525 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8403019530874707642, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
@@ -16024,6 +16002,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1673449196 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4863919739909936663, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
+  m_PrefabInstance: {fileID: 869162312}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1697634673
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16036,6 +16019,10 @@ PrefabInstance:
       propertyPath: store
       value: 
       objectReference: {fileID: 869162315}
+    - target: {fileID: 1020951914719666859, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
+      propertyPath: option
+      value: 
+      objectReference: {fileID: 1673449196}
     - target: {fileID: 1020951914719666859, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
       propertyPath: toolBar_UI
       value: 
@@ -16059,7 +16046,7 @@ PrefabInstance:
     - target: {fileID: 3793216011849168464, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
       propertyPath: newDayFadeInOutImage
       value: 
-      objectReference: {fileID: 1207501524}
+      objectReference: {fileID: 0}
     - target: {fileID: 4920566309791694972, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
       propertyPath: m_Name
       value: GameManager

@@ -31,4 +31,9 @@ public class InGameCanvas : MonoBehaviour
 
         DontDestroyOnLoad(this);
     }
+
+    public void ExitButton()
+    {
+        SceneLoadManager.Instance.StartLoadScene("Title", false, false);
+    }
 }

@@ -8,7 +8,7 @@ public class SceneLoader : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            SceneLoadManager.Instance.StartLoadScene(sceneName, false);
+            SceneLoadManager.Instance.StartLoadScene(sceneName, false, false);
         }
     }
 }

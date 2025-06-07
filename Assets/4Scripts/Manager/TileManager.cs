@@ -140,6 +140,9 @@ public class TileManager : MonoBehaviour
 
     private void Update()
     {
+        if (farmSelectedTileMap == null)
+            return;
+
         UpdateMouseDirection();
         DrawSelectedTile();
     }

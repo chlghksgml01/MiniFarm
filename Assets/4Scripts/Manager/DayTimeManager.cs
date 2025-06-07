@@ -19,11 +19,6 @@ public class DayTimeManager : MonoBehaviour
     [SerializeField] public TextMeshProUGUI hourUIText;
     [SerializeField] public TextMeshProUGUI minuteUIText;
 
-    [Header("NewDayUI")]
-    [SerializeField] private float fadeWaitTime = 0.5f;
-    [SerializeField] private float fadeInOutDuration = 0.5f;
-    [SerializeField] public NewDayFadeInOut newDayFadeInOutImage;
-
     [Header("Light")]
     [SerializeField] public Light2D globalLight;
     [SerializeField] private Color nightLightColor;
@@ -59,14 +54,8 @@ public class DayTimeManager : MonoBehaviour
 
     private void Update()
     {
-        if (timeStop)
-        {
-            int a = 0;
-        }
         if (!timeStop)
-        {
             UpdateTime();
-        }
     }
 
     private void UpdateTime()
@@ -110,14 +99,11 @@ public class DayTimeManager : MonoBehaviour
 
     public void NextDay()
     {
-        newDayFadeInOutImage.SetNewDay(fadeInOutDuration, fadeWaitTime);
-        StartCoroutine(StartNewDay());
+        SceneLoadManager.Instance.StartLoadScene("House", false, true);
     }
 
-    private IEnumerator StartNewDay()
+    public IEnumerator StartNewDay()
     {
-        yield return new WaitForSecondsRealtime(fadeInOutDuration);
-
         OnDayPassed?.Invoke();
         yield return null;
         DataManager.instance.SaveData();

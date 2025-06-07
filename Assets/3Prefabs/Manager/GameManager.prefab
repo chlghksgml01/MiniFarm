@@ -106,6 +106,7 @@ MonoBehaviour:
   inventoryPanel: {fileID: 0}
   toolBarPanel: {fileID: 0}
   store: {fileID: 0}
+  option: {fileID: 0}
 --- !u!114 &3793216011849168464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,9 +123,8 @@ MonoBehaviour:
   dayEndTime: 26
   twilightStartTime: 19
   darkestTime: 22
-  timeScale: 600
+  timeScale: 6000
   timeInterval: 1
-  stopTimeColor: {r: 0.7058824, g: 0.7058824, b: 0.7058824, a: 0}
   hourUIText: {fileID: 0}
   minuteUIText: {fileID: 0}
   fadeWaitTime: 0.5
@@ -136,7 +136,7 @@ MonoBehaviour:
   slimeSpawnTime: 19
   spawnInterval: 1
   spawnController: {fileID: 5353644126994676888}
-  isSlimeSpawn: 0
+  isSlimeSpawn: 1
   timeStop: 0
 --- !u!114 &6438177313553398301
 MonoBehaviour:
