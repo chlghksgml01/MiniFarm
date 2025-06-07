@@ -4,8 +4,7 @@ using UnityEngine;
 public class Entity : MonoBehaviour
 {
     [Header("Info")]
-    [SerializeField] public int maxHp;
-    [SerializeField] public int hp;
+
     [SerializeField] public float speed;
     [SerializeField] public int damage;
 
@@ -19,7 +18,6 @@ public class Entity : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        maxHp = hp;
         sprite = GetComponentInChildren<SpriteRenderer>();
         if (sprite == null)
             sprite = GetComponent<SpriteRenderer>();

@@ -10,8 +10,10 @@ public class SceneLoadManager : MonoBehaviour
     [SerializeField] private Image fadeInOutImage;
 
     public string prevSceneName = string.Empty;
-
+    public bool isSceneLoading = false;
     public event Action SceneLoad = null;
+
+    private Coroutine sceneLoadCoroutine = null;
 
     private static SceneLoadManager instance;
 
@@ -45,12 +47,14 @@ public class SceneLoadManager : MonoBehaviour
 
     public void StartLoadScene(string sceneName, bool isGameStart, bool isNextDay)
     {
-        StartCoroutine(LoadScene(sceneName, isGameStart, isNextDay));
+        if (sceneLoadCoroutine == null)
+            sceneLoadCoroutine = StartCoroutine(LoadScene(sceneName, isGameStart, isNextDay));
         fadeInOutImage.transform.SetAsLastSibling();
     }
 
     private IEnumerator LoadScene(string sceneName, bool isGameStart, bool isNextDay)
     {
+        isSceneLoading = true;
         prevSceneName = SceneManager.GetActiveScene().name;
 
         if (GameManager.Instance != null)
@@ -70,32 +74,53 @@ public class SceneLoadManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
         if (isGameStart)
+        {
             DataManager.instance.LoadData();
+            GameManager.Instance.player.InitializePlayerData();
+        }
 
         SceneLoad?.Invoke();
 
+        SetPlayerSceneLoad(sceneName, isNextDay);
+
+        StartCoroutine(FadeInOut(1f, 0f, fadeInOutDuration));
+
+        isSceneLoading = false;
+        GameManager.Instance.dayTimeManager.SetTimeStop(false);
+        sceneLoadCoroutine = null;
+    }
+
+    private void SetPlayerSceneLoad(string sceneName, bool isNextDay)
+    {
         Player player = GameManager.Instance.player;
-        if (sceneName == "Farm")
+
+        // 다음날 -> 침대에서 시작
+        if (isNextDay)
+        {
+            player.transform.position = new Vector3(3.32f, 1.4f);
+            player.LookDown();
+        }
+        // 집 -> 농장 씬 전환
+        else if (sceneName == "Farm" && prevSceneName == "House")
         {
             player.transform.position = Vector3.zero;
             player.LookDown();
         }
+        // 농장 -> 집 씬 전환
+        else if (sceneName == "House" && prevSceneName == "Farm")
+        {
+            GameManager.Instance.CreateGift();
+            player.transform.position = new Vector3(0.5f, 0f);
+            player.LookUp();
+        }
+        // 이전 씬이 Title, 집이거나
         else if (sceneName == "House" && (prevSceneName == "Title" || prevSceneName == "House"))
         {
             GameManager.Instance.CreateGift();
             player.transform.position = new Vector3(3.32f, 1.4f);
             player.LookDown();
         }
-        else if (sceneName == "House" && prevSceneName == "Farm")
-        {
-            GameManager.Instance.CreateGift();
-            transform.position = new Vector3(0.5f, 0f);
-            player.LookUp();
-        }
 
-        StartCoroutine(FadeInOut(1f, 0f, fadeInOutDuration));
-
-        GameManager.Instance.dayTimeManager.SetTimeStop(false);
     }
 
     private IEnumerator FadeInOut(float startAlpha, float endAlpha, float fadeInOutDuration)

@@ -6,10 +6,11 @@ public class Bed : MonoBehaviour
 
     private void Awake()
     {
-        if (SceneLoadManager.Instance.prevSceneName == "Farm")
-            canPassDay = true;
-        else if (SceneLoadManager.Instance.prevSceneName == "Title" || SceneLoadManager.Instance.prevSceneName == "House")
+        Debug.Log(transform.GetInstanceID());
+        if (SceneLoadManager.Instance.prevSceneName == "Title" || GameManager.Instance.player.isDead)
             canPassDay = false;
+        else if (SceneLoadManager.Instance.prevSceneName == "Farm")
+            canPassDay = true;
     }
 
     private void OnTriggerStay2D(Collider2D collision)

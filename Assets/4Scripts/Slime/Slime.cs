@@ -12,6 +12,8 @@ public enum SlimeState
 public class Slime : Entity
 {
     [Header("Info")]
+    [SerializeField] public int maxHp;
+    [SerializeField] public int hp;
     [SerializeField] public float angrySpeed = 1.5f;
     [SerializeField] private float patrolRadius = 2f;
     [SerializeField] private Item[] dropItems;
@@ -38,6 +40,7 @@ public class Slime : Entity
     private void Awake()
     {
         knockbackTimer = knockbackTime;
+        maxHp = hp;
 
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
@@ -74,11 +77,11 @@ public class Slime : Entity
         switch (slimeState)
         {
             case SlimeState.Patrol:
-                Patrol();
-                break;
+            Patrol();
+            break;
             case SlimeState.Angry:
-                Angry();
-                break;
+            Angry();
+            break;
         }
     }
 

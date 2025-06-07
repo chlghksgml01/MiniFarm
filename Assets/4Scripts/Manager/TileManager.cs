@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
@@ -293,43 +294,14 @@ public class TileManager : MonoBehaviour
     {
         foreach (TileSaveData tileSaveData in tileSaveDatas.tileSaveDatas)
         {
-            tileDict.Add(tileSaveData.tilePos, tileSaveData.tileData);
+            if (!tileDict.ContainsKey(tileSaveData.tilePos))
+                tileDict.Add(tileSaveData.tilePos, tileSaveData.tileData);
+            else
+                tileDict[tileSaveData.tilePos] = tileSaveData.tileData;
             if (tileSaveData.cropSaveData != null && tileSaveData.tileData.tileState == TileState.Planted)
             {
                 GameManager.Instance.cropManager.LoadCropData(tileSaveData.tilePos, tileSaveData.cropSaveData);
             }
         }
     }
-
-    //public List<TileSaveData> GetTileData()
-    //{
-    //    List<TileSaveData> tileSaveDatas = new List<TileSaveData>();
-    //    foreach (KeyValuePair<Vector3Int, TileData> pair in tileDict)
-    //    {
-    //        if (pair.Value.tileState == TileState.Empty || pair.Value.tileState == TileState.None)
-    //            continue;
-    //        TileSaveData tileSaveData = new TileSaveData();
-
-    //        tileSaveData.tilePos = pair.Key;
-    //        tileSaveData.tileData = pair.Value;
-
-    //        if (pair.Value.tileState == TileState.Planted)
-    //            GameManager.Instance.cropManager.SaveCropData(tileSaveData.cropSaveData, pair.Key);
-
-    //        tileSaveDatas.Add(tileSaveData);
-    //    }
-    //    return tileSaveDatas;
-    //}
-
-    //public void LoadTileData(List<TileSaveData> tileSaveDatas)
-    //{
-    //    foreach (TileSaveData tileSaveData in tileSaveDatas)
-    //    {
-    //        tileDict.Add(tileSaveData.tilePos, tileSaveData.tileData);
-    //        if (tileSaveData.cropSaveData != null && tileSaveData.tileData.tileState == TileState.Planted)
-    //        {
-    //            GameManager.Instance.cropManager.LoadCropData(tileSaveData.tilePos, tileSaveData.cropSaveData);
-    //        }
-    //    }
-    //}
 }

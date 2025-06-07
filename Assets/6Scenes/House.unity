@@ -15217,7 +15217,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
 --- !u!114 &869162313 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4342982937505014258, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
+  m_CorrespondingSourceObject: {fileID: 9217188352868800852, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
   m_PrefabInstance: {fileID: 869162312}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -15228,7 +15228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
 --- !u!114 &869162314 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 601839473292552862, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
+  m_CorrespondingSourceObject: {fileID: 272266168577918098, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
   m_PrefabInstance: {fileID: 869162312}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -15273,7 +15273,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1004871635}
-  - component: {fileID: 1004871636}
   m_Layer: 12
   m_Name: Bed
   m_TagString: Untagged
@@ -15301,19 +15300,6 @@ Transform:
   - {fileID: 1874771254}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1004871636
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1004871634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a7e5c796a9711c4a93a7c83be23ae62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPassDay: 0
 --- !u!1 &1007378489
 GameObject:
   m_ObjectHideFlags: 0
@@ -16256,7 +16242,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a7e5c796a9711c4a93a7c83be23ae62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPassDay: 0
 --- !u!1 &1891153161
 GameObject:
   m_ObjectHideFlags: 0

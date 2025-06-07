@@ -5,6 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerSaveData
 {
+    public int hp = 100;
+    public int stamina = 100;
     public int gold = 500;
     public Inventory inventory;
 }

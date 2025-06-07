@@ -41,8 +41,6 @@ public class DayTimeManager : MonoBehaviour
     public event Action SpawnSlime = null;
     public event Action OnDayPassed = null;
 
-    public bool timeStop = false;
-
     private void Awake()
     {
         gameTimer = dayStartTime * secondsPerHour;
@@ -54,8 +52,9 @@ public class DayTimeManager : MonoBehaviour
 
     private void Update()
     {
-        if (!timeStop)
-            UpdateTime();
+        if (GameManager.Instance.player.isDead)
+            return;
+        UpdateTime();
     }
 
     private void UpdateTime()
@@ -82,8 +81,7 @@ public class DayTimeManager : MonoBehaviour
 
             if (gameTimer >= dayEndTime * secondsPerHour)
             {
-                NextDay();
-                GameManager.Instance.player.hasSleptInBed = false;
+                GameManager.Instance.player.Die();
                 return;
             }
 
@@ -136,7 +134,6 @@ public class DayTimeManager : MonoBehaviour
 
     public void SetTimeStop(bool stop)
     {
-        timeStop = stop;
         Image image = hourUIText.GetComponentInParent<Image>();
         if (image == null)
         {

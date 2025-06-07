@@ -601,16 +601,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6fd581eddeddc14ea7ed695c373e2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 100
-  hp: 100
   speed: 7
   damage: 5
   flashDuration: 0.1
   hitMat: {fileID: 2100000, guid: a62d3ed68e04d8b489e3078e08b39144, type: 2}
+  maxHp: 100
   maxStamina: 100
-  stamina: 100
   workStaminaCost: 5
   playerSaveData:
+    hp: 100
+    stamina: 100
     gold: 500
     inventory:
       slots: []
@@ -623,6 +623,7 @@ MonoBehaviour:
   staminaBar: {fileID: 0}
   moveInput: {x: 0, y: 0, z: 0}
   anim: {fileID: 0}
+  isDead: 0
 --- !u!50 &3154548862488017935
 Rigidbody2D:
   serializedVersion: 5

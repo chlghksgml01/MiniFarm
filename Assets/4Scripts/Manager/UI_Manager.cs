@@ -32,9 +32,9 @@ public class UI_Manager : MonoBehaviour
         {
             if (store.activeSelf)
                 ToggleStore();
-            if (inventoryPanel.activeSelf)
+            else if (inventoryPanel.activeSelf)
                 ToggleInventoryUI();
-            if (!inventoryPanel.activeSelf && !store.activeSelf)
+            else if (!inventoryPanel.activeSelf && !store.activeSelf)
                 ToggleOption();
         }
     }
@@ -75,6 +75,7 @@ public class UI_Manager : MonoBehaviour
     {
         if (!store.activeSelf)
         {
+            Time.timeScale = 0f;
             GameManager.Instance.dayTimeManager.SetTimeStop(true);
             store.SetActive(true);
             inventoryPanel.SetActive(false);
@@ -82,6 +83,7 @@ public class UI_Manager : MonoBehaviour
         }
         else
         {
+            Time.timeScale = 1f;
             GameManager.Instance.dayTimeManager.SetTimeStop(false);
             store.SetActive(false);
             toolBarPanel.SetActive(true);
@@ -104,6 +106,6 @@ public class UI_Manager : MonoBehaviour
 
     public bool IsUIOpen()
     {
-        return inventoryPanel.activeSelf || store.activeSelf;
+        return inventoryPanel.activeSelf || store.activeSelf || option.activeSelf;
     }
 }

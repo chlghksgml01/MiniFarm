@@ -9,7 +9,6 @@ public class Gift : MonoBehaviour
         for (int i = 0; i < items.Length; i++)
         {
             Item item = Instantiate(items[i]).GetComponent<Item>();
-            Debug.Log(item.GetInstanceID());
             item.SpawnItem(false, true, transform.position, item.itemData, 1);
             item.SetGiftItem();
         }

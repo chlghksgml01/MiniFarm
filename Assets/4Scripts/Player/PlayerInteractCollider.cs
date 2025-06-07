@@ -1,15 +1,21 @@
 
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerInteractCollider : MonoBehaviour
 {
     private Player player;
-    Coroutine playerDamage;
+    Coroutine playerDamageCoroutine;
 
     private void Start()
     {
         player = GetComponentInParent<Player>();
+    }
+
+    private void Update()
+    {
+
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -19,7 +25,7 @@ public class PlayerInteractCollider : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             Slime slime = collision.GetComponent<Slime>();
-            playerDamage = StartCoroutine(DamagePlayer(slime));
+            playerDamageCoroutine = StartCoroutine(DamagePlayer(slime));
         }
 
         if (collision.CompareTag("Gift"))
@@ -50,10 +56,10 @@ public class PlayerInteractCollider : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy") && playerDamage != null)
+        if (collision.CompareTag("Enemy") && playerDamageCoroutine != null)
         {
-            StopCoroutine(playerDamage);
-            playerDamage = null;
+            StopCoroutine(playerDamageCoroutine);
+            playerDamageCoroutine = null;
         }
     }
 
@@ -61,8 +67,11 @@ public class PlayerInteractCollider : MonoBehaviour
     {
         while (true)
         {
-            if (slime.slimeState == SlimeState.Death)
-                yield return null;
+            if (slime.slimeState == SlimeState.Death || player.isDead)
+            {
+                playerDamageCoroutine = null;
+                yield break;
+            }
 
             player.Damage(slime.damage);
             yield return new WaitForSeconds(slime.attackDelay);

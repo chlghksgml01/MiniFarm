@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,8 +12,9 @@ public enum playerDir
 
 public class Player : Entity
 {
+    [SerializeField] public int maxHp;
     [SerializeField] public int maxStamina;
-    [SerializeField] public int stamina;
+
     [SerializeField] public int workStaminaCost = 5;
     [SerializeField] public PlayerSaveData playerSaveData = new PlayerSaveData();
 
@@ -42,8 +44,7 @@ public class Player : Entity
     public ToolType playerToolType { get; set; } = ToolType.None;
     public playerDir playerDir { get; set; } = playerDir.Down;
 
-    private bool isDead = false;
-    public bool hasSleptInBed { get; set; } = false;
+    public bool isDead = false;
 
     private void Awake()
     {
@@ -80,23 +81,24 @@ public class Player : Entity
 
     private void SetNewDay()
     {
-        hp = maxHp;
-        if (hasSleptInBed)
-            stamina = maxStamina;
-        else
-            stamina /= 2;
+        playerSaveData.hp = maxHp;
 
-        staminaBar.fillAmount = 1f;
-        SetGague(staminaBar, stamina, maxStamina);
+        if (!isDead)
+            playerSaveData.stamina = maxStamina;
+        else
+            playerSaveData.stamina = maxStamina * 3 / 4;
+
+        SetGague(staminaBar, playerSaveData.stamina, maxStamina);
 
         isDead = false;
+        anim.SetBool("isDeath", false);
         stateMachine.ChangeState(idleState);
         moveInput = Vector3.zero;
     }
 
     void Update()
     {
-        if (isDead || GameManager.Instance.uiManager.IsUIOpen() || Time.timeScale == 0)
+        if (isDead || GameManager.Instance.uiManager.IsUIOpen() || SceneLoadManager.Instance.isSceneLoading)
             return;
 
         moveInput.x = Input.GetAxisRaw("Horizontal");
@@ -119,21 +121,35 @@ public class Player : Entity
 
     public void Damage(int _damage)
     {
-        hp -= _damage;
-        SetGague(healthBar, hp, maxHp);
-        if (hp <= 0 && !isDead)
+        playerSaveData.hp -= _damage;
+        SetGague(healthBar, playerSaveData.hp, maxHp);
+        if (playerSaveData.hp <= 0 && !isDead)
         {
-            isDead = true;
-            GameManager.Instance.dayTimeManager.NextDay();
-            anim.SetTrigger("isDeath");
+            Die();
         }
         StartCoroutine(FlashFX());
     }
 
+    public void Die()
+    {
+        isDead = true;
+        anim.SetBool("isDeath", true);
+        moveInput = Vector3.zero;
+        StartCoroutine(StartDie());
+    }
+
+    private IEnumerator StartDie()
+    {
+        yield return new WaitForSeconds(1f);
+        GameManager.Instance.dayTimeManager.NextDay();
+    }
+
     public void UseStamina()
     {
-        stamina -= workStaminaCost;
-        SetGague(staminaBar, stamina, maxStamina);
+        playerSaveData.stamina -= workStaminaCost;
+        SetGague(staminaBar, playerSaveData.stamina, maxStamina);
+        if (playerSaveData.stamina <= 0)
+            Die();
     }
 
     public void SetGague(Image gauge, int value, int maxValue)
@@ -291,7 +307,7 @@ public class Player : Entity
 
     public bool CanWork()
     {
-        if (holdItem.IsToolHold() && stamina > 0 && stateMachine.currentState != workingState)
+        if (holdItem.IsToolHold() && playerSaveData.stamina > 0 && stateMachine.currentState != workingState)
             return true;
         return false;
     }
@@ -318,5 +334,11 @@ public class Player : Entity
     {
         anim.SetFloat("horizontal", 0f);
         anim.SetFloat("vertical", 1f);
+    }
+
+    public void InitializePlayerData()
+    {
+        SetGague(healthBar, playerSaveData.hp, maxHp);
+        SetGague(staminaBar, playerSaveData.stamina, maxStamina);
     }
 }

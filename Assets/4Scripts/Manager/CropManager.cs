@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -162,6 +163,9 @@ public class CropManager : MonoBehaviour
         itemData.cropItemData.currentGrowthLevel = cropSaveData.currentGrowthLevel;
         itemData.cropItemData.canHarvest = cropSaveData.canHarvest;
 
-        plantedCropsDict.Add(pos, itemData.cropItemData);
+        if (!plantedCropsDict.ContainsKey(pos))
+            plantedCropsDict.Add(pos, itemData.cropItemData);
+        else
+            plantedCropsDict[pos] = itemData.cropItemData;
     }
 }
