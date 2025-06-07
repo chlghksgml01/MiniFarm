@@ -53,6 +53,11 @@ public class Store : MonoBehaviour
         itemCountTextUI.text = "";
     }
 
+    private void OnEnable()
+    {
+        storePlayerInventory_UI.Refresh();
+    }
+
     public void Purchase()
     {
         int selectedItemCount = int.Parse(itemCountTextUI.text);

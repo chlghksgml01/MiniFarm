@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static Inventory;
 
@@ -6,6 +7,7 @@ public class Inventory_UI : MonoBehaviour
 {
     private Inventory inventory;
     [SerializeField] private ToolBar_UI toolBar_UI;
+    [SerializeField] private TextMeshProUGUI GoldUI;
 
     public List<Slot_UI> slotsUIs = new List<Slot_UI>();
 
@@ -16,7 +18,7 @@ public class Inventory_UI : MonoBehaviour
     RightClickStrategy rightClick;
     ShiftRightClickStrategy shiftRightClick;
 
-    public bool isDragging = false;
+    public bool isDragging { get; set; } = false;
 
     private void Awake()
     {
@@ -45,6 +47,11 @@ public class Inventory_UI : MonoBehaviour
             Debug.Log("Inventory_UI - SceneLoadManager ¾øÀ½");
             return;
         }
+    }
+
+    private void OnEnable()
+    {
+        GoldUI.text = GameManager.Instance.player.playerSaveData.gold.ToString();
     }
 
     void Update()

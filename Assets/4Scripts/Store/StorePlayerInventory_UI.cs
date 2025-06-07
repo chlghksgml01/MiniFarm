@@ -31,6 +31,9 @@ public class StorePlayerInventory_UI : MonoBehaviour
 
     public void Refresh()
     {
+        if (playerInventory == null)
+            return;
+
         for (int i = 0; i < slotsUIs.Count; i++)
         {
             slotsUIs[i].SetItem(playerInventory.slots[i]);
