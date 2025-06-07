@@ -46,3 +46,9 @@ public class DropItemDatas
     public List<DropItemData> houseDropItems = new List<DropItemData>();
     public List<DropItemData> farmDropItems = new List<DropItemData>();
 }
+
+[System.Serializable]
+public class GiftGet
+{
+    public bool isGiftGet = false;
+}

@@ -61,7 +61,8 @@ MonoBehaviour:
   player: {fileID: 0}
   playerPrefab: {fileID: 7613151609588484325, guid: bd38f5e30a549ce429c951d293a37e8f, type: 3}
   Gift: {fileID: 8437575237915871898, guid: 43a586a9eef275844a29c5c400b6edac, type: 3}
-  isGiftGet: 0
+  giftGet:
+    isGiftGet: 0
 --- !u!114 &38490482852750421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,13 +124,10 @@ MonoBehaviour:
   dayEndTime: 26
   twilightStartTime: 19
   darkestTime: 22
-  timeScale: 6000
+  timeScale: 3000
   timeInterval: 1
   hourUIText: {fileID: 0}
   minuteUIText: {fileID: 0}
-  fadeWaitTime: 0.5
-  fadeInOutDuration: 0.5
-  newDayFadeInOutImage: {fileID: 0}
   globalLight: {fileID: 0}
   nightLightColor: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 0}
   dayLightColor: {r: 1, g: 1, b: 1, a: 1}

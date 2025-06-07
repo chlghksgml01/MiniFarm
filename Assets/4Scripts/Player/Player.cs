@@ -308,20 +308,6 @@ public class Player : Entity
         playerSaveData.inventory.RemoveItem(sellItemData, sellCount);
     }
 
-    public void SetPlayerPos()
-    {
-        if (hasSleptInBed)
-        {
-            transform.position = new Vector3(3.32f, 1.4f);
-            LookDown();
-        }
-        else
-        {
-            transform.position = new Vector3(3.32f, 1.4f);
-            LookUp();
-        }
-    }
-
     public void LookDown()
     {
         anim.SetFloat("horizontal", 0f);

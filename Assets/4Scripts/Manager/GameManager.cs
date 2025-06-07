@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     [Header("Gift")]
     [SerializeField] private GameObject Gift;
 
-    public bool isGiftGet = false;
+    public GiftGet giftGet;
 
     public static GameManager Instance
     {
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
 
     public void CreateGift()
     {
-        if (!isGiftGet)
+        if (!giftGet.isGiftGet)
             Instantiate(Gift);
     }
 }

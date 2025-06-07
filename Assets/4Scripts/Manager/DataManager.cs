@@ -10,6 +10,7 @@ public class DataManager : MonoBehaviour
     private string playerSaveFileName = "player_save.json";
     private string tileSaveFileName = "tile_save.json";
     private string dropItemSaveFileName = "dropItem_save.json";
+    private string giftGetSaveFileName = "giftGet_save.json";
 
     private TileSaveDatas tileSaveDatas = new TileSaveDatas();
 
@@ -58,6 +59,7 @@ public class DataManager : MonoBehaviour
         SavePlayer();
         SaveTile();
         SaveDropItem();
+        SaveGift();
         Debug.Log("Save Data");
     }
 
@@ -86,6 +88,12 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(Path.Combine(path, dropItemSaveFileName), json);
     }
 
+    private void SaveGift()
+    {
+        string json = JsonUtility.ToJson(GameManager.Instance.giftGet);
+        File.WriteAllText(Path.Combine(path, giftGetSaveFileName), json);
+    }
+
     public void LoadData()
     {
         path = Path.Combine(Application.persistentDataPath, saveRootFolderName, saveFolderName);
@@ -93,7 +101,7 @@ public class DataManager : MonoBehaviour
         LoadPlayer();
         LoadTile();
         LoadDropItem();
-        Debug.Log("Load Data");
+        LoadGift();
     }
 
     private void LoadPlayer()
@@ -102,7 +110,6 @@ public class DataManager : MonoBehaviour
 
         if (File.Exists(fullPath))
         {
-            GameManager.Instance.isGiftGet = true;
             string data = File.ReadAllText(fullPath);
             GameManager.Instance.player.playerSaveData = JsonUtility.FromJson<PlayerSaveData>(data);
         }
@@ -130,6 +137,17 @@ public class DataManager : MonoBehaviour
             string data = File.ReadAllText(fullPath);
             GameManager.Instance.itemManager.dropItemData = JsonUtility.FromJson<DropItemDatas>(data);
             GameManager.Instance.itemManager.CreateItem();
+        }
+    }
+
+    private void LoadGift()
+    {
+        string fullPath = Path.Combine(path, giftGetSaveFileName);
+
+        if (File.Exists(fullPath))
+        {
+            string data = File.ReadAllText(fullPath);
+            GameManager.Instance.giftGet = JsonUtility.FromJson<GiftGet>(data);
         }
     }
 

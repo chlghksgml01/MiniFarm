@@ -9,6 +9,8 @@ public class SceneLoadManager : MonoBehaviour
     [SerializeField] private float fadeInOutDuration = 0.5f;
     [SerializeField] private Image fadeInOutImage;
 
+    public string prevSceneName = string.Empty;
+
     public event Action SceneLoad = null;
 
     private static SceneLoadManager instance;
@@ -49,6 +51,8 @@ public class SceneLoadManager : MonoBehaviour
 
     private IEnumerator LoadScene(string sceneName, bool isGameStart, bool isNextDay)
     {
+        prevSceneName = SceneManager.GetActiveScene().name;
+
         if (GameManager.Instance != null)
             GameManager.Instance.dayTimeManager.SetTimeStop(true);
 
@@ -66,25 +70,29 @@ public class SceneLoadManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
         if (isGameStart)
-        {
             DataManager.instance.LoadData();
-            GameObject bed = GameObject.Find("BedNextDayCollider");
-            bed.GetComponent<Bed>().isPassDay = true;
-        }
 
         SceneLoad?.Invoke();
 
         Player player = GameManager.Instance.player;
-        if (sceneName == "Farm" && !isGameStart)
+        if (sceneName == "Farm")
         {
             player.transform.position = Vector3.zero;
             player.LookDown();
         }
-        else if (sceneName == "House")
+        else if (sceneName == "House" && (prevSceneName == "Title" || prevSceneName == "House"))
         {
             GameManager.Instance.CreateGift();
-            player.SetPlayerPos();
+            player.transform.position = new Vector3(3.32f, 1.4f);
+            player.LookDown();
         }
+        else if (sceneName == "House" && prevSceneName == "Farm")
+        {
+            GameManager.Instance.CreateGift();
+            transform.position = new Vector3(0.5f, 0f);
+            player.LookUp();
+        }
+
         StartCoroutine(FadeInOut(1f, 0f, fadeInOutDuration));
 
         GameManager.Instance.dayTimeManager.SetTimeStop(false);
