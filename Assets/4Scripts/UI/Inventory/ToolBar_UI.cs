@@ -16,20 +16,6 @@ public class ToolBar_UI : MonoBehaviour
     {
         slotCount = slotsUIs.Count;
         initialSelectedUIPosX = selectedUI.transform.position.x;
-        StartCoroutine(RegisterEvent());
-    }
-
-    private IEnumerator RegisterEvent()
-    {
-        yield return null;
-        SceneLoadManager.Instance.SceneLoad += SetToolBarInventory;
-    }
-
-    private void OnDisable()
-    {
-        if (SceneLoadManager.Instance == null)
-            return;
-        SceneLoadManager.Instance.SceneLoad -= SetToolBarInventory;
     }
 
     private void Start()
@@ -39,6 +25,14 @@ public class ToolBar_UI : MonoBehaviour
             Debug.Log("Inventory_UI - SceneLoadManager ¾øÀ½");
             return;
         }
+        DataManager.Instance.SceneLoad += SetToolBarInventory;
+    }
+
+    private void OnDisable()
+    {
+        if (DataManager.Instance == null)
+            return;
+        DataManager.Instance.SceneLoad -= SetToolBarInventory;
     }
 
     private void Update()

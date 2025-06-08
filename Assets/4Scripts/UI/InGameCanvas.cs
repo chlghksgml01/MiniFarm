@@ -3,6 +3,7 @@ using UnityEngine;
 public class InGameCanvas : MonoBehaviour
 {
     static InGameCanvas instance;
+    [HideInInspector] public StoreUI storeUI;
 
     public static InGameCanvas Instance
     {
@@ -30,6 +31,8 @@ public class InGameCanvas : MonoBehaviour
         instance = this;
 
         DontDestroyOnLoad(this);
+
+        storeUI = GetComponentInChildren<StoreUI>();
     }
 
     public void ExitButton()

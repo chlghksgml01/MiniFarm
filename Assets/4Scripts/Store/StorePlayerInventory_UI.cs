@@ -7,9 +7,23 @@ public class StorePlayerInventory_UI : MonoBehaviour
     [SerializeField] private List<Slot_UI> slotsUIs;
     private Inventory playerInventory;
 
-    private void Start()
+    public void RefreshPlayerInventory()
     {
+        if (playerInventory == null)
+            InitializePlayerInventory();
+
         playerInventory = GameManager.Instance.player.playerSaveData.inventory;
+
+        for (int i = 0; i < slotsUIs.Count; i++)
+        {
+            slotsUIs[i].SetItem(playerInventory.slots[i]);
+        }
+    }
+
+    public void InitializePlayerInventory()
+    {
+        playerInventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
+
         int slotCount = playerInventory.slots.Count;
         for (int i = 0; i < slotCount; i++)
         {
@@ -22,21 +36,15 @@ public class StorePlayerInventory_UI : MonoBehaviour
     {
         GameObject selectedSlot = EventSystem.current.currentSelectedGameObject;
         Slot_UI slotUI = selectedSlot.GetComponentInChildren<Slot_UI>();
-        ItemData itemData = new ItemData();
-        itemData.SetItemData(GameManager.Instance.itemManager.GetItemData(slotUI.itemName));
-
-        Store.instance.isStoreClicked = false;
-        Store.instance.SetSelectedItemData(itemData);
-    }
-
-    public void Refresh()
-    {
-        if (playerInventory == null)
-            return;
-
-        for (int i = 0; i < slotsUIs.Count; i++)
+        ItemData itemData = GameManager.Instance.itemManager.GetItemData(slotUI.itemName);
+        if (itemData == null)
         {
-            slotsUIs[i].SetItem(playerInventory.slots[i]);
+            Debug.Log("아이템 없음");
+            return;
         }
+        itemData.SetItemData(itemData);
+
+        InGameCanvas.Instance.storeUI.isStoreClicked = false;
+        InGameCanvas.Instance.storeUI.SetSelectedItemData(itemData);
     }
 }

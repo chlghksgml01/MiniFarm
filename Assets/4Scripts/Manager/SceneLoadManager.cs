@@ -11,7 +11,6 @@ public class SceneLoadManager : MonoBehaviour
 
     public string prevSceneName = string.Empty;
     public bool isSceneLoading = false;
-    public event Action SceneLoad = null;
 
     private Coroutine sceneLoadCoroutine = null;
 
@@ -79,8 +78,6 @@ public class SceneLoadManager : MonoBehaviour
             DataManager.instance.LoadData();
             GameManager.Instance.player.InitializePlayerData();
         }
-
-        SceneLoad?.Invoke();
 
         SetSceneLoadData(sceneName, isNextDay);
 

@@ -19,7 +19,7 @@ public class StoreInventorySlot : MonoBehaviour
         ItemData selectedItemData = new ItemData();
         selectedItemData.SetItemData(itemData);
 
-        Store.instance.isStoreClicked = true;
-        Store.instance.SetSelectedItemData(selectedItemData);
+        InGameCanvas.Instance.storeUI.isStoreClicked = true;
+        InGameCanvas.Instance.storeUI.SetSelectedItemData(selectedItemData);
     }
 }

@@ -22,6 +22,11 @@ public class ItemData
 
     public void SetItemData(ItemData newItemData)
     {
+        if (newItemData == null)
+        {
+            Debug.Log("itemData ¾øÀ½");
+            return;
+        }
         itemName = newItemData.itemName;
         icon = newItemData.icon;
         itemType = newItemData.itemType;

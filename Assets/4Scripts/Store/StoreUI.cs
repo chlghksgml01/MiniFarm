@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class Store : MonoBehaviour
+public class StoreUI : MonoBehaviour
 {
     [SerializeField] public TMP_InputField itemCountTextUI;
     [SerializeField] public TextMeshProUGUI playerGold;
@@ -10,37 +10,9 @@ public class Store : MonoBehaviour
     public bool isStoreClicked { get; set; } = false;
     private bool prevIsStoreClicked = false;
 
-    public ItemData selectedItemData = new ItemData();
+    [HideInInspector] public ItemData selectedItemData = new ItemData();
     private bool hasBeenSelected = false;
     private Player player;
-
-    public static Store instance;
-
-    public static Store Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindFirstObjectByType<Store>();
-                if (instance == null)
-                {
-                    Debug.LogError("¾À¿¡ GameManager ¾øÀ½");
-                }
-            }
-            return instance;
-        }
-    }
-
-    private void Awake()
-    {
-        if (instance != null && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
-    }
 
     private void Start()
     {
@@ -55,7 +27,7 @@ public class Store : MonoBehaviour
 
     private void OnEnable()
     {
-        storePlayerInventory_UI.Refresh();
+        storePlayerInventory_UI.RefreshPlayerInventory();
     }
 
     public void Purchase()
@@ -66,7 +38,7 @@ public class Store : MonoBehaviour
             if (selectedItemData.buyPrice * selectedItemCount <= player.playerSaveData.gold)
             {
                 player.BuyItem(selectedItemData, selectedItemCount);
-                storePlayerInventory_UI.Refresh();
+                storePlayerInventory_UI.RefreshPlayerInventory();
                 playerGold.text = player.playerSaveData.gold.ToString();
             }
             else
@@ -78,7 +50,7 @@ public class Store : MonoBehaviour
         else
         {
             player.SellItem(selectedItemData, selectedItemCount);
-            storePlayerInventory_UI.Refresh();
+            storePlayerInventory_UI.RefreshPlayerInventory();
             playerGold.text = player.playerSaveData.gold.ToString();
         }
 

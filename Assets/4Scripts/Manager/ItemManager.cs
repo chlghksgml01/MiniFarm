@@ -17,18 +17,18 @@ public class ItemManager : MonoBehaviour
 
     private void Start()
     {
-        if (SceneLoadManager.Instance == null)
+        if (DataManager.Instance == null)
         {
-            Debug.Log("ItemManager - SceneLoadManager 없음");
+            Debug.Log("ItemManager - DataManager 없음");
             return;
         }
-        SceneLoadManager.Instance.SceneLoad += CreateItem;
+        DataManager.Instance.SceneLoad += CreateItem;
     }
 
     private void OnDisable()
     {
-        if (SceneLoadManager.Instance != null)
-            SceneLoadManager.Instance.SceneLoad -= CreateItem;
+        if (DataManager.Instance != null)
+            DataManager.Instance.SceneLoad -= CreateItem;
     }
 
     void AddItem(Item item)

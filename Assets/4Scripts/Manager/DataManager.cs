@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using System;
 
 public class DataManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class DataManager : MonoBehaviour
     private string giftGetSaveFileName = "giftGet_save.json";
 
     private TileSaveDatas tileSaveDatas = new TileSaveDatas();
+
+    public event Action SceneLoad = null;
 
     public static DataManager instance;
 
@@ -102,6 +105,8 @@ public class DataManager : MonoBehaviour
         LoadTile();
         LoadDropItem();
         LoadGift();
+
+        SceneLoad?.Invoke();
     }
 
     private void LoadPlayer()
