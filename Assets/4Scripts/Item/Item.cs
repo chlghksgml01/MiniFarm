@@ -1,6 +1,6 @@
 using TMPro;
+using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Item : MonoBehaviour
 {
@@ -117,5 +117,15 @@ public class Item : MonoBehaviour
         bounceVelocityX = Random.Range(-1f, 1f);
         bounceVelocityY = Random.Range(4f, 5f);
         isPickable = false;
+    }
+
+    public void InitializeItem(DropItemData dropItemData)
+    {
+        isPickable = true;
+
+        if (dropItemData.count > 1)
+            textUI.text = dropItemData.count.ToString();
+
+        GetComponent<SpriteRenderer>().sprite = dropItemData.itemData.icon;
     }
 }

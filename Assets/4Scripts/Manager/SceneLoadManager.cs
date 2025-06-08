@@ -73,9 +73,10 @@ public class SceneLoadManager : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
+        DataManager.instance.LoadData();
+
         if (isGameStart)
         {
-            DataManager.instance.LoadData();
             GameManager.Instance.player.InitializePlayerData();
         }
 

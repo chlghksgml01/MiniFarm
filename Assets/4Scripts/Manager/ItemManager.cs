@@ -15,22 +15,6 @@ public class ItemManager : MonoBehaviour
             AddItem(item);
     }
 
-    private void Start()
-    {
-        if (DataManager.Instance == null)
-        {
-            Debug.Log("ItemManager - DataManager ¾øÀ½");
-            return;
-        }
-        DataManager.Instance.SceneLoad += CreateItem;
-    }
-
-    private void OnDisable()
-    {
-        if (DataManager.Instance != null)
-            DataManager.Instance.SceneLoad -= CreateItem;
-    }
-
     void AddItem(Item item)
     {
         if (item.IsEmpty())
@@ -122,9 +106,8 @@ public class ItemManager : MonoBehaviour
         {
             GameObject itemPrefab = GetItemPrefab(dropItemData.itemData.itemName);
             GameObject item = Instantiate(itemPrefab, dropItemData.pos, Quaternion.identity);
-            if (dropItemData.count > 1)
-                item.GetComponent<Item>().textUI.text = dropItemData.count.ToString();
-            item.GetComponent<SpriteRenderer>().sprite = dropItemData.itemData.icon;
+
+            item.GetComponent<Item>().InitializeItem(dropItemData);
         }
     }
 }

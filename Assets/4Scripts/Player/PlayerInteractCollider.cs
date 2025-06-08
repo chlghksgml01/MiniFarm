@@ -13,11 +13,6 @@ public class PlayerInteractCollider : MonoBehaviour
         player = GetComponentInParent<Player>();
     }
 
-    private void Update()
-    {
-
-    }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
         GetItem(collision);
