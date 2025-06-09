@@ -124,7 +124,7 @@ MonoBehaviour:
   dayEndTime: 26
   twilightStartTime: 19
   darkestTime: 22
-  timeScale: 3000
+  timeScale: 600
   timeInterval: 1
   hourUIText: {fileID: 0}
   minuteUIText: {fileID: 0}
