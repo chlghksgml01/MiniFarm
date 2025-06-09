@@ -75,7 +75,11 @@ public class StoreUI : MonoBehaviour
         // 같은 아이템 선택했을 경우
         if (hasBeenSelected && selectedItemData.itemName == itemData.itemName && prevIsStoreClicked == isStoreClicked)
         {
-            int itemCount = int.Parse(itemCountTextUI.text) + 1;
+            int itemCount = 1;
+
+            if (itemCountTextUI.text != "")
+                itemCount = int.Parse(itemCountTextUI.text) + 1;
+
             SetSelectedData(itemCount.ToString(), true, itemData);
             return;
         }
