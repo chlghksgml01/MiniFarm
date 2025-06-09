@@ -16637,8 +16637,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4794772839617232660}
-        m_TargetAssemblyTypeName: Store, Assembly-CSharp
-        m_MethodName: Purchase
+        m_TargetAssemblyTypeName: StoreUI, Assembly-CSharp
+        m_MethodName: PurchaseConfirmButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -46,11 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e9698922361ad942af0bdab202491a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playAudioSource: {fileID: 0}
-  playOneShotAudioSource: {fileID: 0}
   houseFootsteps: {fileID: 8300000, guid: d17c0cc3cbadb6145b5320f4e9237a33, type: 3}
   farmFootsteps: {fileID: 8300000, guid: bc40fd94ca5a2994781d6c103e53393e, type: 3}
   slimeJump: {fileID: 8300000, guid: ffd6cf0094325ac46ac6bb38d1e07e8f, type: 3}
+  storeEntrance: {fileID: 8300000, guid: f0b981f62dbd568459be2f92a2846837, type: 3}
+  purchase: {fileID: 8300000, guid: c5390742155caec4bb6ae43cbd355914, type: 3}
+  purchaseFail: {fileID: 8300000, guid: 50ee49727d4d9fe4d8395b6700f1164a, type: 3}
 --- !u!82 &7647525257597602814
 AudioSource:
   m_ObjectHideFlags: 0

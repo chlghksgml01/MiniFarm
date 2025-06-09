@@ -30,9 +30,13 @@ public class StoreUI : MonoBehaviour
         storePlayerInventory_UI.RefreshPlayerInventory();
     }
 
-    public void Purchase()
+    public void PurchaseConfirmButton()
     {
-        int selectedItemCount = int.Parse(itemCountTextUI.text);
+        int selectedItemCount = 0;
+        if (itemCountTextUI.text != "")
+            selectedItemCount = int.Parse(itemCountTextUI.text);
+        SFXManager sfxManager = SoundManager.Instance.sfxManager;
+
         if (isStoreClicked)
         {
             if (selectedItemData.buyPrice * selectedItemCount <= player.playerSaveData.gold)
@@ -40,9 +44,11 @@ public class StoreUI : MonoBehaviour
                 player.BuyItem(selectedItemData, selectedItemCount);
                 storePlayerInventory_UI.RefreshPlayerInventory();
                 playerGold.text = player.playerSaveData.gold.ToString();
+                sfxManager.PlayOneShot(sfxManager.purchase);
             }
             else
             {
+                sfxManager.PlayOneShot(sfxManager.purchaseFail);
                 Debug.Log("Store - 구매 실패: 골드 부족");
             }
         }
@@ -52,6 +58,7 @@ public class StoreUI : MonoBehaviour
             player.SellItem(selectedItemData, selectedItemCount);
             storePlayerInventory_UI.RefreshPlayerInventory();
             playerGold.text = player.playerSaveData.gold.ToString();
+            sfxManager.PlayOneShot(sfxManager.purchase);
         }
 
         itemCountTextUI.text = "";

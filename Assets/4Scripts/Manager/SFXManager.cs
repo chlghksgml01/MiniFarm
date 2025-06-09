@@ -9,6 +9,9 @@ public class SFXManager : MonoBehaviour
     [SerializeField] public AudioClip houseFootsteps;
     [SerializeField] public AudioClip farmFootsteps;
     [SerializeField] public AudioClip slimeJump;
+    [SerializeField] public AudioClip storeEntrance;
+    [SerializeField] public AudioClip purchase;
+    [SerializeField] public AudioClip purchaseFail;
 
     private void Awake()
     {
