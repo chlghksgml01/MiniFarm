@@ -2,41 +2,44 @@ using UnityEngine;
 
 public class SFXManager : MonoBehaviour
 {
-    private AudioSource audioSource;
+    private AudioSource playAudioSource;
+    private AudioSource playOneShotAudioSource;
 
-    private void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
-        audioSource.Stop();
-    }
+    [Header("SFX")]
+    [SerializeField] public AudioClip houseFootsteps;
+    [SerializeField] public AudioClip farmFootsteps;
+    [SerializeField] public AudioClip slimeJump;
 
-    private void Update()
+    private void Awake()
     {
-        if (audioSource.isPlaying)
-            Debug.Log("SFX ¿Áª˝¡ﬂ");
-        else
-            Debug.Log("SFX ∏ÿ√„");
+        playAudioSource = GetComponents<AudioSource>()[0];
+        playOneShotAudioSource = GetComponents<AudioSource>()[1];
+
+        playAudioSource.playOnAwake = false;
+        playAudioSource.loop = true;
+
+        playOneShotAudioSource.playOnAwake = false;
+        playOneShotAudioSource.loop = false;
     }
 
     public void Play(AudioClip clip)
     {
-        audioSource.clip = clip;
-        audioSource.loop = true;
-        audioSource.Play();
-    }
-
-    public bool isPlaying()
-    {
-        return audioSource.isPlaying;
-    }
-
-    public void PlayOneShot(AudioClip clip)
-    {
-        audioSource.PlayOneShot(clip);
+        playAudioSource.clip = clip;
+        playAudioSource.Play();
     }
 
     public void Stop()
     {
-        audioSource.Stop();
+        playAudioSource.Stop();
+    }
+
+    public bool isPlaying()
+    {
+        return playAudioSource.isPlaying;
+    }
+
+    public void PlayOneShot(AudioClip clip, float volume = 1f)
+    {
+        playOneShotAudioSource.PlayOneShot(clip, volume);
     }
 }

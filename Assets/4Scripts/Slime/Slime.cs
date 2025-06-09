@@ -223,4 +223,10 @@ public class Slime : Entity
     {
         Destroy(gameObject);
     }
+
+    private void PlayJumpSoundAnimationTrigger()
+    {
+        SFXManager sfxManager = SoundManager.Instance.sfxManager;
+        sfxManager.PlayOneShot(sfxManager.slimeJump, 0.8f);
+    }
 }

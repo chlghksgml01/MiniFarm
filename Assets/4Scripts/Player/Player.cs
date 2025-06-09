@@ -32,10 +32,6 @@ public class Player : Entity
     [SerializeField] public Image healthBar;
     [SerializeField] public Image staminaBar;
 
-    [Header("SFX")]
-    [SerializeField] public AudioClip houseFootsteps;
-    [SerializeField] public AudioClip farmFootsteps;
-
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Animator anim;
 
@@ -50,6 +46,7 @@ public class Player : Entity
     public playerDir playerDir { get; set; } = playerDir.Down;
 
     public bool isDead = false;
+    private SFXManager sfxManager;
 
     private void Awake()
     {
@@ -69,6 +66,10 @@ public class Player : Entity
         stateMachine.Initialize(idleState);
 
         playerSaveData.inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
+    }
+    private void Start()
+    {
+        sfxManager = SoundManager.Instance.sfxManager;
     }
 
     protected override void OnEnable()
@@ -104,7 +105,11 @@ public class Player : Entity
     void Update()
     {
         if (isDead || GameManager.Instance.uiManager.IsUIOpen() || SceneLoadManager.Instance.isSceneLoading)
+        {
+            if (sfxManager.isPlaying())
+                sfxManager.Stop();
             return;
+        }
 
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
@@ -115,12 +120,12 @@ public class Player : Entity
         if (moveInput.magnitude != 0 && !SoundManager.Instance.sfxManager.isPlaying())
         {
             if (SceneManager.GetActiveScene().name == "Farm")
-                SoundManager.Instance.sfxManager.Play(farmFootsteps);
+                sfxManager.Play(sfxManager.farmFootsteps);
             else if (SceneManager.GetActiveScene().name == "House")
-                SoundManager.Instance.sfxManager.Play(houseFootsteps);
+                sfxManager.Play(sfxManager.houseFootsteps);
         }
-        else
-            SoundManager.Instance.sfxManager.Stop();
+        else if (moveInput.magnitude == 0 && SoundManager.Instance.sfxManager.isPlaying())
+            sfxManager.Stop();
 
         if (stateMachine.currentState != workingState && stateMachine.currentState != pickUpState)
         {
