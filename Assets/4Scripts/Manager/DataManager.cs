@@ -28,7 +28,7 @@ public class DataManager : MonoBehaviour
                 instance = FindFirstObjectByType<DataManager>();
                 if (instance == null)
                 {
-                    Debug.LogError("¾À¿¡ DataManager ¾øÀ½");
+                    Debug.Log("¾À¿¡ DataManager ¾øÀ½");
                 }
             }
             return instance;

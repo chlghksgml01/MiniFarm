@@ -9,15 +9,16 @@ public class StorePlayerInventory_UI : MonoBehaviour
 
     public void RefreshPlayerInventory()
     {
+        if (GameManager.Instance.player == null)
+            return;
+
         if (playerInventory == null)
             InitializePlayerInventory();
 
         playerInventory = GameManager.Instance.player.playerSaveData.inventory;
 
         for (int i = 0; i < slotsUIs.Count; i++)
-        {
             slotsUIs[i].SetItem(playerInventory.slots[i]);
-        }
     }
 
     public void InitializePlayerInventory()

@@ -57,8 +57,11 @@ public class SceneLoadManager : MonoBehaviour
         prevSceneName = SceneManager.GetActiveScene().name;
         SetBGM(sceneName);
 
-        if (GameManager.Instance != null)
+        if (!isGameStart)
+        {
+            GameManager.Instance.player.StartSceneLoad();
             GameManager.Instance.dayTimeManager.SetTimeStop(true);
+        }
 
         StartCoroutine(FadeInOut(0f, 1f, fadeInOutDuration));
         yield return new WaitForSecondsRealtime(fadeInOutDuration);

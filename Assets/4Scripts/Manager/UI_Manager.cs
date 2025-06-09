@@ -19,7 +19,6 @@ public class UI_Manager : MonoBehaviour
 
     public void InitializeUI()
     {
-        inventory_UI.Refresh();
         inventoryPanel.SetActive(false);
         toolBarPanel.SetActive(true);
         store.SetActive(false);

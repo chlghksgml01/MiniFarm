@@ -356,4 +356,10 @@ public class Player : Entity
         SetGague(healthBar, playerSaveData.hp, maxHp);
         SetGague(staminaBar, playerSaveData.stamina, maxStamina);
     }
+
+    public void StartSceneLoad()
+    {
+        stateMachine.ChangeState(idleState);
+        moveInput = Vector3.zero;
+    }
 }
