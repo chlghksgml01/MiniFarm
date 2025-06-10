@@ -8,14 +8,14 @@ public class CropManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.dayTimeManager.OnDayPassed += NewDayCrop;
+        GameManager.Instance.dayTimeManager.OnDayFinished += PrepareNewDayCrop;
     }
 
     private void OnDisable()
     {
         if (GameManager.Instance == null)
             return;
-        GameManager.Instance.dayTimeManager.OnDayPassed -= NewDayCrop;
+        GameManager.Instance.dayTimeManager.OnDayFinished -= PrepareNewDayCrop;
     }
 
     public Tile GetCropSeedTile(Vector3Int cellPosition, bool isWet)
@@ -42,7 +42,7 @@ public class CropManager : MonoBehaviour
         GameManager.Instance.tileManager.cropTileMap.SetTile(GameManager.Instance.tileManager.selectedTilePos, wetCropTile);
     }
 
-    public void NewDayCrop()
+    public void PrepareNewDayCrop()
     {
         TileManager tileManager = GameManager.Instance.tileManager;
         if (tileManager == null || GameManager.Instance.cropManager.plantedCropsDict.Count == 0)

@@ -52,6 +52,8 @@ public class InGameCanvas : MonoBehaviour
         Time.timeScale = 1f;
     }
 
+
+
     public void SetBGMVolume(float volume)
     {
         SoundManager.Instance.bgmManager.ChangeVolume(volume);

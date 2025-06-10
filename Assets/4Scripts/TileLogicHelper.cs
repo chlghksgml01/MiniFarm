@@ -59,7 +59,6 @@ public static class TileLogicHelper
         }
     }
 
-
     private static void ApplyTool(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileData centerTileData, TileState tileState, TileManager tileManager)
     {
         CropManager cropManager = GameManager.Instance.cropManager;
@@ -72,7 +71,7 @@ public static class TileLogicHelper
             if (tileState == TileState.Empty)
             {
                 tileDict[cellPosition].tileState = TileState.Tilled;
-                UpdateTiles(cellPosition, tileDict, centerTileData);
+                ConnectSurroundginTiles(cellPosition, tileDict, centerTileData);
             }
             else if (tileState == TileState.Planted)
             {
@@ -112,7 +111,7 @@ public static class TileLogicHelper
                 tileDict[cellPosition].tileConnectedDir = TileConnectedDir.None;
                 tileDict[cellPosition].tileState = TileState.Empty;
 
-                ResetConnectedTiles(cellPosition, tileDict);
+                DisconnectSurroundingTiles(cellPosition, tileDict);
             }
             break;
             default:
@@ -120,7 +119,7 @@ public static class TileLogicHelper
         }
     }
 
-    public static void UpdateTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileData centerTileData)
+    public static void ConnectSurroundginTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileData centerTileData)
     {
         Vector3Int rightCellPos = cellPosition + Vector3Int.right;
         Vector3Int leftCellPos = cellPosition + Vector3Int.left;
@@ -185,7 +184,7 @@ public static class TileLogicHelper
         interactableMap.SetTile(cellPosition, tilledTileDict[tileConnectedState]);
     }
 
-    static public void ResetConnectedTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict)
+    static public void DisconnectSurroundingTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict)
     {
         Tilemap tilledTileMap = GameManager.Instance.tileManager.tilledTileMap;
         List<Tile> tilledTileDict = GameManager.Instance.tileManager.tilledTileDict;

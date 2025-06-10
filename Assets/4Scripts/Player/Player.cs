@@ -75,17 +75,17 @@ public class Player : Entity
     protected override void OnEnable()
     {
         base.OnEnable();
-        GameManager.Instance.dayTimeManager.OnDayPassed += SetNewDay;
+        GameManager.Instance.dayTimeManager.OnDayFinished += PrepareNewDay;
     }
 
     private void OnDisable()
     {
         if (GameManager.Instance == null)
             return;
-        GameManager.Instance.dayTimeManager.OnDayPassed -= SetNewDay;
+        GameManager.Instance.dayTimeManager.OnDayFinished -= PrepareNewDay;
     }
 
-    private void SetNewDay()
+    private void PrepareNewDay()
     {
         playerSaveData.hp = maxHp;
 

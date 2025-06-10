@@ -39,7 +39,7 @@ public class DayTimeManager : MonoBehaviour
     private Coroutine slimeSpawn;
 
     public event Action SpawnSlime = null;
-    public event Action OnDayPassed = null;
+    public event Action OnDayFinished = null;
 
     private void Awake()
     {
@@ -102,7 +102,6 @@ public class DayTimeManager : MonoBehaviour
 
     public IEnumerator StartNewDay()
     {
-        OnDayPassed?.Invoke();
         yield return null;
         DataManager.instance.SaveData();
 
@@ -145,5 +144,10 @@ public class DayTimeManager : MonoBehaviour
             image.color = new Color(0.8f, 0.8f, 0.8f);
         else
             image.color = Color.white;
+    }
+
+    public void StartOnDayFinishedEvent()
+    {
+        OnDayFinished?.Invoke();
     }
 }

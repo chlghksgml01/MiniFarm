@@ -35,6 +35,7 @@ public class TileManager : MonoBehaviour
 
     private Player player;
     private Vector3Int playerCellPosition;
+    private bool isNewDay = false;
 
     private Dictionary<MouseDirection, Vector2Int> mouseDirectionValues = new Dictionary<MouseDirection, Vector2Int>
         {
@@ -56,7 +57,7 @@ public class TileManager : MonoBehaviour
         player = GameManager.Instance.player;
 
         InitializeTileData();
-        GameManager.Instance.dayTimeManager.OnDayPassed += NewDayTile;
+        GameManager.Instance.dayTimeManager.OnDayFinished += PrepareNewDayTile;
 
         if (SceneLoadManager.Instance == null)
         {
@@ -70,20 +71,44 @@ public class TileManager : MonoBehaviour
     {
         if (GameManager.Instance == null)
             return;
-        GameManager.Instance.dayTimeManager.OnDayPassed -= NewDayTile;
+        GameManager.Instance.dayTimeManager.OnDayFinished -= PrepareNewDayTile;
 
         if (SceneLoadManager.Instance == null)
             return;
         SceneLoadManager.Instance.SceneLoad -= OnSceneLoaded;
     }
 
+    private void PrepareNewDayTile()
+    {
+        var wateredTiles = tileDict.Where(pair => pair.Value.tileState == TileState.Watered);
+        foreach (var wateredTile in wateredTiles)
+        {
+            if (wateringTileMap != null)
+                wateringTileMap.SetTile(wateredTile.Key, null);
+            wateredTile.Value.tileState = TileState.Tilled;
+        }
+
+        var tilledTiles = tileDict.Where(pair => pair.Value.tileState == TileState.Tilled);
+        foreach (var tilledTile in tilledTiles)
+        {
+            bool isReset = Random.Range(0, 100) <= resetTileChance;
+            if (isReset)
+            {
+                if (tilledTileMap != null)
+                    tilledTileMap.SetTile(tilledTile.Key, null);
+                tilledTile.Value.tileState = TileState.Empty;
+            }
+        }
+        isNewDay = true;
+    }
+
     void OnSceneLoaded()
     {
         InitializeTileData();
-        RefreshCropTileStates();
+        RefreshTileStates();
     }
 
-    private void RefreshCropTileStates()
+    private void RefreshTileStates()
     {
         if (tilledTileMap == null)
             return;
@@ -94,7 +119,10 @@ public class TileManager : MonoBehaviour
         {
             if (tile.Value.tileState != TileState.None && tile.Value.tileState != TileState.Empty)
             {
-                TileLogicHelper.UpdateTiles(tile.Key, tileDict, tileDict[tile.Key]);
+                if (isNewDay)
+                    TileLogicHelper.DisconnectSurroundingTiles(tile.Key, tileDict);
+                else
+                    TileLogicHelper.ConnectSurroundginTiles(tile.Key, tileDict, tileDict[tile.Key]);
 
                 if (tile.Value.tileState == TileState.Watered)
                 {
@@ -103,9 +131,9 @@ public class TileManager : MonoBehaviour
                 }
                 else
                     tileDict[tile.Key].tileState = TileState.Tilled;
-
             }
         }
+        isNewDay = false;
 
         // 작물 심은 타일
         foreach (KeyValuePair<Vector3Int, CropItemData> plantedCropData in cropManager.plantedCropsDict)
@@ -239,29 +267,6 @@ public class TileManager : MonoBehaviour
         return CropItemData;
     }
 
-    private void NewDayTile()
-    {
-        var wateredTiles = tileDict.Where(pair => pair.Value.tileState == TileState.Watered);
-        foreach (var wateredTile in wateredTiles)
-        {
-            if (wateringTileMap != null)
-                wateringTileMap.SetTile(wateredTile.Key, null);
-            wateredTile.Value.tileState = TileState.Tilled;
-        }
-
-        var tilledTiles = tileDict.Where(pair => pair.Value.tileState == TileState.Tilled);
-        foreach (var tilledTile in tilledTiles)
-        {
-            bool isReset = Random.Range(0, 100) <= resetTileChance;
-            if (isReset)
-            {
-                if (tilledTileMap != null)
-                    tilledTileMap.SetTile(tilledTile.Key, null);
-                tilledTile.Value.tileState = TileState.Empty;
-                TileLogicHelper.ResetConnectedTiles(tilledTile.Key, tileDict);
-            }
-        }
-    }
 
     public string GetSelectedCropName()
     {

@@ -75,6 +75,17 @@ public class SceneLoadManager : MonoBehaviour
         StartCoroutine(FadeInOut(0f, 1f, fadeInOutDuration));
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
+        if (sceneName == "Title")
+        {
+            Destroy(GameManager.Instance.player.gameObject);
+            Destroy(GameManager.Instance.gameObject);
+            Canvas inGameCanvas = FindAnyObjectByType<Canvas>();
+            Destroy(inGameCanvas.gameObject);
+        }
+
+        if (!isGameStart && isNextDay)
+            GameManager.Instance.dayTimeManager.StartOnDayFinishedEvent();
+
         AsyncOperation asyncOp = SceneManager.LoadSceneAsync(sceneName);
 
         while (!asyncOp.isDone)
@@ -91,16 +102,22 @@ public class SceneLoadManager : MonoBehaviour
         {
             DataManager.instance.LoadData();
             GameManager.Instance.player.InitializePlayerData();
+            GameManager.Instance.player.gameObject.SetActive(true);
         }
-        GameManager.Instance.itemManager.CreateItem();
-
-        SetSceneLoadData(sceneName, isNextDay);
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.itemManager.CreateItem();
+            SetSceneLoadData(sceneName, isNextDay);
+        }
 
         StartCoroutine(FadeInOut(1f, 0f, fadeInOutDuration));
 
         isSceneLoading = false;
-        GameManager.Instance.dayTimeManager.SetTimeStop(false);
-        GameManager.Instance.uiManager.InitializeUI();
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.dayTimeManager.SetTimeStop(false);
+            GameManager.Instance.uiManager.InitializeUI();
+        }
         sceneLoadCoroutine = null;
     }
 
