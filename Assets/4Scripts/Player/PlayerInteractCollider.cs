@@ -44,7 +44,6 @@ public class PlayerInteractCollider : MonoBehaviour
                 return;
 
             player.playerSaveData.inventory.AddItem(item);
-            GameManager.Instance.itemManager.RemoveDropItem(item);
             Destroy(item.gameObject);
         }
     }

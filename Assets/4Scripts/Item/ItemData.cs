@@ -32,6 +32,7 @@ public class ItemData
         itemType = newItemData.itemType;
         buyPrice = newItemData.buyPrice;
         sellPrice = newItemData.sellPrice;
+        itemPrefab = newItemData.itemPrefab;
 
         if (!newItemData.IsDropEmpty())
             dropItemData.SetDropData(newItemData.dropItemData);
@@ -63,6 +64,7 @@ public class ItemData
         itemType = ItemType.None;
         buyPrice = 0;
         sellPrice = 0;
+        itemPrefab = null;
 
         dropItemData.SetEmpty();
         cropItemData.SetEmpty();

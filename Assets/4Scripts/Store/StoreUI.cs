@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StoreUI : MonoBehaviour
@@ -64,7 +65,7 @@ public class StoreUI : MonoBehaviour
         itemCountTextUI.text = "";
     }
 
-    public void SetSelectedItemData(ItemData itemData)
+    public void SetSelectedItemData(ItemData itemData, int maxCount = -1)
     {
         if (itemData == null || itemData.IsEmpty())
         {
@@ -76,9 +77,16 @@ public class StoreUI : MonoBehaviour
         if (hasBeenSelected && selectedItemData.itemName == itemData.itemName && prevIsStoreClicked == isStoreClicked)
         {
             int itemCount = 1;
+            int currentItemCount = 0;
 
             if (itemCountTextUI.text != "")
+                currentItemCount = int.Parse(itemCountTextUI.text);
+
+            if ((maxCount == -1 && itemCountTextUI.text != "") ||
+                (maxCount != -1 && itemCountTextUI.text != "" && currentItemCount < maxCount))
                 itemCount = int.Parse(itemCountTextUI.text) + 1;
+            else if (currentItemCount == maxCount)
+                itemCount = currentItemCount;
 
             SetSelectedData(itemCount.ToString(), true, itemData);
             return;
@@ -102,5 +110,10 @@ public class StoreUI : MonoBehaviour
             selectedItemData = _selectedItemData;
 
         prevIsStoreClicked = isStoreClicked;
+    }
+
+    public void CloseStore()
+    {
+        itemCountTextUI.text = "";
     }
 }

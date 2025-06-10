@@ -53,11 +53,17 @@ public class TileManager : MonoBehaviour
 
     void Start()
     {
+        player = GameManager.Instance.player;
+
         InitializeTileData();
         GameManager.Instance.dayTimeManager.OnDayPassed += NewDayTile;
 
-        player = GameManager.Instance.player;
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        if (SceneLoadManager.Instance == null)
+        {
+            Debug.Log("Inventory_UI - SceneLoadManager ¾øÀ½");
+            return;
+        }
+        SceneLoadManager.Instance.SceneLoad += OnSceneLoaded;
     }
 
     private void OnDisable()
@@ -65,13 +71,15 @@ public class TileManager : MonoBehaviour
         if (GameManager.Instance == null)
             return;
         GameManager.Instance.dayTimeManager.OnDayPassed -= NewDayTile;
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        if (SceneLoadManager.Instance == null)
+            return;
+        SceneLoadManager.Instance.SceneLoad -= OnSceneLoaded;
     }
 
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    void OnSceneLoaded()
     {
         InitializeTileData();
-
         RefreshCropTileStates();
     }
 
@@ -86,14 +94,16 @@ public class TileManager : MonoBehaviour
         {
             if (tile.Value.tileState != TileState.None && tile.Value.tileState != TileState.Empty)
             {
-                tileDict[tile.Key].tileState = TileState.Tilled;
                 TileLogicHelper.UpdateTiles(tile.Key, tileDict, tileDict[tile.Key]);
-            }
 
-            else if (tile.Value.tileState == TileState.Watered)
-            {
-                wateringTileMap.SetTile(tile.Key, wateringTile);
-                tileDict[tile.Key].tileState = TileState.Watered;
+                if (tile.Value.tileState == TileState.Watered)
+                {
+                    wateringTileMap.SetTile(tile.Key, wateringTile);
+                    tileDict[tile.Key].tileState = TileState.Watered;
+                }
+                else
+                    tileDict[tile.Key].tileState = TileState.Tilled;
+
             }
         }
 

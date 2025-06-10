@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -38,14 +39,18 @@ public class StorePlayerInventory_UI : MonoBehaviour
         GameObject selectedSlot = EventSystem.current.currentSelectedGameObject;
         Slot_UI slotUI = selectedSlot.GetComponentInChildren<Slot_UI>();
         ItemData itemData = GameManager.Instance.itemManager.GetItemData(slotUI.itemName);
+
         if (itemData == null)
         {
             Debug.Log("아이템 없음");
             return;
         }
+
         itemData.SetItemData(itemData);
 
         InGameCanvas.Instance.storeUI.isStoreClicked = false;
-        InGameCanvas.Instance.storeUI.SetSelectedItemData(itemData);
+
+        int maxCount = int.Parse(selectedSlot.GetComponentInChildren<TextMeshProUGUI>().text);
+        InGameCanvas.Instance.storeUI.SetSelectedItemData(itemData, maxCount);
     }
 }

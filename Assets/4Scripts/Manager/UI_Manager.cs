@@ -87,6 +87,7 @@ public class UI_Manager : MonoBehaviour
         }
         else
         {
+            store.GetComponent<StoreUI>().CloseStore();
             Time.timeScale = 1f;
             GameManager.Instance.dayTimeManager.SetTimeStop(false);
             store.SetActive(false);

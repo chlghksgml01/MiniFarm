@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -42,51 +43,40 @@ public class ItemManager : MonoBehaviour
         return null;
     }
 
-    public void DropItem(GameObject _dropItem, Vector2 pos, int count)
+    public void SaveDropItem()
     {
-        DropItemData dropItemData = SetDropItemData(_dropItem, pos, count);
-
         if (SceneManager.GetActiveScene().name == "House")
-            this.dropItemData.houseDropItems.Add(dropItemData);
+        {
+            dropItemData.houseDropItems.Clear();
+            SetDropItemData(dropItemData.houseDropItems);
+        }
 
         else if (SceneManager.GetActiveScene().name == "Farm")
-            this.dropItemData.farmDropItems.Add(dropItemData);
-    }
-
-    private DropItemData SetDropItemData(GameObject _dropItem, Vector2 pos, int count)
-    {
-        DropItemData dropItemData = new DropItemData();
-
-        ItemData itemData = _dropItem.GetComponent<Item>().itemData;
-
-        dropItemData.itemData.SetItemData(itemData);
-        dropItemData.pos = pos;
-        dropItemData.count = count;
-
-        return dropItemData;
-    }
-
-    public void RemoveDropItem(Item _dropItem)
-    {
-        string sceneName = SceneManager.GetActiveScene().name;
-
-        if (sceneName == "House")
-            RemoveDropItemMethod(dropItemData.houseDropItems, _dropItem);
-        if (sceneName == "Farm")
-            RemoveDropItemMethod(dropItemData.farmDropItems, _dropItem);
-    }
-
-    private void RemoveDropItemMethod(List<DropItemData> dropItems, Item dropItem)
-    {
-        for (int i = dropItems.Count - 1; i >= 0; i--)
         {
-            DropItemData dropItemData = dropItems[i];
+            dropItemData.farmDropItems.Clear();
+            SetDropItemData(dropItemData.farmDropItems);
+        }
+    }
 
-            if (dropItemData.pos == dropItem.transform.position &&
-                dropItemData.itemData.itemName == dropItem.itemData.itemName)
-            {
-                dropItems.RemoveAt(i);
-            }
+    private void SetDropItemData(List<DropItemData> dropItemsLocation)
+    {
+        GameObject[] itemGameObjects = GameObject.FindGameObjectsWithTag("Item");
+
+        foreach (GameObject itemGameObject in itemGameObjects)
+        {
+            ItemData itemData = new ItemData();
+            itemData.SetItemData(itemGameObject.GetComponent<Item>().itemData);
+
+            DropItemData _dropItemData = new DropItemData();
+            _dropItemData.itemData = itemData;
+            _dropItemData.pos = itemGameObject.transform.position;
+
+            if (itemGameObject.GetComponentInChildren<TextMeshProUGUI>().text == "")
+                _dropItemData.count = 1;
+            else
+                _dropItemData.count = int.Parse(itemGameObject.GetComponentInChildren<TextMeshProUGUI>().text);
+
+            dropItemsLocation.Add(_dropItemData);
         }
     }
 

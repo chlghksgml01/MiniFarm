@@ -25,14 +25,14 @@ public class ToolBar_UI : MonoBehaviour
             Debug.Log("Inventory_UI - SceneLoadManager ¾øÀ½");
             return;
         }
-        DataManager.Instance.SceneLoad += SetToolBarInventory;
+        SceneLoadManager.Instance.SceneLoad += SetToolBarInventory;
     }
 
     private void OnDisable()
     {
-        if (DataManager.Instance == null)
+        if (SceneLoadManager.Instance == null)
             return;
-        DataManager.Instance.SceneLoad -= SetToolBarInventory;
+        SceneLoadManager.Instance.SceneLoad -= SetToolBarInventory;
     }
 
     private void Update()

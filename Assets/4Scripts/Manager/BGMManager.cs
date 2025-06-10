@@ -54,7 +54,7 @@ public class BGMManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(fadeInOutDuration + 0.1f);
 
         if (newAudioclip == null)
-            StartCoroutine(FadeInOutBGM(0.5f, 1f));
+            StartCoroutine(FadeInOutBGM(audioSource.volume / 2, currentVolume));
         else
         {
             audioSource.clip = newAudioclip;

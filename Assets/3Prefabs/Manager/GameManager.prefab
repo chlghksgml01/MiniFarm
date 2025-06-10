@@ -134,7 +134,7 @@ MonoBehaviour:
   slimeSpawnTime: 19
   spawnInterval: 1
   spawnController: {fileID: 5353644126994676888}
-  isSlimeSpawn: 0
+  isSlimeSpawn: 1
 --- !u!114 &6438177313553398301
 MonoBehaviour:
   m_ObjectHideFlags: 0

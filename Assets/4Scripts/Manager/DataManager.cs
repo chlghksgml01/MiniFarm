@@ -15,7 +15,6 @@ public class DataManager : MonoBehaviour
 
     private TileSaveDatas tileSaveDatas = new TileSaveDatas();
 
-    public event Action SceneLoad = null;
 
     public static DataManager instance;
 
@@ -81,6 +80,7 @@ public class DataManager : MonoBehaviour
     private void SaveTile()
     {
         tileSaveDatas = GameManager.Instance.tileManager.GetTileData();
+
         string json = JsonUtility.ToJson(tileSaveDatas);
         File.WriteAllText(Path.Combine(path, tileSaveFileName), json);
     }
@@ -105,8 +105,6 @@ public class DataManager : MonoBehaviour
         LoadTile();
         LoadDropItem();
         LoadGift();
-
-        SceneLoad?.Invoke();
     }
 
     private void LoadPlayer()
@@ -141,7 +139,6 @@ public class DataManager : MonoBehaviour
         {
             string data = File.ReadAllText(fullPath);
             GameManager.Instance.itemManager.dropItemData = JsonUtility.FromJson<DropItemDatas>(data);
-            GameManager.Instance.itemManager.CreateItem();
         }
     }
 

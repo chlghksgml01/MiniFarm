@@ -13,6 +13,7 @@ public class SceneLoadManager : MonoBehaviour
     public bool isSceneLoading = false;
     public bool isFarmToHouse = false;
 
+    public event Action SceneLoad = null;
     private Coroutine sceneLoadCoroutine = null;
 
     private static SceneLoadManager instance;
@@ -60,6 +61,7 @@ public class SceneLoadManager : MonoBehaviour
         {
             if (prevSceneName == "Farm" && sceneName == "House" && !GameManager.Instance.player.isDead)
                 isFarmToHouse = true;
+            GameManager.Instance.itemManager.SaveDropItem();
         }
 
         SetBGM(sceneName);
@@ -78,17 +80,19 @@ public class SceneLoadManager : MonoBehaviour
         while (!asyncOp.isDone)
             yield return null;
 
+        SceneLoad?.Invoke();
+
         if (isNextDay)
             StartCoroutine(GameManager.Instance.dayTimeManager.StartNewDay());
 
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
-        DataManager.instance.LoadData();
-
         if (isGameStart)
         {
+            DataManager.instance.LoadData();
             GameManager.Instance.player.InitializePlayerData();
         }
+        GameManager.Instance.itemManager.CreateItem();
 
         SetSceneLoadData(sceneName, isNextDay);
 

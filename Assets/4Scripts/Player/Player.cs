@@ -208,7 +208,6 @@ public class Player : Entity
 
         GameObject dropItemPrefab = GameManager.Instance.itemManager.GetItemPrefab(selectedItem.GetSelectedItemName());
         GameObject item = Instantiate(dropItemPrefab, bounceBasePos, Quaternion.identity);
-        GameManager.Instance.itemManager.DropItem(dropItemPrefab, bounceBasePos, count);
         Item _item = item.GetComponent<Item>();
 
         _item.SpawnItem(true, true, bounceBasePos, selectedItem.selectedSlot.slotItemData, count);
