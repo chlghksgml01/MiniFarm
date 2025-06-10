@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InGameCanvas : MonoBehaviour
 {
     static InGameCanvas instance;
     [HideInInspector] public StoreUI storeUI;
+    [SerializeField] public Slider backgroundSlider;
+    [SerializeField] public Slider SFXSlider;
 
     public static InGameCanvas Instance
     {
@@ -33,11 +36,28 @@ public class InGameCanvas : MonoBehaviour
         DontDestroyOnLoad(this);
 
         storeUI = GetComponentInChildren<StoreUI>();
+        backgroundSlider.onValueChanged.AddListener(SetBGMVolume);
+        SFXSlider.onValueChanged.AddListener(SetSFXVolume);
+    }
+
+    void OnDestroy()
+    {
+        backgroundSlider.onValueChanged.RemoveListener(SetBGMVolume);
+        SFXSlider.onValueChanged.RemoveListener(SetSFXVolume);
     }
 
     public void ExitButton()
     {
         SceneLoadManager.Instance.StartLoadScene("Title", false, false);
         Time.timeScale = 1f;
+    }
+
+    public void SetBGMVolume(float volume)
+    {
+        SoundManager.Instance.bgmManager.ChangeVolume(volume);
+    }
+    public void SetSFXVolume(float volume)
+    {
+        SoundManager.Instance.sfxManager.ChangeVolume(volume);
     }
 }

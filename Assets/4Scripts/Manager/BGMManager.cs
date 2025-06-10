@@ -15,12 +15,13 @@ public class BGMManager : MonoBehaviour
 
     [SerializeField] private AudioClip titleBGM;
     [SerializeField] private AudioClip inGameBGM;
-    [SerializeField] private float bgmDefaultVolume;
+
+    private float currentVolume = 1f;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        audioSource.volume = bgmDefaultVolume;
+        audioSource.volume = currentVolume;
         audioSource.Play();
     }
 
@@ -46,9 +47,9 @@ public class BGMManager : MonoBehaviour
     private IEnumerator StartFadeInOutBGM(AudioClip newAudioclip = null)
     {
         if (newAudioclip == null)
-            StartCoroutine(FadeInOutBGM(bgmDefaultVolume, bgmDefaultVolume / 2));
+            StartCoroutine(FadeInOutBGM(currentVolume, currentVolume / 2));
         else
-            StartCoroutine(FadeInOutBGM(bgmDefaultVolume, 0f));
+            StartCoroutine(FadeInOutBGM(currentVolume, 0f));
 
         yield return new WaitForSecondsRealtime(fadeInOutDuration + 0.1f);
 
@@ -58,7 +59,7 @@ public class BGMManager : MonoBehaviour
         {
             audioSource.clip = newAudioclip;
             audioSource.Play();
-            StartCoroutine(FadeInOutBGM(0f, bgmDefaultVolume));
+            StartCoroutine(FadeInOutBGM(0f, currentVolume));
         }
     }
 
@@ -72,5 +73,11 @@ public class BGMManager : MonoBehaviour
             yield return null;
         }
         audioSource.volume = targetVolume;
+    }
+
+    public void ChangeVolume(float volume)
+    {
+        audioSource.volume = volume;
+        currentVolume = volume;
     }
 }

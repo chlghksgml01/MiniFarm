@@ -2,12 +2,15 @@ using UnityEngine;
 
 public class Bed : MonoBehaviour
 {
-    private bool canPassDay = false;
+    public bool canPassDay = false;
 
     private void Awake()
     {
-        if (SceneLoadManager.Instance.prevSceneName == "Farm")
+        if (SceneLoadManager.Instance.isFarmToHouse)
+        {
             canPassDay = true;
+            SceneLoadManager.Instance.isFarmToHouse = false;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)

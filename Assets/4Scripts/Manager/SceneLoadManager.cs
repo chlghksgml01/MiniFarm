@@ -11,6 +11,7 @@ public class SceneLoadManager : MonoBehaviour
 
     public string prevSceneName = string.Empty;
     public bool isSceneLoading = false;
+    public bool isFarmToHouse = false;
 
     private Coroutine sceneLoadCoroutine = null;
 
@@ -55,6 +56,12 @@ public class SceneLoadManager : MonoBehaviour
     {
         isSceneLoading = true;
         prevSceneName = SceneManager.GetActiveScene().name;
+        if (!isGameStart)
+        {
+            if (prevSceneName == "Farm" && sceneName == "House" && !GameManager.Instance.player.isDead)
+                isFarmToHouse = true;
+        }
+
         SetBGM(sceneName);
 
         if (!isGameStart)

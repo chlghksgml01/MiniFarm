@@ -1,3 +1,4 @@
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class SFXManager : MonoBehaviour
@@ -12,6 +13,8 @@ public class SFXManager : MonoBehaviour
     [SerializeField] public AudioClip storeEntrance;
     [SerializeField] public AudioClip purchase;
     [SerializeField] public AudioClip purchaseFail;
+
+    private float currentVolume = 1f;
 
     private void Awake()
     {
@@ -43,6 +46,12 @@ public class SFXManager : MonoBehaviour
 
     public void PlayOneShot(AudioClip clip, float volume = 1f)
     {
-        playOneShotAudioSource.PlayOneShot(clip, volume);
+        playOneShotAudioSource.PlayOneShot(clip, volume * currentVolume);
+    }
+
+    public void ChangeVolume(float volume)
+    {
+        currentVolume = volume;
+        playAudioSource.volume = currentVolume;
     }
 }
