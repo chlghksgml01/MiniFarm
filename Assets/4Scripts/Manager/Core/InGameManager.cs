@@ -28,7 +28,7 @@ public class InGameManager : MonoBehaviour
     [Header("Gift")]
     [SerializeField] private GameObject Gift;
 
-    public GiftGet giftGet;
+    [HideInInspector] public GiftGet giftGet;
 
     public static InGameManager Instance
     {
