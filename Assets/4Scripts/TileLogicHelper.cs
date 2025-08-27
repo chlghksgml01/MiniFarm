@@ -115,60 +115,38 @@ public static class TileLogicHelper
         }
     }
 
+    // 경작한 주변 타일 잇기
     public static void ConnectSurroundginTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileData centerTileData)
     {
-        Vector3Int rightCellPos = cellPosition + Vector3Int.right;
-        Vector3Int leftCellPos = cellPosition + Vector3Int.left;
-        Vector3Int upCellPos = cellPosition + Vector3Int.up;
-        Vector3Int downCellPos = cellPosition + Vector3Int.down;
-
-        // 오른쪽
-        if (tileDict.TryGetValue(rightCellPos, out var rightTileData))
+        var dirs = new (Vector3Int delta, TileConnectedDir currentDir, TileConnectedDir neighborDir)[]
         {
-            rightTileData.tileConnectedDir |= TileConnectedDir.Left;
-            if (rightTileData.tileState != TileState.Empty)
-            {
-                centerTileData.tileConnectedDir |= TileConnectedDir.Right;
-                UpdateConnectedTilledTile(rightCellPos, tileDict);
-            }
-        }
+            (Vector3Int.right, TileConnectedDir.Right, TileConnectedDir.Left),
+            (Vector3Int.left,  TileConnectedDir.Left,  TileConnectedDir.Right),
+            (Vector3Int.up,    TileConnectedDir.Up,    TileConnectedDir.Down),
+            (Vector3Int.down,  TileConnectedDir.Down,  TileConnectedDir.Up),
+        };
 
-        // 왼쪽
-        if (tileDict.TryGetValue(leftCellPos, out var leftTileData))
+        foreach (var dir in dirs)
         {
-            leftTileData.tileConnectedDir |= TileConnectedDir.Right;
-            if (leftTileData.tileState != TileState.Empty)
-            {
-                centerTileData.tileConnectedDir |= TileConnectedDir.Left;
-                UpdateConnectedTilledTile(leftCellPos, tileDict);
-            }
-        }
+            var neighborPos = cellPosition + dir.delta;
+            if (!tileDict.TryGetValue(neighborPos, out var neighborData))
+                continue;
 
-        // 위쪽
-        if (tileDict.TryGetValue(upCellPos, out var upTileData))
-        {
-            upTileData.tileConnectedDir |= TileConnectedDir.Down;
-            if (upTileData.tileState != TileState.Empty)
-            {
-                centerTileData.tileConnectedDir |= TileConnectedDir.Up;
-                UpdateConnectedTilledTile(upCellPos, tileDict);
-            }
-        }
+            neighborData.tileConnectedDir |= dir.neighborDir;
 
-        // 아래쪽
-        if (tileDict.TryGetValue(downCellPos, out var downTileData))
-        {
-            downTileData.tileConnectedDir |= TileConnectedDir.Up;
-            if (downTileData.tileState != TileState.Empty)
+            if (neighborData.tileState != TileState.Empty)
             {
-                centerTileData.tileConnectedDir |= TileConnectedDir.Down;
-                UpdateConnectedTilledTile(downCellPos, tileDict);
+                centerTileData.tileConnectedDir |= dir.currentDir;
+                UpdateConnectedTilledTile(neighborPos, tileDict);
             }
+            else
+                centerTileData.tileConnectedDir &= ~dir.currentDir;
         }
 
         UpdateConnectedTilledTile(cellPosition, tileDict, true);
     }
 
+    // 경작한 타일상태 업데이트
     static private void UpdateConnectedTilledTile(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, bool isInteractedTile = false)
     {
         Tilemap interactableMap = InGameManager.Instance.tileManager.tilledTileMap;
@@ -180,6 +158,7 @@ public static class TileLogicHelper
         interactableMap.SetTile(cellPosition, tilledTileDict[tileConnectedState]);
     }
 
+    // 경작한 타일 끊기
     static public void DisconnectSurroundingTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict)
     {
         Tilemap tilledTileMap = InGameManager.Instance.tileManager.tilledTileMap;
@@ -220,6 +199,7 @@ public static class TileLogicHelper
         }
     }
 
+    // 타일 연결된 방향 설정
     private static void SetTileConnectedDirection(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict)
     {
         TileConnectedDir dir = tileDict[cellPosition].tileConnectedDir;

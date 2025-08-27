@@ -108,7 +108,6 @@ public class TileManager : MonoBehaviour
     {
         if (tilledTileMap == null)
             return;
-        CropManager cropManager = InGameManager.Instance.cropManager;
 
         // 괭이질/물 준 타일
         foreach (KeyValuePair<Vector3Int, TileData> tile in tileDict)
@@ -127,7 +126,7 @@ public class TileManager : MonoBehaviour
             }
         }
         // 작물 심은 타일
-        foreach (KeyValuePair<Vector3Int, CropItemData> plantedCropData in cropManager.plantedCropsDict)
+        foreach (KeyValuePair<Vector3Int, CropItemData> plantedCropData in InGameManager.Instance.cropManager.plantedCropsDict)
         {
             if (tileDict.ContainsKey(plantedCropData.Key))
             {
@@ -145,7 +144,6 @@ public class TileManager : MonoBehaviour
 
                     tileDict[plantedCropData.Key].tileState = TileState.Planted;
                 }
-
             }
         }
     }
@@ -223,7 +221,8 @@ public class TileManager : MonoBehaviour
 
     private void DrawSelectedTile()
     {
-        Vector3Int _selectedTilePos = playerCellPosition + new Vector3Int(mouseDirectionValues[mouseDirection].x, mouseDirectionValues[mouseDirection].y);
+        Vector3Int _selectedTilePos = playerCellPosition
+            + new Vector3Int(mouseDirectionValues[mouseDirection].x, mouseDirectionValues[mouseDirection].y);
 
         if (_selectedTilePos != selectedTilePos)
         {
@@ -231,6 +230,7 @@ public class TileManager : MonoBehaviour
             farmSelectedTileMap.SetTile(_selectedTilePos, selectedTile);
             selectedTilePos = _selectedTilePos;
         }
+        Debug.Log("Selected Tile Pos: " + selectedTilePos);
     }
 
     public void ChangeTileState()
