@@ -6,7 +6,7 @@ public class OpenStore : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            GameManager.Instance.uiManager.ToggleStore();
+            InGameManager.Instance.uiManager.ToggleStore();
         }
     }
 }

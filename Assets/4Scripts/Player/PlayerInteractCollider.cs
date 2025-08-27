@@ -25,7 +25,7 @@ public class PlayerInteractCollider : MonoBehaviour
 
         if (collision.CompareTag("Gift"))
         {
-            GameManager.Instance.giftGet.isGiftGet = true;
+            InGameManager.Instance.giftGet.isGiftGet = true;
             collision.GetComponent<Gift>().OpenGift();
         }
     }

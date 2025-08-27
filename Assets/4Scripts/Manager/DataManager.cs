@@ -67,19 +67,19 @@ public class DataManager : MonoBehaviour
 
     private void SavePlayer()
     {
-        if (GameManager.Instance.player == null)
+        if (InGameManager.Instance.player == null)
         {
             Debug.LogError("DataManager - Player ¾øÀ½");
             return;
         }
 
-        string json = JsonUtility.ToJson(GameManager.Instance.player.playerSaveData);
+        string json = JsonUtility.ToJson(InGameManager.Instance.player.playerSaveData);
         File.WriteAllText(Path.Combine(path, playerSaveFileName), json);
     }
 
     private void SaveTile()
     {
-        tileSaveDatas = GameManager.Instance.tileManager.GetTileData();
+        tileSaveDatas = InGameManager.Instance.tileManager.GetTileData();
 
         string json = JsonUtility.ToJson(tileSaveDatas);
         File.WriteAllText(Path.Combine(path, tileSaveFileName), json);
@@ -87,13 +87,13 @@ public class DataManager : MonoBehaviour
 
     private void SaveDropItem()
     {
-        string json = JsonUtility.ToJson(GameManager.Instance.itemManager.dropItemData);
+        string json = JsonUtility.ToJson(InGameManager.Instance.itemManager.dropItemData);
         File.WriteAllText(Path.Combine(path, dropItemSaveFileName), json);
     }
 
     private void SaveGift()
     {
-        string json = JsonUtility.ToJson(GameManager.Instance.giftGet);
+        string json = JsonUtility.ToJson(InGameManager.Instance.giftGet);
         File.WriteAllText(Path.Combine(path, giftGetSaveFileName), json);
     }
 
@@ -114,7 +114,7 @@ public class DataManager : MonoBehaviour
         if (File.Exists(fullPath))
         {
             string data = File.ReadAllText(fullPath);
-            GameManager.Instance.player.playerSaveData = JsonUtility.FromJson<PlayerSaveData>(data);
+            InGameManager.Instance.player.playerSaveData = JsonUtility.FromJson<PlayerSaveData>(data);
         }
     }
 
@@ -127,7 +127,7 @@ public class DataManager : MonoBehaviour
             string data = File.ReadAllText(fullPath);
             tileSaveDatas = JsonUtility.FromJson<TileSaveDatas>(data);
 
-            GameManager.Instance.tileManager.LoadTileData(tileSaveDatas);
+            InGameManager.Instance.tileManager.LoadTileData(tileSaveDatas);
         }
     }
 
@@ -138,7 +138,7 @@ public class DataManager : MonoBehaviour
         if (File.Exists(fullPath))
         {
             string data = File.ReadAllText(fullPath);
-            GameManager.Instance.itemManager.dropItemData = JsonUtility.FromJson<DropItemDatas>(data);
+            InGameManager.Instance.itemManager.dropItemData = JsonUtility.FromJson<DropItemDatas>(data);
         }
     }
 
@@ -149,7 +149,7 @@ public class DataManager : MonoBehaviour
         if (File.Exists(fullPath))
         {
             string data = File.ReadAllText(fullPath);
-            GameManager.Instance.giftGet = JsonUtility.FromJson<GiftGet>(data);
+            InGameManager.Instance.giftGet = JsonUtility.FromJson<GiftGet>(data);
         }
     }
 

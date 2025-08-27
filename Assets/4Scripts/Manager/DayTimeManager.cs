@@ -52,7 +52,7 @@ public class DayTimeManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.player.isDead)
+        if (InGameManager.Instance.player.isDead)
             return;
         UpdateTime();
     }
@@ -81,7 +81,7 @@ public class DayTimeManager : MonoBehaviour
 
             if (gameTimer >= dayEndTime * secondsPerHour)
             {
-                GameManager.Instance.player.Die();
+                InGameManager.Instance.player.Die();
                 return;
             }
 

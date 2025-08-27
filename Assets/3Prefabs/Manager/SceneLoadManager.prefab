@@ -219,8 +219,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6573817441247141428}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 565b5dce39d678c4696dacc39d4a7fde, type: 3}
+  m_Script: {fileID: 11500000, guid: d1b7008ff7af62a4fb7a15786e2c8aab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fadeInOutDuration: 0.5
   fadeInOutImage: {fileID: 8720975787303515031}
+  prevSceneName: 
+  isSceneLoading: 0
+  isFarmToHouse: 0

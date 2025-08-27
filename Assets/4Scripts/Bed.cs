@@ -19,7 +19,7 @@ public class Bed : MonoBehaviour
             && Mathf.Abs(transform.position.x - collision.transform.position.x) <= 0.1f)
         {
             canPassDay = false;
-            GameManager.Instance.dayTimeManager.NextDay();
+            InGameManager.Instance.dayTimeManager.NextDay();
         }
     }
 

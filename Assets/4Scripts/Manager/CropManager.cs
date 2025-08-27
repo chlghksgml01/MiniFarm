@@ -8,14 +8,14 @@ public class CropManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.dayTimeManager.OnDayFinished += PrepareNewDayCrop;
+        InGameManager.Instance.dayTimeManager.OnDayFinished += PrepareNewDayCrop;
     }
 
     private void OnDisable()
     {
-        if (GameManager.Instance == null)
+        if (InGameManager.Instance == null)
             return;
-        GameManager.Instance.dayTimeManager.OnDayFinished -= PrepareNewDayCrop;
+        InGameManager.Instance.dayTimeManager.OnDayFinished -= PrepareNewDayCrop;
     }
 
     public Tile GetCropSeedTile(Vector3Int cellPosition, bool isWet)
@@ -39,13 +39,13 @@ public class CropManager : MonoBehaviour
 
         CropItemData.isWatered = true;
         Tile wetCropTile = CropItemData.wetCropTiles[CropItemData.currentGrowthLevel - 1];
-        GameManager.Instance.tileManager.cropTileMap.SetTile(GameManager.Instance.tileManager.selectedTilePos, wetCropTile);
+        InGameManager.Instance.tileManager.cropTileMap.SetTile(InGameManager.Instance.tileManager.selectedTilePos, wetCropTile);
     }
 
     public void PrepareNewDayCrop()
     {
-        TileManager tileManager = GameManager.Instance.tileManager;
-        if (tileManager == null || GameManager.Instance.cropManager.plantedCropsDict.Count == 0)
+        TileManager tileManager = InGameManager.Instance.tileManager;
+        if (tileManager == null || InGameManager.Instance.cropManager.plantedCropsDict.Count == 0)
             return;
 
         foreach (KeyValuePair<Vector3Int, CropItemData> cropTile in plantedCropsDict)
@@ -78,12 +78,12 @@ public class CropManager : MonoBehaviour
 
     public bool CanHarvest()
     {
-        if (GameManager.Instance.tileManager == null)
+        if (InGameManager.Instance.tileManager == null)
             return false;
-        TileManager tileManager = GameManager.Instance.tileManager;
+        TileManager tileManager = InGameManager.Instance.tileManager;
         Vector3Int selectedTilePos = tileManager.selectedTilePos;
 
-        var cropDict = GameManager.Instance.cropManager.plantedCropsDict;
+        var cropDict = InGameManager.Instance.cropManager.plantedCropsDict;
         cropDict.TryGetValue(selectedTilePos, out CropItemData CropItemData);
         if (CropItemData == null)
             return false;
@@ -96,7 +96,7 @@ public class CropManager : MonoBehaviour
 
     public void HarvestCrop()
     {
-        TileManager tileManager = GameManager.Instance.tileManager;
+        TileManager tileManager = InGameManager.Instance.tileManager;
         Vector3Int selectedTilePos = tileManager.selectedTilePos;
 
         if (!CanHarvest())
@@ -105,9 +105,9 @@ public class CropManager : MonoBehaviour
             return;
         }
 
-        GameManager.Instance.player.SetPlayerDirection(tileManager.mouseDirection);
+        InGameManager.Instance.player.SetPlayerDirection(tileManager.mouseDirection);
 
-        CropItemData cropItemData = GameManager.Instance.cropManager.plantedCropsDict[selectedTilePos];
+        CropItemData cropItemData = InGameManager.Instance.cropManager.plantedCropsDict[selectedTilePos];
 
         if (cropItemData.isRegrowable)
         {
@@ -131,7 +131,7 @@ public class CropManager : MonoBehaviour
                 tileManager.tileDict[selectedTilePos].tileState = TileState.Tilled;
         }
 
-        GameManager.Instance.cropManager.plantedCropsDict.Remove(selectedTilePos);
+        InGameManager.Instance.cropManager.plantedCropsDict.Remove(selectedTilePos);
         tileManager.SetTile(tileManager.cropTileMap, selectedTilePos, null);
     }
 
@@ -154,8 +154,8 @@ public class CropManager : MonoBehaviour
     public void LoadCropData(Vector3Int pos, CropSaveData cropSaveData)
     {
         ItemData itemData = new ItemData();
-        itemData.SetItemData(GameManager.Instance.itemManager.GetItemData(cropSaveData.cropName));
-        itemData.cropItemData.SetCropItemData(GameManager.Instance.itemManager.GetItemData(cropSaveData.cropName).cropItemData);
+        itemData.SetItemData(InGameManager.Instance.itemManager.GetItemData(cropSaveData.cropName));
+        itemData.cropItemData.SetCropItemData(InGameManager.Instance.itemManager.GetItemData(cropSaveData.cropName).cropItemData);
 
         itemData.cropItemData.currentGrowthDuration = cropSaveData.currentGrowthDuration;
         itemData.cropItemData.currentGrowthLevel = cropSaveData.currentGrowthLevel;

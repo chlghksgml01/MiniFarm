@@ -15,13 +15,13 @@ public class SceneInitializer : MonoBehaviour
 
     private void Awake()
     {
-        GameManager.Instance.dayTimeManager.globalLight = globalLight;
-        GameManager.Instance.dayTimeManager.UpdateLight();
+        InGameManager.Instance.dayTimeManager.globalLight = globalLight;
+        InGameManager.Instance.dayTimeManager.UpdateLight();
 
         if (spawnBox != null)
-            GameManager.Instance.slimeSpawnController.spawnBox = spawnBox;
+            InGameManager.Instance.slimeSpawnController.spawnBox = spawnBox;
 
-        TileManager tileManager = GameManager.Instance.tileManager;
+        TileManager tileManager = InGameManager.Instance.tileManager;
         if (cropTileMap != null)
         {
             tileManager.cropTileMap = cropTileMap;

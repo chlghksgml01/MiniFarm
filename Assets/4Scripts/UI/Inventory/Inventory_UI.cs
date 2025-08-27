@@ -40,7 +40,7 @@ public class Inventory_UI : MonoBehaviour
             return;
         }
         selectedItem.gameObject.SetActive(false);
-        inventory = GameManager.Instance.player.playerSaveData.inventory;
+        inventory = InGameManager.Instance.player.playerSaveData.inventory;
 
         if (SceneLoadManager.Instance == null)
         {
@@ -51,8 +51,8 @@ public class Inventory_UI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (GameManager.Instance.player != null)
-            GoldUI.text = GameManager.Instance.player.playerSaveData.gold.ToString();
+        if (InGameManager.Instance.player != null)
+            GoldUI.text = InGameManager.Instance.player.playerSaveData.gold.ToString();
     }
 
     void Update()
@@ -66,7 +66,7 @@ public class Inventory_UI : MonoBehaviour
 
     void KeyInput()
     {
-        if (!GameManager.Instance.uiManager.inventoryPanel.activeSelf)
+        if (!InGameManager.Instance.uiManager.inventoryPanel.activeSelf)
             return;
 
         if (Input.GetMouseButtonDown(0))
@@ -93,7 +93,7 @@ public class Inventory_UI : MonoBehaviour
 
     public void Refresh()
     {
-        inventory = GameManager.Instance.player.playerSaveData.inventory;
+        inventory = InGameManager.Instance.player.playerSaveData.inventory;
 
         if (slotsUIs.Count != inventory.slots.Count)
         {
@@ -160,7 +160,7 @@ public class Inventory_UI : MonoBehaviour
 
     void DropItem()
     {
-        GameManager.Instance.player.CreateDropItem(selectedItem, selectedItem.selectedSlot.itemCount);
+        InGameManager.Instance.player.CreateDropItem(selectedItem, selectedItem.selectedSlot.itemCount);
     }
 
     public void TrashBin()

@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public enum playerDir
 {
@@ -28,9 +28,7 @@ public class Player : Entity
     [SerializeField] public GameObject SwordColliderDown;
     [SerializeField] public GameObject SwordColliderUp;
 
-    [Header("UI")]
-    [SerializeField] public Image healthBar;
-    [SerializeField] public Image staminaBar;
+    private StatUI statUI;
 
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Animator anim;
@@ -47,6 +45,7 @@ public class Player : Entity
 
     public bool isDead = false;
     private SFXManager sfxManager;
+    public event Action<StatType> OnStatChanged;
 
     private void Awake()
     {
@@ -65,7 +64,7 @@ public class Player : Entity
 
         stateMachine.Initialize(idleState);
 
-        playerSaveData.inventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
+        playerSaveData.inventory = new Inventory(InGameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
     }
     private void Start()
     {
@@ -75,14 +74,14 @@ public class Player : Entity
     protected override void OnEnable()
     {
         base.OnEnable();
-        GameManager.Instance.dayTimeManager.OnDayFinished += PrepareNewDay;
+        InGameManager.Instance.dayTimeManager.OnDayFinished += PrepareNewDay;
     }
 
     private void OnDisable()
     {
-        if (GameManager.Instance == null)
+        if (InGameManager.Instance == null)
             return;
-        GameManager.Instance.dayTimeManager.OnDayFinished -= PrepareNewDay;
+        InGameManager.Instance.dayTimeManager.OnDayFinished -= PrepareNewDay;
     }
 
     private void PrepareNewDay()
@@ -94,7 +93,7 @@ public class Player : Entity
         else
             playerSaveData.stamina = maxStamina * 3 / 4;
 
-        SetGague(staminaBar, playerSaveData.stamina, maxStamina);
+        OnStatChanged?.Invoke(StatType.Stamina);
 
         isDead = false;
         anim.SetBool("isDeath", false);
@@ -104,7 +103,7 @@ public class Player : Entity
 
     void Update()
     {
-        if (isDead || GameManager.Instance.uiManager.IsUIOpen() || SceneLoadManager.Instance.isSceneLoading)
+        if (isDead || InGameManager.Instance.uiManager.IsUIOpen() || SceneLoadManager.Instance.isSceneLoading)
         {
             if (sfxManager.isPlaying())
                 sfxManager.Stop();
@@ -142,7 +141,8 @@ public class Player : Entity
     public void Damage(int _damage)
     {
         playerSaveData.hp -= _damage;
-        SetGague(healthBar, playerSaveData.hp, maxHp);
+        OnStatChanged?.Invoke(StatType.Health);
+
         if (playerSaveData.hp <= 0 && !isDead)
         {
             Die();
@@ -161,35 +161,16 @@ public class Player : Entity
     private IEnumerator StartDie()
     {
         yield return new WaitForSeconds(1f);
-        GameManager.Instance.dayTimeManager.NextDay();
+        InGameManager.Instance.dayTimeManager.NextDay();
     }
 
     public void UseStamina()
     {
         playerSaveData.stamina -= workStaminaCost;
-        SetGague(staminaBar, playerSaveData.stamina, maxStamina);
+        OnStatChanged?.Invoke(StatType.Stamina);
+
         if (playerSaveData.stamina <= 0)
             Die();
-    }
-
-    public void SetGague(Image gauge, int value, int maxValue)
-    {
-        if (value <= 0)
-        {
-            gauge.fillAmount = 0f;
-            return;
-        }
-
-        float percent = (float)value / maxValue;
-
-        for (float i = 8f; i >= 1f; i--)
-        {
-            if (percent >= 0.125f * i)
-            {
-                gauge.fillAmount = i / 8f;
-                break;
-            }
-        }
     }
 
     public void CreateDropItem(SelectedItem_UI selectedItem, int count)
@@ -206,7 +187,7 @@ public class Player : Entity
         Vector2 mouseDir = (mousePos - playerPos).normalized * 2.5f;
         Vector2 bounceBasePos = playerPos + mouseDir;
 
-        GameObject dropItemPrefab = GameManager.Instance.itemManager.GetItemPrefab(selectedItem.GetSelectedItemName());
+        GameObject dropItemPrefab = InGameManager.Instance.itemManager.GetItemPrefab(selectedItem.GetSelectedItemName());
         GameObject item = Instantiate(dropItemPrefab, bounceBasePos, Quaternion.identity);
         Item _item = item.GetComponent<Item>();
 
@@ -225,7 +206,7 @@ public class Player : Entity
 
         holdItem.gameObject.SetActive(true);
 
-        GameManager.Instance.itemManager.itemDict.TryGetValue(holdItemData.itemName, out Item item);
+        InGameManager.Instance.itemManager.itemDict.TryGetValue(holdItemData.itemName, out Item item);
         if (item.IsEmpty())
             return;
         holdItem.SetHoldItem(item.itemData);
@@ -248,13 +229,13 @@ public class Player : Entity
         stateMachine.ChangeState(pickUpState);
 
         // 현태 선택된 타일에 있는 작물 가져오기
-        CropItemData CropItemData = GameManager.Instance.tileManager.GetSelectedCropItemData();
+        CropItemData CropItemData = InGameManager.Instance.tileManager.GetSelectedCropItemData();
 
-        GameManager.Instance.itemManager.itemDict.TryGetValue(CropItemData.cropName, out Item item);
+        InGameManager.Instance.itemManager.itemDict.TryGetValue(CropItemData.cropName, out Item item);
 
         playerSaveData.inventory.AddItem(item);
 
-        if (!GameManager.Instance.player.holdItem.IsEmpty())
+        if (!InGameManager.Instance.player.holdItem.IsEmpty())
             return;
 
         holdItem.gameObject.SetActive(true);
@@ -318,7 +299,7 @@ public class Player : Entity
 
     public bool CanHarvest()
     {
-        if (holdItem.IsEmpty() || holdItem.itemData.itemName == GameManager.Instance.tileManager.GetSelectedCropName())
+        if (holdItem.IsEmpty() || holdItem.itemData.itemName == InGameManager.Instance.tileManager.GetSelectedCropName())
             return true;
 
         return false;
@@ -357,8 +338,8 @@ public class Player : Entity
 
     public void InitializePlayerData()
     {
-        SetGague(healthBar, playerSaveData.hp, maxHp);
-        SetGague(staminaBar, playerSaveData.stamina, maxStamina);
+        OnStatChanged?.Invoke(StatType.Health);
+        OnStatChanged?.Invoke(StatType.Stamina);
     }
 
     public void StartSceneLoad()

@@ -10,13 +10,13 @@ public class StorePlayerInventory_UI : MonoBehaviour
 
     public void RefreshPlayerInventory()
     {
-        if (GameManager.Instance.player == null)
+        if (InGameManager.Instance.player == null)
             return;
 
         if (playerInventory == null)
             InitializePlayerInventory();
 
-        playerInventory = GameManager.Instance.player.playerSaveData.inventory;
+        playerInventory = InGameManager.Instance.player.playerSaveData.inventory;
 
         for (int i = 0; i < slotsUIs.Count; i++)
             slotsUIs[i].SetItem(playerInventory.slots[i]);
@@ -24,7 +24,7 @@ public class StorePlayerInventory_UI : MonoBehaviour
 
     public void InitializePlayerInventory()
     {
-        playerInventory = new Inventory(GameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
+        playerInventory = new Inventory(InGameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
 
         int slotCount = playerInventory.slots.Count;
         for (int i = 0; i < slotCount; i++)
@@ -38,7 +38,7 @@ public class StorePlayerInventory_UI : MonoBehaviour
     {
         GameObject selectedSlot = EventSystem.current.currentSelectedGameObject;
         Slot_UI slotUI = selectedSlot.GetComponentInChildren<Slot_UI>();
-        ItemData itemData = GameManager.Instance.itemManager.GetItemData(slotUI.itemName);
+        ItemData itemData = InGameManager.Instance.itemManager.GetItemData(slotUI.itemName);
 
         if (itemData == null)
         {

@@ -10,28 +10,24 @@ public static class TileLogicHelper
             return;
 
         TileState tileState = centerTileData.tileState;
-        TileManager tileManager = GameManager.Instance.tileManager;
+        TileManager tileManager = InGameManager.Instance.tileManager;
 
         string cropName = "";
         // 플레이어가 들고있는 씨앗 이름으로 타일 가져오기
-        if (!GameManager.Instance.player.holdItem.itemData.IsCropEmpty())
-            cropName = GameManager.Instance.player.holdItem.itemData.cropItemData.cropName;
+        if (!InGameManager.Instance.player.holdItem.itemData.IsCropEmpty())
+            cropName = InGameManager.Instance.player.holdItem.itemData.cropItemData.cropName;
 
         // 씨앗 심기
         if (cropName != "" && (tileState == TileState.Tilled || tileState == TileState.Watered))
-        {
             PlantCrop(cellPosition, tileDict, tileState, tileManager);
-        }
         // 도구 사용
         else
-        {
             ApplyTool(cellPosition, tileDict, centerTileData, tileState, tileManager);
-        }
     }
 
     private static void PlantCrop(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileState tileState, TileManager tileManager)
     {
-        CropManager cropManager = GameManager.Instance.cropManager;
+        CropManager cropManager = InGameManager.Instance.cropManager;
         Tilemap farmFieldMap = tileManager.cropTileMap;
 
         if (farmFieldMap.GetTile(cellPosition) == null)
@@ -40,31 +36,31 @@ public static class TileLogicHelper
 
             // 씨앗 타일 가져오기
             if (tileState == TileState.Tilled)
-                cropSeedTile = GameManager.Instance.player.holdItem.itemData.cropItemData.cropTiles[0];
+                cropSeedTile = InGameManager.Instance.player.holdItem.itemData.cropItemData.cropTiles[0];
             else if (tileState == TileState.Watered)
-                cropSeedTile = GameManager.Instance.player.holdItem.itemData.cropItemData.wetCropTiles[0];
+                cropSeedTile = InGameManager.Instance.player.holdItem.itemData.cropItemData.wetCropTiles[0];
 
             if (cropSeedTile != null)
             {
                 farmFieldMap.SetTile(cellPosition, cropSeedTile);
 
                 cropManager.plantedCropsDict.TryAdd(cellPosition, new CropItemData());
-                cropManager.plantedCropsDict[cellPosition].SetCropItemData(GameManager.Instance.player.holdItem.itemData.cropItemData);
+                cropManager.plantedCropsDict[cellPosition].SetCropItemData(InGameManager.Instance.player.holdItem.itemData.cropItemData);
 
                 if (tileState == TileState.Watered)
                     cropManager.plantedCropsDict[cellPosition].isWatered = true;
                 tileDict[cellPosition].tileState = TileState.Planted;
-                GameManager.Instance.uiManager.toolBar_UI.UseItem();
+                InGameManager.Instance.uiManager.toolBar_UI.UseItem();
             }
         }
     }
 
     private static void ApplyTool(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileData centerTileData, TileState tileState, TileManager tileManager)
     {
-        CropManager cropManager = GameManager.Instance.cropManager;
+        CropManager cropManager = InGameManager.Instance.cropManager;
         Tilemap interactableMap = tileManager.tilledTileMap;
 
-        ToolType playerToolType = GameManager.Instance.player.playerToolType;
+        ToolType playerToolType = InGameManager.Instance.player.playerToolType;
         switch (playerToolType)
         {
             case ToolType.Hoe:
@@ -175,8 +171,8 @@ public static class TileLogicHelper
 
     static private void UpdateConnectedTilledTile(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, bool isInteractedTile = false)
     {
-        Tilemap interactableMap = GameManager.Instance.tileManager.tilledTileMap;
-        List<Tile> tilledTileDict = GameManager.Instance.tileManager.tilledTileDict;
+        Tilemap interactableMap = InGameManager.Instance.tileManager.tilledTileMap;
+        List<Tile> tilledTileDict = InGameManager.Instance.tileManager.tilledTileDict;
 
         // TileConnectedState 설정
         SetTileConnectedDirection(cellPosition, tileDict);
@@ -186,8 +182,8 @@ public static class TileLogicHelper
 
     static public void DisconnectSurroundingTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict)
     {
-        Tilemap tilledTileMap = GameManager.Instance.tileManager.tilledTileMap;
-        List<Tile> tilledTileDict = GameManager.Instance.tileManager.tilledTileDict;
+        Tilemap tilledTileMap = InGameManager.Instance.tileManager.tilledTileMap;
+        List<Tile> tilledTileDict = InGameManager.Instance.tileManager.tilledTileDict;
 
         Vector3Int rightCellPos = cellPosition + Vector3Int.right;
         Vector3Int leftCellPos = cellPosition + Vector3Int.left;

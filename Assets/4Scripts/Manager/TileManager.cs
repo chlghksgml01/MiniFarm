@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public enum MouseDirection
@@ -35,7 +33,6 @@ public class TileManager : MonoBehaviour
 
     private Player player;
     private Vector3Int playerCellPosition;
-    private bool isNewDay = false;
 
     private Dictionary<MouseDirection, Vector2Int> mouseDirectionValues = new Dictionary<MouseDirection, Vector2Int>
         {
@@ -54,10 +51,10 @@ public class TileManager : MonoBehaviour
 
     void Start()
     {
-        player = GameManager.Instance.player;
+        player = InGameManager.Instance.player;
 
         InitializeTileData();
-        GameManager.Instance.dayTimeManager.OnDayFinished += PrepareNewDayTile;
+        InGameManager.Instance.dayTimeManager.OnDayFinished += PrepareNewDayTile;
 
         if (SceneLoadManager.Instance == null)
         {
@@ -69,9 +66,9 @@ public class TileManager : MonoBehaviour
 
     private void OnDisable()
     {
-        if (GameManager.Instance == null)
+        if (InGameManager.Instance == null)
             return;
-        GameManager.Instance.dayTimeManager.OnDayFinished -= PrepareNewDayTile;
+        InGameManager.Instance.dayTimeManager.OnDayFinished -= PrepareNewDayTile;
 
         if (SceneLoadManager.Instance == null)
             return;
@@ -99,7 +96,6 @@ public class TileManager : MonoBehaviour
                 tilledTile.Value.tileState = TileState.Empty;
             }
         }
-        isNewDay = true;
     }
 
     void OnSceneLoaded()
@@ -112,17 +108,14 @@ public class TileManager : MonoBehaviour
     {
         if (tilledTileMap == null)
             return;
-        CropManager cropManager = GameManager.Instance.cropManager;
+        CropManager cropManager = InGameManager.Instance.cropManager;
 
         // 괭이질/물 준 타일
         foreach (KeyValuePair<Vector3Int, TileData> tile in tileDict)
         {
             if (tile.Value.tileState != TileState.None && tile.Value.tileState != TileState.Empty)
             {
-                if (isNewDay)
-                    TileLogicHelper.DisconnectSurroundingTiles(tile.Key, tileDict);
-                else
-                    TileLogicHelper.ConnectSurroundginTiles(tile.Key, tileDict, tileDict[tile.Key]);
+                TileLogicHelper.ConnectSurroundginTiles(tile.Key, tileDict, tileDict[tile.Key]);
 
                 if (tile.Value.tileState == TileState.Watered)
                 {
@@ -133,8 +126,6 @@ public class TileManager : MonoBehaviour
                     tileDict[tile.Key].tileState = TileState.Tilled;
             }
         }
-        isNewDay = false;
-
         // 작물 심은 타일
         foreach (KeyValuePair<Vector3Int, CropItemData> plantedCropData in cropManager.plantedCropsDict)
         {
@@ -263,14 +254,13 @@ public class TileManager : MonoBehaviour
 
     public CropItemData GetSelectedCropItemData()
     {
-        GameManager.Instance.cropManager.plantedCropsDict.TryGetValue(selectedTilePos, out CropItemData CropItemData);
+        InGameManager.Instance.cropManager.plantedCropsDict.TryGetValue(selectedTilePos, out CropItemData CropItemData);
         return CropItemData;
     }
 
-
     public string GetSelectedCropName()
     {
-        var cropDict = GameManager.Instance.cropManager.plantedCropsDict;
+        var cropDict = InGameManager.Instance.cropManager.plantedCropsDict;
         cropDict.TryGetValue(selectedTilePos, out CropItemData CropItemData);
 
         if (CropItemData == null)
@@ -298,7 +288,7 @@ public class TileManager : MonoBehaviour
             tileSaveData.tileData = pair.Value;
 
             if (pair.Value.tileState == TileState.Planted)
-                GameManager.Instance.cropManager.SaveCropData(tileSaveData.cropSaveData, pair.Key);
+                InGameManager.Instance.cropManager.SaveCropData(tileSaveData.cropSaveData, pair.Key);
 
             tileSaveDatas.tileSaveDatas.Add(tileSaveData);
         }
@@ -315,7 +305,7 @@ public class TileManager : MonoBehaviour
                 tileDict[tileSaveData.tilePos] = tileSaveData.tileData;
             if (tileSaveData.cropSaveData != null && tileSaveData.tileData.tileState == TileState.Planted)
             {
-                GameManager.Instance.cropManager.LoadCropData(tileSaveData.tilePos, tileSaveData.cropSaveData);
+                InGameManager.Instance.cropManager.LoadCropData(tileSaveData.tilePos, tileSaveData.cropSaveData);
             }
         }
     }

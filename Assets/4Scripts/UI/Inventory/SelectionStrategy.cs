@@ -24,7 +24,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
     {
         // Canvas에 있는 애들 가져오기
         List<RaycastResult> results = DetectUIUnderCursor();
-        inventoryUI = GameManager.Instance.uiManager.inventory_UI;
+        inventoryUI = InGameManager.Instance.uiManager.inventory_UI;
 
         foreach (var result in results)
         {
@@ -38,7 +38,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
             {
                 // 클릭한 슬롯UI의 슬롯 가져오기
                 if (slots == null)
-                    slots = GameManager.Instance.player.playerSaveData.inventory.slots;
+                    slots = InGameManager.Instance.player.playerSaveData.inventory.slots;
                 selectedSlot = slots[slotUI.slotIdx];
 
 
@@ -70,7 +70,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
         }
 
         // 인벤창 켜있는데 인벤말고 다른거 클릭 -> 아이템 드랍
-        if (GameManager.Instance.uiManager.inventoryPanel.activeSelf && !EventSystem.current.IsPointerOverGameObject())
+        if (InGameManager.Instance.uiManager.inventoryPanel.activeSelf && !EventSystem.current.IsPointerOverGameObject())
         {
             if (selectedItemUI.IsEmpty())
                 return;
@@ -116,9 +116,9 @@ public abstract class BaseClickStrategy : ISelectionStrategy
         if (selectedSlot.IsEmpty())
             selectedSlot.SetEmpty();
 
-        GameManager.Instance.uiManager.inventory_UI.Refresh();
+        InGameManager.Instance.uiManager.inventory_UI.Refresh();
 
-        selectedItemUI.transform.SetParent(GameManager.Instance.uiManager.inventory_UI.transform.root); // UI 최상위로 이동
+        selectedItemUI.transform.SetParent(InGameManager.Instance.uiManager.inventory_UI.transform.root); // UI 최상위로 이동
         selectedItemUI.transform.position = pointerData.position;
     }
 
@@ -129,7 +129,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
             inventoryUI.isDragging = false;
         }
 
-        GameManager.Instance.uiManager.inventory_UI.Refresh();
+        InGameManager.Instance.uiManager.inventory_UI.Refresh();
     }
 }
 
@@ -161,7 +161,7 @@ public class LeftClickStrategy : BaseClickStrategy
 
     protected override void DropItem()
     {
-        GameManager.Instance.player.CreateDropItem(selectedItemUI, selectedItemUI.selectedSlot.itemCount);
+        InGameManager.Instance.player.CreateDropItem(selectedItemUI, selectedItemUI.selectedSlot.itemCount);
         selectedItemUI.SetEmpty();
     }
 
@@ -211,7 +211,7 @@ public class RightClickStrategy : BaseClickStrategy
 
     protected override void DropItem()
     {
-        GameManager.Instance.player.CreateDropItem(selectedItemUI, 1);
+        InGameManager.Instance.player.CreateDropItem(selectedItemUI, 1);
         selectedItemUI.SetCount(selectedItemUI.selectedSlot.itemCount - 1);
     }
 }
@@ -246,7 +246,7 @@ public class ShiftRightClickStrategy : BaseClickStrategy
         int dropItemCount = (int)Mathf.Ceil(selectedItemUI.selectedSlot.itemCount / 2f);
         int selectedUIcount = selectedItemUI.selectedSlot.itemCount - dropItemCount;
 
-        GameManager.Instance.player.CreateDropItem(selectedItemUI, dropItemCount);
+        InGameManager.Instance.player.CreateDropItem(selectedItemUI, dropItemCount);
 
         selectedItemUI.SetCount(selectedUIcount);
     }

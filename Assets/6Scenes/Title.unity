@@ -3474,7 +3474,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7964111711683165867, guid: 15f598806d4f9c54690dfb49ec029c0d, type: 3}
       propertyPath: m_Name
-      value: SoungManager
+      value: SoundManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3528,6 +3528,10 @@ PrefabInstance:
     - target: {fileID: 205851795597760948, guid: 12cc7ff609dcb9a4cbf03b39c57af25d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2048280752200082938, guid: 12cc7ff609dcb9a4cbf03b39c57af25d, type: 3}
+      propertyPath: prevSceneName
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6573817441247141428, guid: 12cc7ff609dcb9a4cbf03b39c57af25d, type: 3}
       propertyPath: m_Name

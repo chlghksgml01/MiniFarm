@@ -82,7 +82,7 @@ public class Item : MonoBehaviour
         float dirX = 1f;
 
         if (isPlayerDrop)
-            dirX = (transform.position - GameManager.Instance.player.transform.position).normalized.x;
+            dirX = (transform.position - InGameManager.Instance.player.transform.position).normalized.x;
         bounceBasePos.x += dirX * bounceVelocityX * Time.deltaTime;
         transform.position = bounceBasePos + new Vector3(0, bounceY, 0);
     }
@@ -100,7 +100,7 @@ public class Item : MonoBehaviour
 
         GetComponent<SpriteRenderer>().sprite = _itemData.icon;
 
-        GameManager.Instance.uiManager.toolBar_UI.CheckSlot();
+        InGameManager.Instance.uiManager.toolBar_UI.CheckSlot();
     }
 
     private void SetCount(int count)

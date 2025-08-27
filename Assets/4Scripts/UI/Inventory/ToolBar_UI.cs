@@ -53,15 +53,15 @@ public class ToolBar_UI : MonoBehaviour
         if (selectedSlotIdx >= slotCount)
             selectedSlotIdx = 0;
 
-        ItemData selectedItemData = GameManager.Instance.player.playerSaveData.inventory.slots[selectedSlotIdx].slotItemData;
+        ItemData selectedItemData = InGameManager.Instance.player.playerSaveData.inventory.slots[selectedSlotIdx].slotItemData;
 
-        if (GameManager.Instance.player.stateMachine.currentState == GameManager.Instance.player.pickUpState)
+        if (InGameManager.Instance.player.stateMachine.currentState == InGameManager.Instance.player.pickUpState)
             return;
 
         if (!selectedItemData.IsEmpty() && selectedItemData.itemType != ItemType.None)
-            GameManager.Instance.player.SetHoldItem(selectedItemData);
+            InGameManager.Instance.player.SetHoldItem(selectedItemData);
         else if (selectedItemData.IsEmpty())
-            GameManager.Instance.player.SetHoldItem();
+            InGameManager.Instance.player.SetHoldItem();
     }
 
     private void DrawSelectedUI()
@@ -73,7 +73,7 @@ public class ToolBar_UI : MonoBehaviour
 
     public void SetToolBarInventory()
     {
-        Inventory inventory = GameManager.Instance.player.playerSaveData.inventory;
+        Inventory inventory = InGameManager.Instance.player.playerSaveData.inventory;
 
         for (int i = 0; i < slotsUIs.Count; i++)
         {
@@ -86,7 +86,7 @@ public class ToolBar_UI : MonoBehaviour
 
     public void UseItem()
     {
-        GameManager gameManager = GameManager.Instance;
+        InGameManager gameManager = InGameManager.Instance;
         if (gameManager.player.playerSaveData.inventory.slots[selectedSlotIdx].slotItemData.IsEmpty())
             return;
 

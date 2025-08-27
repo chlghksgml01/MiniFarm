@@ -16,7 +16,7 @@ public class PlayerWorkingState : PlayerState
 
         if (player.playerToolType == ToolType.Sword)
         {
-            player.SetPlayerDirection(GameManager.Instance.tileManager.mouseDirection);
+            player.SetPlayerDirection(InGameManager.Instance.tileManager.mouseDirection);
 
             if (player.playerDir == playerDir.Left)
             {

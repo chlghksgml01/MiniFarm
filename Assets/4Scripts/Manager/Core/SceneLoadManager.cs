@@ -9,9 +9,9 @@ public class SceneLoadManager : MonoBehaviour
     [SerializeField] private float fadeInOutDuration = 0.5f;
     [SerializeField] private Image fadeInOutImage;
 
-    public string prevSceneName = string.Empty;
-    public bool isSceneLoading = false;
-    public bool isFarmToHouse = false;
+    [HideInInspector] public string prevSceneName = string.Empty;
+    [HideInInspector] public bool isSceneLoading = false;
+    [HideInInspector] public bool isFarmToHouse = false;
 
     public event Action SceneLoad = null;
     private Coroutine sceneLoadCoroutine = null;
@@ -59,17 +59,17 @@ public class SceneLoadManager : MonoBehaviour
         prevSceneName = SceneManager.GetActiveScene().name;
         if (!isGameStart)
         {
-            if (prevSceneName == "Farm" && sceneName == "House" && !GameManager.Instance.player.isDead)
+            if (prevSceneName == "Farm" && sceneName == "House" && !InGameManager.Instance.player.isDead)
                 isFarmToHouse = true;
-            GameManager.Instance.itemManager.SaveDropItem();
+            InGameManager.Instance.itemManager.SaveDropItem();
         }
 
         SetBGM(sceneName);
 
         if (!isGameStart)
         {
-            GameManager.Instance.player.StartSceneLoad();
-            GameManager.Instance.dayTimeManager.SetTimeStop(true);
+            InGameManager.Instance.player.StartSceneLoad();
+            InGameManager.Instance.dayTimeManager.SetTimeStop(true);
         }
 
         StartCoroutine(FadeInOut(0f, 1f, fadeInOutDuration));
@@ -77,14 +77,14 @@ public class SceneLoadManager : MonoBehaviour
 
         if (sceneName == "Title")
         {
-            Destroy(GameManager.Instance.player.gameObject);
-            Destroy(GameManager.Instance.gameObject);
+            Destroy(InGameManager.Instance.player.gameObject);
+            Destroy(InGameManager.Instance.gameObject);
             Canvas inGameCanvas = FindAnyObjectByType<Canvas>();
             Destroy(inGameCanvas.gameObject);
         }
 
         if (!isGameStart && isNextDay)
-            GameManager.Instance.dayTimeManager.StartOnDayFinishedEvent();
+            InGameManager.Instance.dayTimeManager.StartOnDayFinishedEvent();
 
         AsyncOperation asyncOp = SceneManager.LoadSceneAsync(sceneName);
 
@@ -94,29 +94,29 @@ public class SceneLoadManager : MonoBehaviour
         SceneLoad?.Invoke();
 
         if (isNextDay)
-            StartCoroutine(GameManager.Instance.dayTimeManager.StartNewDay());
+            StartCoroutine(InGameManager.Instance.dayTimeManager.StartNewDay());
 
         yield return new WaitForSecondsRealtime(fadeInOutDuration);
 
         if (isGameStart)
         {
             DataManager.instance.LoadData();
-            GameManager.Instance.player.InitializePlayerData();
-            GameManager.Instance.player.gameObject.SetActive(true);
+            InGameManager.Instance.player.InitializePlayerData();
+            InGameManager.Instance.player.gameObject.SetActive(true);
         }
-        if (GameManager.Instance != null)
+        if (InGameManager.Instance != null)
         {
-            GameManager.Instance.itemManager.CreateItem();
+            InGameManager.Instance.itemManager.CreateItem();
             SetSceneLoadData(sceneName, isNextDay);
         }
 
         StartCoroutine(FadeInOut(1f, 0f, fadeInOutDuration));
 
         isSceneLoading = false;
-        if (GameManager.Instance != null)
+        if (InGameManager.Instance != null)
         {
-            GameManager.Instance.dayTimeManager.SetTimeStop(false);
-            GameManager.Instance.uiManager.InitializeUI();
+            InGameManager.Instance.dayTimeManager.SetTimeStop(false);
+            InGameManager.Instance.uiManager.InitializeUI();
         }
         sceneLoadCoroutine = null;
     }
@@ -133,7 +133,7 @@ public class SceneLoadManager : MonoBehaviour
 
     private void SetSceneLoadData(string sceneName, bool isNextDay)
     {
-        Player player = GameManager.Instance.player;
+        Player player = InGameManager.Instance.player;
 
         // 다음날 -> 침대에서 시작
         if (isNextDay)
@@ -150,14 +150,14 @@ public class SceneLoadManager : MonoBehaviour
         // 농장 -> 집 씬 전환
         else if (sceneName == "House" && prevSceneName == "Farm")
         {
-            GameManager.Instance.CreateGift();
+            InGameManager.Instance.CreateGift();
             player.transform.position = new Vector3(0.5f, 0f);
             player.LookUp();
         }
         // 이전 씬이 Title, 집이거나
         else if (sceneName == "House" && (prevSceneName == "Title" || prevSceneName == "House"))
         {
-            GameManager.Instance.CreateGift();
+            InGameManager.Instance.CreateGift();
             player.transform.position = new Vector3(3.32f, 1.4f);
             player.LookDown();
         }

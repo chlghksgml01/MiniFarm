@@ -53,7 +53,7 @@ public class Slime : Entity
         anim.SetFloat("vertical", 0f);
         anim.SetFloat("horizontal", 0f);
 
-        playerTransform = GameManager.Instance.player.transform;
+        playerTransform = InGameManager.Instance.player.transform;
     }
 
     private void Update()
@@ -101,7 +101,7 @@ public class Slime : Entity
             Vector2 knockbackDirection = transform.position - collision.transform.position;
             rigid.AddForce(knockbackDirection.normalized * knockbackForce, ForceMode2D.Impulse);
 
-            hp -= GameManager.Instance.player.damage;
+            hp -= InGameManager.Instance.player.damage;
             if (hp <= 0)
             {
                 Death();

@@ -80,7 +80,7 @@ public class UI_Manager : MonoBehaviour
         if (!store.activeSelf)
         {
             Time.timeScale = 0f;
-            GameManager.Instance.dayTimeManager.SetTimeStop(true);
+            InGameManager.Instance.dayTimeManager.SetTimeStop(true);
             store.SetActive(true);
             inventoryPanel.SetActive(false);
             toolBarPanel.SetActive(false);
@@ -89,7 +89,7 @@ public class UI_Manager : MonoBehaviour
         {
             store.GetComponent<StoreUI>().CloseStore();
             Time.timeScale = 1f;
-            GameManager.Instance.dayTimeManager.SetTimeStop(false);
+            InGameManager.Instance.dayTimeManager.SetTimeStop(false);
             store.SetActive(false);
             toolBarPanel.SetActive(true);
         }

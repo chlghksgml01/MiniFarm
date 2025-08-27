@@ -19,7 +19,7 @@ public class StoreUI : MonoBehaviour
     {
         if (player == null)
         {
-            player = GameManager.Instance.player;
+            player = InGameManager.Instance.player;
         }
         playerGold.text = player.playerSaveData.gold.ToString();
 

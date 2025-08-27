@@ -41,7 +41,7 @@ public class Inventory
 
             slotItemData.SetItemData(item.itemData);
 
-            GameManager.Instance.uiManager.inventory_UI.Refresh();
+            InGameManager.Instance.uiManager.inventory_UI.Refresh();
         }
 
         public void AddItem(ItemData itemData, int count)
@@ -53,7 +53,7 @@ public class Inventory
 
             slotItemData.SetItemData(itemData);
 
-            GameManager.Instance.uiManager.inventory_UI.Refresh();
+            InGameManager.Instance.uiManager.inventory_UI.Refresh();
         }
 
         public void UseItem(int useCount = -99)
@@ -68,7 +68,7 @@ public class Inventory
                 if (itemCount <= 0)
                     SetEmpty();
 
-                GameManager.Instance.uiManager.inventory_UI.Refresh();
+                InGameManager.Instance.uiManager.inventory_UI.Refresh();
             }
         }
 
@@ -77,7 +77,7 @@ public class Inventory
             itemCount = 0;
             slotItemData.SetEmpty();
 
-            GameManager.Instance.uiManager.inventory_UI.Refresh();
+            InGameManager.Instance.uiManager.inventory_UI.Refresh();
         }
 
         public bool IsEmpty()
@@ -96,7 +96,7 @@ public class Inventory
             else
                 itemCount = _slot.itemCount;
 
-            GameManager.Instance.uiManager.inventory_UI.Refresh();
+            InGameManager.Instance.uiManager.inventory_UI.Refresh();
         }
     }
 
@@ -127,7 +127,7 @@ public class Inventory
             if (slot.IsEmpty())
             {
                 slot.AddItem(item);
-                GameManager.Instance.uiManager.toolBar_UI.CheckSlot();
+                InGameManager.Instance.uiManager.toolBar_UI.CheckSlot();
                 return;
             }
         }
@@ -149,7 +149,7 @@ public class Inventory
             if (slot.IsEmpty())
             {
                 slot.AddItem(itemData, count);
-                GameManager.Instance.uiManager.toolBar_UI.CheckSlot();
+                InGameManager.Instance.uiManager.toolBar_UI.CheckSlot();
                 return;
             }
         }

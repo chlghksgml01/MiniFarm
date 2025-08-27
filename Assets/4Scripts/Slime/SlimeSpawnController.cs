@@ -9,14 +9,14 @@ public class SlimeSpawnController : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.dayTimeManager.SpawnSlime += SpawnSlime;
+        InGameManager.Instance.dayTimeManager.SpawnSlime += SpawnSlime;
     }
 
     private void OnDisable()
     {
-        if (GameManager.Instance == null)
+        if (InGameManager.Instance == null)
             return;
-        GameManager.Instance.dayTimeManager.SpawnSlime -= SpawnSlime;
+        InGameManager.Instance.dayTimeManager.SpawnSlime -= SpawnSlime;
     }
 
     private void SpawnSlime()

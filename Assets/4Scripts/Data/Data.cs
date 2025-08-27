@@ -52,5 +52,5 @@ public class DropItemDatas
 [System.Serializable]
 public class GiftGet
 {
-    public bool isGiftGet = false;
+    public bool isGiftGet { get; set; } = false;
 }
