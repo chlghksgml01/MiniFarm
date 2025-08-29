@@ -103,6 +103,8 @@ public class SceneLoadManager : MonoBehaviour
             DataManager.instance.LoadData();
             InGameManager.Instance.player.InitializePlayerData();
             InGameManager.Instance.player.gameObject.SetActive(true);
+            InGameManager.Instance.uiManager.inventory_UI.Refresh();
+
         }
         if (InGameManager.Instance != null)
         {

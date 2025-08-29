@@ -230,7 +230,6 @@ public class TileManager : MonoBehaviour
             farmSelectedTileMap.SetTile(_selectedTilePos, selectedTile);
             selectedTilePos = _selectedTilePos;
         }
-        Debug.Log("Selected Tile Pos: " + selectedTilePos);
     }
 
     public void ChangeTileState()

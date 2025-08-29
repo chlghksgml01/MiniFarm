@@ -27,7 +27,11 @@ public class Slot_UI : MonoBehaviour
                 SetEmpty();
                 return;
             }
-
+            if (_slot.slotItemData.icon == null)
+            {
+                Debug.Log("slot icon is null");
+                return;
+            }
             itemIcon.sprite = _slot.slotItemData.icon;
             itemIcon.color = new Color(1, 1, 1, 1);
 
