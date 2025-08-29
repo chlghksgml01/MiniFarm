@@ -3,6 +3,11 @@ using TMPro;
 using UnityEngine;
 using static Inventory;
 
+public class DragState
+{
+    public bool isDragging { get; set; }
+}
+
 public class Inventory_UI : MonoBehaviour
 {
     private Inventory inventory;
@@ -18,15 +23,21 @@ public class Inventory_UI : MonoBehaviour
     RightClickStrategy rightClick;
     ShiftRightClickStrategy shiftRightClick;
 
-    public bool isDragging { get; set; } = false;
+    DragState dragState = new DragState();
+
+    public bool IsDragging
+    {
+        get { return dragState.isDragging; }
+        private set { dragState.isDragging = value; }
+    }
 
     private void Awake()
     {
-        leftClick = new LeftClickStrategy(selectedItem);
-        rightClick = new RightClickStrategy(selectedItem);
-        shiftRightClick = new ShiftRightClickStrategy(selectedItem);
+        leftClick = new LeftClickStrategy(selectedItem, dragState);
+        rightClick = new RightClickStrategy(selectedItem, dragState);
+        shiftRightClick = new ShiftRightClickStrategy(selectedItem, dragState);
 
-        for (int i = 0; i < slotsUIs.Count; i++) 
+        for (int i = 0; i < slotsUIs.Count; i++)
         {
             slotsUIs[i].InitializeSlot(i); // 각 슬롯에 인덱스 설정
         }
@@ -52,7 +63,7 @@ public class Inventory_UI : MonoBehaviour
     void Update()
     {
         KeyInput();
-        if (isDragging)
+        if (IsDragging)
         {
             selectedItem.transform.position = Input.mousePosition;
         }
@@ -109,7 +120,7 @@ public class Inventory_UI : MonoBehaviour
     // 버튼 함수
     public void SortInventory()
     {
-        if (isDragging)
+        if (IsDragging)
         {
             PlaceItem();
         }
@@ -120,7 +131,7 @@ public class Inventory_UI : MonoBehaviour
 
     void PlaceItem()
     {
-        isDragging = false;
+        IsDragging = false;
 
         foreach (Slot slot in inventory.slots)
         {
@@ -145,10 +156,10 @@ public class Inventory_UI : MonoBehaviour
 
     public void CloseInventoryUI()
     {
-        if (isDragging)
+        if (IsDragging)
             DropItem();
 
-        isDragging = false;
+        IsDragging = false;
         selectedItem.gameObject.SetActive(false);
     }
 
@@ -160,6 +171,6 @@ public class Inventory_UI : MonoBehaviour
     public void TrashBin()
     {
         selectedItem.SetEmpty();
-        isDragging = false;
+        IsDragging = false;
     }
 }

@@ -68,7 +68,7 @@ public class UI_Manager : MonoBehaviour
             inventoryPanel.SetActive(false);
             toolBarPanel.SetActive(true);
 
-            if (inventory_UI.isDragging)
+            if (inventory_UI.IsDragging)
             {
                 inventory_UI.CloseInventoryUI();
             }

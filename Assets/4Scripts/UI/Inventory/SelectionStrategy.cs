@@ -16,19 +16,22 @@ public abstract class BaseClickStrategy : ISelectionStrategy
     protected Slot selectedSlot;
     protected List<Slot> slots;
     protected Slot_UI slotUI;
-    Inventory_UI inventoryUI = null;
+    public DragState dragState;
 
-    public BaseClickStrategy(SelectedItem_UI _selectedItem) => selectedItemUI = _selectedItem;
+    public BaseClickStrategy(SelectedItem_UI _selectedItem, DragState _dragState)
+    {
+        selectedItemUI = _selectedItem;
+        dragState = _dragState;
+    }
 
     public virtual void ClickHandle()
     {
         // Canvas에 있는 애들 가져오기
         List<RaycastResult> results = DetectUIUnderCursor();
-        inventoryUI = InGameManager.Instance.uiManager.inventory_UI;
 
         foreach (var result in results)
         {
-            if (inventoryUI.isDragging &&
+            if (dragState.isDragging &&
                 (result.gameObject.name == "Sort_Button" || result.gameObject.name == "TrashBin"))
                 return;
 
@@ -41,9 +44,8 @@ public abstract class BaseClickStrategy : ISelectionStrategy
                     slots = InGameManager.Instance.player.playerSaveData.inventory.slots;
                 selectedSlot = slots[slotUI.slotIdx];
 
-
                 // 드래깅상태가 아니라면 
-                if (!inventoryUI.isDragging)
+                if (!dragState.isDragging)
                 {
                     // 빈칸이면 return
                     if (selectedSlot.IsEmpty())
@@ -64,7 +66,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
             }
         }
 
-        if (inventoryUI.isDragging)
+        if (dragState.isDragging)
         {
             CompleteStartDrag();
         }
@@ -79,7 +81,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
             if (selectedItemUI.IsEmpty())
             {
-                inventoryUI.isDragging = false;
+                dragState.isDragging = false;
                 selectedItemUI.SetEmpty();
             }
         }
@@ -104,7 +106,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
     void StartItemDrag()
     {
-        inventoryUI.isDragging = true;
+        dragState.isDragging = true;
         selectedItemUI.gameObject.SetActive(true);
     }
 
@@ -126,7 +128,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
     {
         if (selectedItemUI.IsEmpty())
         {
-            inventoryUI.isDragging = false;
+            dragState.isDragging = false;
         }
 
         InGameManager.Instance.uiManager.inventory_UI.Refresh();
@@ -135,7 +137,7 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
 public class LeftClickStrategy : BaseClickStrategy
 {
-    public LeftClickStrategy(SelectedItem_UI selectedItem) : base(selectedItem) { }
+    public LeftClickStrategy(SelectedItem_UI selectedItem, DragState _dragState) : base(selectedItem, _dragState) { }
 
     protected override void DragStart_SetItemQuantity()
     {
@@ -191,7 +193,7 @@ public class LeftClickStrategy : BaseClickStrategy
 
 public class RightClickStrategy : BaseClickStrategy
 {
-    public RightClickStrategy(SelectedItem_UI selectedItem) : base(selectedItem) { }
+    public RightClickStrategy(SelectedItem_UI selectedItem, DragState _dragState) : base(selectedItem, _dragState) { }
 
     protected override void DragStart_SetItemQuantity()
     {
@@ -218,7 +220,7 @@ public class RightClickStrategy : BaseClickStrategy
 
 public class ShiftRightClickStrategy : BaseClickStrategy
 {
-    public ShiftRightClickStrategy(SelectedItem_UI selectedItem) : base(selectedItem) { }
+    public ShiftRightClickStrategy(SelectedItem_UI selectedItem, DragState _dragState) : base(selectedItem, _dragState) { }
 
     protected override void DragStart_SetItemQuantity()
     {
