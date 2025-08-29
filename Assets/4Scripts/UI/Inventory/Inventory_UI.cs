@@ -26,7 +26,7 @@ public class Inventory_UI : MonoBehaviour
         rightClick = new RightClickStrategy(selectedItem);
         shiftRightClick = new ShiftRightClickStrategy(selectedItem);
 
-        for (int i = 0; i < slotsUIs.Count; i++)
+        for (int i = 0; i < slotsUIs.Count; i++) 
         {
             slotsUIs[i].InitializeSlot(i); // 각 슬롯에 인덱스 설정
         }
@@ -41,12 +41,6 @@ public class Inventory_UI : MonoBehaviour
         }
         selectedItem.gameObject.SetActive(false);
         inventory = InGameManager.Instance.player.playerSaveData.inventory;
-
-        if (SceneLoadManager.Instance == null)
-        {
-            Debug.Log("Inventory_UI - SceneLoadManager 없음");
-            return;
-        }
     }
 
     private void OnEnable()

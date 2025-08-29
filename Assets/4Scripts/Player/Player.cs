@@ -28,8 +28,6 @@ public class Player : Entity
     [SerializeField] public GameObject SwordColliderDown;
     [SerializeField] public GameObject SwordColliderUp;
 
-    private StatUI statUI;
-
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Animator anim;
 
