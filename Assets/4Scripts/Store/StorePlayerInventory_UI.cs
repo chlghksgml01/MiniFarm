@@ -19,18 +19,18 @@ public class StorePlayerInventory_UI : MonoBehaviour
         playerInventory = InGameManager.Instance.player.playerSaveData.inventory;
 
         for (int i = 0; i < slotsUIs.Count; i++)
-            slotsUIs[i].SetItem(playerInventory.slots[i]);
+            slotsUIs[i].SetItem(playerInventory.GetSlot(i));
     }
 
     public void InitializePlayerInventory()
     {
         playerInventory = new Inventory(InGameManager.Instance.uiManager.inventory_UI.slotsUIs.Count);
 
-        int slotCount = playerInventory.slots.Count;
+        int slotCount = playerInventory.GetSlotCount();
         for (int i = 0; i < slotCount; i++)
         {
             slotsUIs[i].InitializeSlot(i);
-            slotsUIs[i].SetItem(playerInventory.slots[i]);
+            slotsUIs[i].SetItem(playerInventory.GetSlot(i));
         }
     }
 

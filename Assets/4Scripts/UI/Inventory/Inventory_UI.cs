@@ -100,7 +100,7 @@ public class Inventory_UI : MonoBehaviour
     {
         inventory = InGameManager.Instance.player.playerSaveData.inventory;
 
-        if (slotsUIs.Count != inventory.slots.Count)
+        if (slotsUIs.Count != inventory.GetSlotCount())
         {
             Debug.Log("Inventory_UI - 인벤UI, 인벤 개수 다름");
             return;
@@ -108,8 +108,8 @@ public class Inventory_UI : MonoBehaviour
 
         for (int i = 0; i < slotsUIs.Count; i++)
         {
-            if (!inventory.slots[i].IsEmpty())
-                slotsUIs[i].SetItem(inventory.slots[i]);
+            if (!inventory.IsSlotEmpty(i))
+                slotsUIs[i].SetItem(inventory.GetSlot(i));
             else
                 slotsUIs[i].SetEmpty();
         }
@@ -133,21 +133,21 @@ public class Inventory_UI : MonoBehaviour
     {
         IsDragging = false;
 
-        foreach (Slot slot in inventory.slots)
+        int sameIndex = inventory.HasSameItem(selectedItem.selectedSlot.slotItemData.itemName);
+
+        if (sameIndex != -1)
         {
-            if (selectedItem.selectedSlot.slotItemData.itemName == slot.slotItemData.itemName)
-            {
-                slot.itemCount += selectedItem.selectedSlot.itemCount;
-                selectedItem.SetEmpty();
-                return;
-            }
+            int count = inventory.GetSlotItemCount(sameIndex) + selectedItem.selectedSlot.itemCount;
+            inventory.SetSlotItemCount(sameIndex, count);
+            selectedItem.SetEmpty();
+            return;
         }
 
-        foreach (Slot slot in inventory.slots)
+        else
         {
-            if (slot.IsEmpty())
+            if (inventory.IsSlotEmpty(sameIndex))
             {
-                slot.SetSlotItemData(selectedItem.selectedSlot, 0);
+                inventory.SetSlotItemData(sameIndex, selectedItem.selectedSlot, selectedItem.selectedSlot.itemCount);
                 selectedItem.SetEmpty();
                 return;
             }

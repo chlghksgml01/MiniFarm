@@ -100,7 +100,7 @@ public class Inventory
         }
     }
 
-    public List<Slot> slots = new List<Slot>();
+    private List<Slot> slots = new List<Slot>();
 
     public Inventory(int numSlots)
     {
@@ -215,4 +215,51 @@ public class Inventory
             }
         }
     }
+
+    public bool IsSlotEmpty(int idx)
+    {
+        if (slots[idx].IsEmpty() || slots[idx].itemCount <= 0)
+            return true;
+        return false;
+    }
+
+    public Slot GetSlot(int idx)
+    {
+        if (idx < 0 || idx >= slots.Count || slots[idx] == null)
+        {
+            Debug.Log($"Inventory - {idx} 번째 슬롯 없음");
+            return null;
+        }
+        return slots[idx];
+    }
+
+    public ItemData GetSlotItemData(int idx)
+    {
+        if (idx < 0 || idx >= slots.Count || slots[idx] == null)
+        {
+            Debug.Log($"Inventory - {idx} 번째 슬롯 없음");
+            return null;
+        }
+        return slots[idx].slotItemData;
+    }
+
+    public int GetSlotCount() => slots.Count;
+
+    public void UseSlotItem(int idx, int useCount = -99) => slots[idx].UseItem(useCount);
+
+    public int HasSameItem(string itemName)
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (itemName == slots[i].slotItemData.itemName)
+                return i;
+        }
+        return -1;
+    }
+
+    public void SetSlotItemCount(int idx, int count) => slots[idx].itemCount = count;
+
+    public int GetSlotItemCount(int idx) => slots[idx].itemCount;
+
+    public void SetSlotItemData(int idx, Slot slot, int count = -99) => slots[idx].SetSlotItemData(slot, count);
 }
