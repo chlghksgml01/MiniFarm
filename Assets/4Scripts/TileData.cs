@@ -36,6 +36,12 @@ public enum TileConnectedDir
     Right = 1 << 3
 }
 
+[CreateAssetMenu(fileName = "TilledTileSet", menuName = "TilledTileSet")]
+public class TilledTileSet : ScriptableObject
+{
+    [SerializeField] public TileBase[] tiles;
+}
+
 [System.Serializable]
 public class TileData
 {

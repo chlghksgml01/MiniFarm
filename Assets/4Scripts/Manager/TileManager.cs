@@ -24,7 +24,8 @@ public class TileManager : MonoBehaviour
     [SerializeField] Tile selectedTile;
     [SerializeField] public Tile emptyTile;
     [SerializeField] public Tile wateringTile;
-    [SerializeField] public List<Tile> tilledTileDict;
+    [HideInInspector] public List<Tile> tilledTileDict;
+    [SerializeField] private TilledTileSet tilledTileSet;
 
     [Space]
     [SerializeField] private int resetTileChance = 30;
@@ -54,6 +55,11 @@ public class TileManager : MonoBehaviour
     private void Awake()
     {
         mainCam = Camera.main;
+
+        for (int i = 0; i < tilledTileSet.tiles.Length; i++)
+        {
+            tilledTileDict.Add(tilledTileSet.tiles[i] as Tile);
+        }
     }
 
     void Start()
@@ -188,6 +194,9 @@ public class TileManager : MonoBehaviour
         playerCellPosition = farmSelectedTileMap.WorldToCell(player.transform.position);
 
         Vector3 prevMousePos = mousePos;
+
+        if(mainCam == null)
+            mainCam = Camera.main;
         mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0f;
 

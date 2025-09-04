@@ -192,5 +192,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b8e3685df9d5c414bb38c83447fd97f0, type: 2}
   - {fileID: 11400000, guid: 113f4b802640c0e46add511f4e5329c1, type: 2}
   - {fileID: 11400000, guid: 44a2e2f35dca5ba4babf851aa3f71693, type: 2}
+  tilledTileSet: {fileID: 11400000, guid: 85bfb6bd9358be54eae039aa2c904efc, type: 2}
   resetTileChance: 30
   mouseDirection: 0
