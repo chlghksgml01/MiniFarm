@@ -24,7 +24,7 @@ public class TileManager : MonoBehaviour
     [SerializeField] Tile selectedTile;
     [SerializeField] public Tile emptyTile;
     [SerializeField] public Tile wateringTile;
-    [HideInInspector] public List<Tile> tilledTileDict;
+    [HideInInspector] public List<Tile> tilledTileList;
     [SerializeField] private TilledTileSet tilledTileSet;
 
     [Space]
@@ -58,7 +58,7 @@ public class TileManager : MonoBehaviour
 
         for (int i = 0; i < tilledTileSet.tiles.Length; i++)
         {
-            tilledTileDict.Add(tilledTileSet.tiles[i] as Tile);
+            tilledTileList.Add(tilledTileSet.tiles[i] as Tile);
         }
     }
 

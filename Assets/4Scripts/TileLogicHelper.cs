@@ -150,19 +150,19 @@ public static class TileLogicHelper
     static private void UpdateConnectedTilledTile(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, bool isInteractedTile = false)
     {
         Tilemap interactableMap = InGameManager.Instance.tileManager.tilledTileMap;
-        List<Tile> tilledTileDict = InGameManager.Instance.tileManager.tilledTileDict;
+        List<Tile> tilledTileList = InGameManager.Instance.tileManager.tilledTileList;
 
         // TileConnectedState 설정
         SetTileConnectedDirection(cellPosition, tileDict);
         int tileConnectedState = (int)tileDict[cellPosition].tileConnectedState;
-        interactableMap.SetTile(cellPosition, tilledTileDict[tileConnectedState]);
+        interactableMap.SetTile(cellPosition, tilledTileList[tileConnectedState]);
     }
 
     // 경작한 타일 끊기
     static public void DisconnectSurroundingTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict)
     {
         Tilemap tilledTileMap = InGameManager.Instance.tileManager.tilledTileMap;
-        List<Tile> tilledTileDict = InGameManager.Instance.tileManager.tilledTileDict;
+        List<Tile> tilledTileList = InGameManager.Instance.tileManager.tilledTileList;
 
         Vector3Int rightCellPos = cellPosition + Vector3Int.right;
         Vector3Int leftCellPos = cellPosition + Vector3Int.left;
@@ -174,28 +174,28 @@ public static class TileLogicHelper
             rightTileData.tileConnectedDir &= ~TileConnectedDir.Left;
             SetTileConnectedDirection(rightCellPos, tileDict);
             int tileConnectedState = (int)rightTileData.tileConnectedState;
-            tilledTileMap.SetTile(rightCellPos, tilledTileDict[tileConnectedState]);
+            tilledTileMap.SetTile(rightCellPos, tilledTileList[tileConnectedState]);
         }
         if (tileDict.TryGetValue(leftCellPos, out var leftTileData) && leftTileData.tileState != TileState.Empty)
         {
             leftTileData.tileConnectedDir &= ~TileConnectedDir.Right;
             SetTileConnectedDirection(leftCellPos, tileDict);
             int tileConnectedState = (int)leftTileData.tileConnectedState;
-            tilledTileMap.SetTile(leftCellPos, tilledTileDict[tileConnectedState]);
+            tilledTileMap.SetTile(leftCellPos, tilledTileList[tileConnectedState]);
         }
         if (tileDict.TryGetValue(upCellPos, out var upTileData) && upTileData.tileState != TileState.Empty)
         {
             upTileData.tileConnectedDir &= ~TileConnectedDir.Down;
             SetTileConnectedDirection(upCellPos, tileDict);
             int tileConnectedState = (int)upTileData.tileConnectedState;
-            tilledTileMap.SetTile(upCellPos, tilledTileDict[tileConnectedState]);
+            tilledTileMap.SetTile(upCellPos, tilledTileList[tileConnectedState]);
         }
         if (tileDict.TryGetValue(downCellPos, out var downTileData) && downTileData.tileState != TileState.Empty)
         {
             downTileData.tileConnectedDir &= ~TileConnectedDir.Up;
             SetTileConnectedDirection(downCellPos, tileDict);
             int tileConnectedState = (int)downTileData.tileConnectedState;
-            tilledTileMap.SetTile(downCellPos, tilledTileDict[tileConnectedState]);
+            tilledTileMap.SetTile(downCellPos, tilledTileList[tileConnectedState]);
         }
     }
 

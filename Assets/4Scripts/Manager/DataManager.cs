@@ -62,6 +62,7 @@ public class DataManager : MonoBehaviour
         SaveTile();
         SaveDropItem();
         SaveGift();
+
         Debug.Log("Save Data");
     }
 
