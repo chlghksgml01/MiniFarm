@@ -100,7 +100,7 @@ public class Inventory
         }
     }
 
-    private List<Slot> slots = new List<Slot>();
+    [SerializeField] private List<Slot> slots = new List<Slot>();
 
     public Inventory(int numSlots)
     {

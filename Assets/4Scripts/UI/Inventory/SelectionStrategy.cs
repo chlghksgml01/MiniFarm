@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using static Inventory;
 
-public interface ISelectionStrategy
+ public interface ISelectionStrategy
 {
     public void ClickHandle();
 }
@@ -14,7 +14,6 @@ public abstract class BaseClickStrategy : ISelectionStrategy
 
     protected SelectedItem_UI selectedItemUI;
     protected Slot selectedSlot;
-    protected List<Slot> slots;
     protected Slot_UI slotUI;
     public DragState dragState;
 

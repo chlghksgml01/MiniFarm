@@ -32,7 +32,9 @@ public class TileManager : MonoBehaviour
     public Dictionary<Vector3Int, TileData> tileDict = new Dictionary<Vector3Int, TileData>();
 
     private Player player;
+    private Camera mainCam;
     private Vector3Int playerCellPosition;
+    private Vector3 mousePos;
 
     private Dictionary<MouseDirection, Vector2Int> mouseDirectionValues = new Dictionary<MouseDirection, Vector2Int>
         {
@@ -41,13 +43,18 @@ public class TileManager : MonoBehaviour
             { MouseDirection.Down,       Vector2Int.down },
             { MouseDirection.Right,      Vector2Int.right },
             { MouseDirection.Left,       Vector2Int.left },
-            { MouseDirection.UpRight,    new Vector2Int(1, 1) },
+            { MouseDirection.UpRight,    new Vector2Int(1, 1)},
             { MouseDirection.DownRight,  new Vector2Int(1, -1)},
             { MouseDirection.UpLeft,     new Vector2Int(-1, 1)},
             { MouseDirection.DownLeft,   new Vector2Int(-1, -1)}
         };
     public MouseDirection mouseDirection;
     public Vector3Int selectedTilePos { get; set; }
+
+    private void Awake()
+    {
+        mainCam = Camera.main;
+    }
 
     void Start()
     {
@@ -114,7 +121,7 @@ public class TileManager : MonoBehaviour
         {
             if (tile.Value.tileState != TileState.None && tile.Value.tileState != TileState.Empty)
             {
-                TileLogicHelper.ConnectSurroundginTiles(tile.Key, tileDict, tileDict[tile.Key]);
+                TileLogicHelper.ConnectSurroundingTiles(tile.Key, tileDict, tileDict[tile.Key]);
 
                 if (tile.Value.tileState == TileState.Watered)
                 {
@@ -171,18 +178,26 @@ public class TileManager : MonoBehaviour
         if (farmSelectedTileMap == null)
             return;
 
-        UpdateMouseDirection();
-        DrawSelectedTile();
+        if (UpdateMouseDirection())
+            DrawSelectedTile();
     }
 
-    private void UpdateMouseDirection()
+    private bool UpdateMouseDirection()
     {
+        Vector3Int prevPlayerPos = playerCellPosition;
         playerCellPosition = farmSelectedTileMap.WorldToCell(player.transform.position);
 
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector3Int mouseCellPos = farmSelectedTileMap.WorldToCell(mousePos);
+        Vector3 prevMousePos = mousePos;
+        mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0f;
 
+        if (prevPlayerPos == playerCellPosition && prevMousePos == mousePos)
+            return false;
+
+        Vector3Int mouseCellPos = farmSelectedTileMap.WorldToCell(mousePos);
         GetMouseDirection(playerCellPosition, mouseCellPos);
+
+        return true;
     }
 
     private void GetMouseDirection(Vector3Int playerPos, Vector3 mousePos)
@@ -221,14 +236,14 @@ public class TileManager : MonoBehaviour
 
     private void DrawSelectedTile()
     {
-        Vector3Int _selectedTilePos = playerCellPosition
+        Vector3Int newSelectedTilePos = playerCellPosition
             + new Vector3Int(mouseDirectionValues[mouseDirection].x, mouseDirectionValues[mouseDirection].y);
 
-        if (_selectedTilePos != selectedTilePos)
+        if (newSelectedTilePos != selectedTilePos)
         {
             farmSelectedTileMap.SetTile(selectedTilePos, null);
-            farmSelectedTileMap.SetTile(_selectedTilePos, selectedTile);
-            selectedTilePos = _selectedTilePos;
+            farmSelectedTileMap.SetTile(newSelectedTilePos, selectedTile);
+            selectedTilePos = newSelectedTilePos;
         }
     }
 

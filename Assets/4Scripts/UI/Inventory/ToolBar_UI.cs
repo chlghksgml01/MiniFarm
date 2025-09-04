@@ -73,14 +73,22 @@ public class ToolBar_UI : MonoBehaviour
 
     public void SetToolBarInventory()
     {
-        Inventory inventory = InGameManager.Instance.player.playerSaveData.inventory;
-
-        for (int i = 0; i < slotsUIs.Count; i++)
+        if (InGameManager.Instance.player == null || InGameManager.Instance.player.playerSaveData == null || InGameManager.Instance.player.playerSaveData.inventory == null)
         {
-            if (!inventory.IsSlotEmpty(i))
-                slotsUIs[i].SetItem(inventory.GetSlot(i));
-            else
-                slotsUIs[i].SetEmpty();
+            Debug.Log("ToolBar_UI - player null");
+            return;
+        }
+        else
+        {
+            Inventory inventory = InGameManager.Instance.player.playerSaveData.inventory;
+
+            for (int i = 0; i < slotsUIs.Count; i++)
+            {
+                if (!inventory.IsSlotEmpty(i))
+                    slotsUIs[i].SetItem(inventory.GetSlot(i));
+                else
+                    slotsUIs[i].SetEmpty();
+            }
         }
     }
 

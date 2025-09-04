@@ -67,7 +67,7 @@ public static class TileLogicHelper
             if (tileState == TileState.Empty)
             {
                 tileDict[cellPosition].tileState = TileState.Tilled;
-                ConnectSurroundginTiles(cellPosition, tileDict, centerTileData);
+                ConnectSurroundingTiles(cellPosition, tileDict, centerTileData);
             }
             else if (tileState == TileState.Planted)
             {
@@ -116,7 +116,7 @@ public static class TileLogicHelper
     }
 
     // 경작한 주변 타일 잇기
-    public static void ConnectSurroundginTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileData centerTileData)
+    public static void ConnectSurroundingTiles(Vector3Int cellPosition, Dictionary<Vector3Int, TileData> tileDict, TileData centerTileData)
     {
         var dirs = new (Vector3Int delta, TileConnectedDir currentDir, TileConnectedDir neighborDir)[]
         {

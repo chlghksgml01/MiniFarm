@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [System.Serializable]
 public enum TileState
@@ -19,17 +20,10 @@ public enum TileConnectedState
     Right,
     Up,
     Down,
-    LeftUp,
-    RightUp,
-    LeftDown,
-    RightDown,
-    LeftCenter,
-    RightCenter,
-    UpCenter,
-    DownCenter,
-    Center,
-    HorizontalCenter,
-    VerticalCenter
+    LeftUp, RightUp,
+    LeftDown, RightDown,
+    LeftCenter, RightCenter, UpCenter, DownCenter,
+    Center, HorizontalCenter, VerticalCenter
 }
 
 [System.Serializable]

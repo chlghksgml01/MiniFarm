@@ -91,7 +91,8 @@ public class SceneLoadManager : MonoBehaviour
         while (!asyncOp.isDone)
             yield return null;
 
-        SceneLoad?.Invoke();
+        if (sceneName != "Title")
+            SceneLoad?.Invoke();
 
         if (isNextDay)
             StartCoroutine(InGameManager.Instance.dayTimeManager.StartNewDay());
@@ -142,6 +143,7 @@ public class SceneLoadManager : MonoBehaviour
         {
             player.transform.position = new Vector3(3.32f, 1.4f);
             player.LookDown();
+            InGameManager.Instance.CreateGift();
         }
         // Áı -> ³óÀå ¾À ÀüÈ¯
         else if (sceneName == "Farm" && prevSceneName == "House")
