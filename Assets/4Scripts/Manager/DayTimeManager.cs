@@ -32,6 +32,9 @@ public class DayTimeManager : MonoBehaviour
 
     const int secondsPerHour = 3600;
 
+    bool stopTime = false;
+    public GameObject stop;
+
     private float realTimer = 0f;
     private float gameTimer = 0f;
     private int hour = 6;
@@ -52,9 +55,20 @@ public class DayTimeManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            stopTime = !stopTime;
+            if (stopTime)
+                stop.SetActive(true);
+            else
+                stop.SetActive(false);
+        }
+
         if (InGameManager.Instance.player.isDead)
             return;
-        UpdateTime();
+
+        if (!stopTime)
+            UpdateTime();
     }
 
     private void UpdateTime()

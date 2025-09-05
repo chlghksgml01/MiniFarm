@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.IO;
-using System;
 
 public class DataManager : MonoBehaviour
 {
@@ -14,7 +13,6 @@ public class DataManager : MonoBehaviour
     private string giftGetSaveFileName = "giftGet_save.json";
 
     private TileSaveDatas tileSaveDatas = new TileSaveDatas();
-
 
     public static DataManager instance;
 
@@ -46,14 +44,6 @@ public class DataManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    public void CreateFolder()
-    {
-        path = Path.Combine(Application.persistentDataPath, saveRootFolderName, saveFolderName);
-
-        if (!Directory.Exists(path))
-            Directory.CreateDirectory(path);
-    }
-
     public void SaveData()
     {
         CreateFolder();
@@ -65,6 +55,15 @@ public class DataManager : MonoBehaviour
 
         Debug.Log("Save Data");
     }
+
+    public void CreateFolder()
+    {
+        path = Path.Combine(Application.persistentDataPath, saveRootFolderName, saveFolderName);
+
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
+    }
+
 
     private void SavePlayer()
     {

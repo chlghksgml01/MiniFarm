@@ -128,6 +128,7 @@ MonoBehaviour:
   spawnInterval: 1
   spawnController: {fileID: 5353644126994676888}
   isSlimeSpawn: 1
+  stop: {fileID: 0}
 --- !u!114 &6438177313553398301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,24 +175,7 @@ MonoBehaviour:
   selectedTile: {fileID: 11400000, guid: d0b899fd9638df84fbb15c806ab30d17, type: 2}
   emptyTile: {fileID: 11400000, guid: 5e6c408882f6c0341bb448b947c861e3, type: 2}
   wateringTile: {fileID: 11400000, guid: 4b218ae72fb1e134bafa42b24e2e37d9, type: 2}
-  tilledTileDict:
-  - {fileID: 11400000, guid: 1e023f790c6bd9d4e8078692c46fca6e, type: 2}
-  - {fileID: 11400000, guid: 94252f4cf489ba74cb6598844e8abb03, type: 2}
-  - {fileID: 11400000, guid: d8907dd8cb659a045ab8b2e58afd43e0, type: 2}
-  - {fileID: 11400000, guid: 48d4c24571f2594498a441c380553963, type: 2}
-  - {fileID: 11400000, guid: a2259c8313a72d44f8a8125bdb5194a4, type: 2}
-  - {fileID: 11400000, guid: 139df3878206de64ea3ccbf67a71cd32, type: 2}
-  - {fileID: 11400000, guid: 68507d3bc6f3bbc4fbe59f80fc44a155, type: 2}
-  - {fileID: 11400000, guid: 7c7260f43063a734ab1cefc860f9cbd5, type: 2}
-  - {fileID: 11400000, guid: 0d7c689e5f275874cb5b520ba316a2b9, type: 2}
-  - {fileID: 11400000, guid: f443e4017f9b3c74fb7a5b760491aa75, type: 2}
-  - {fileID: 11400000, guid: b77f234f66bf75c4ca51bdf27d7a8e08, type: 2}
-  - {fileID: 11400000, guid: 302f8f65186d8e6428b1bb3cf4f47d0b, type: 2}
-  - {fileID: 11400000, guid: 30da5667877a3da4cba0cd3b6107fee2, type: 2}
-  - {fileID: 11400000, guid: fdf899209d890b640ac5339072facd06, type: 2}
-  - {fileID: 11400000, guid: b8e3685df9d5c414bb38c83447fd97f0, type: 2}
-  - {fileID: 11400000, guid: 113f4b802640c0e46add511f4e5329c1, type: 2}
-  - {fileID: 11400000, guid: 44a2e2f35dca5ba4babf851aa3f71693, type: 2}
-  tilledTileSet: {fileID: 11400000, guid: 85bfb6bd9358be54eae039aa2c904efc, type: 2}
+  tilledTileList: []
+  tilledTileSet: {fileID: 11400000, guid: 1d7eb947d3dbd8542917484df4272bb8, type: 2}
   resetTileChance: 30
   mouseDirection: 0

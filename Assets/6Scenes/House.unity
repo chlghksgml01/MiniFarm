@@ -14033,6 +14033,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3336458340393967681, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3398915322189022439, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -15584,6 +15588,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1252691394 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3336458340393967681, guid: dea30fa6762b7bd419aff847fd9cefc0, type: 3}
+  m_PrefabInstance: {fileID: 869162312}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1494282557
 GameObject:
   m_ObjectHideFlags: 0
@@ -16017,6 +16026,10 @@ PrefabInstance:
       propertyPath: inventory_UI
       value: 
       objectReference: {fileID: 869162317}
+    - target: {fileID: 3793216011849168464, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
+      propertyPath: stop
+      value: 
+      objectReference: {fileID: 1252691394}
     - target: {fileID: 3793216011849168464, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
       propertyPath: hourUIText
       value: 
