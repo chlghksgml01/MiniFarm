@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using static Inventory;
 
- public interface ISelectionStrategy
+public interface ISelectionStrategy
 {
     public void ClickHandle();
 }
@@ -178,7 +178,7 @@ public class LeftClickStrategy : BaseClickStrategy
         else
         {
             Slot tempslot = new Slot();
-            tempslot.itemCount = 1;
+            tempslot.itemCount = selectedItemUI.selectedSlot.itemCount;
             tempslot.slotItemData.SetItemData(selectedItemUI.selectedSlot.slotItemData);
 
             selectedItemUI.SetSelectedUIItemData(selectedSlot);

@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public enum ItemType
 {
-    None, Consumable, Seed, Tool
+    None, Tool, Seed, Consumable,
 }
 
 [System.Serializable]

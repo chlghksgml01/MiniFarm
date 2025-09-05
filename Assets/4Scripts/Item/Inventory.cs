@@ -161,7 +161,6 @@ public class Inventory
         {
             for (int j = i + 1; j < slots.Count; j++)
             {
-                // 아무것도 없으면 뒤로 보내기
                 if (slots[i].IsEmpty())
                 {
                     var temp = slots[i];
@@ -169,16 +168,16 @@ public class Inventory
                     slots[j] = temp;
                 }
 
-                // j가 i보다 뒤에 있으면
-                else if (slots[j].slotItemData.itemName.CompareTo(slots[i].slotItemData.itemName) > 0 && slots[j].IsEmpty())
+                else if (!slots[j].IsEmpty() &&
+                         (int)slots[j].slotItemData.itemType < (int)slots[i].slotItemData.itemType)
                 {
                     var temp = slots[i];
                     slots[i] = slots[j];
                     slots[j] = temp;
                 }
 
-                // 같은거라면 묶어주기
-                else if (slots[i].slotItemData.itemName.CompareTo(slots[j].slotItemData.itemName) == 0)
+                else if (!slots[i].IsEmpty() && !slots[j].IsEmpty() &&
+                         slots[i].slotItemData.itemName == slots[j].slotItemData.itemName)
                 {
                     slots[i].itemCount += slots[j].itemCount;
                     slots[j].SetEmpty();
@@ -186,6 +185,7 @@ public class Inventory
             }
         }
     }
+
 
     public void RemoveItem(ItemData itemData, int count)
     {
