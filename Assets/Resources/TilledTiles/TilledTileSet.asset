@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 5de71e38202b21543ac6ddd37bf57071, type: 3}
   m_Name: TilledTileSet
-  m_EditorClassIdentifier: Assembly-CSharp::TilledTileSet
+  m_EditorClassIdentifier: 
   tiles:
   - {fileID: 11400000, guid: 1e023f790c6bd9d4e8078692c46fca6e, type: 2}
   - {fileID: 11400000, guid: 94252f4cf489ba74cb6598844e8abb03, type: 2}

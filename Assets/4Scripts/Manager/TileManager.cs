@@ -24,7 +24,7 @@ public class TileManager : MonoBehaviour
     [SerializeField] Tile selectedTile;
     [SerializeField] public Tile emptyTile;
     [SerializeField] public Tile wateringTile;
-    [HideInInspector] public List<Tile> tilledTileList;
+    [HideInInspector] public List<Tile> tilledTileList = new List<Tile>();
     [SerializeField] private TilledTileSet tilledTileSet;
 
     [Space]
@@ -195,7 +195,7 @@ public class TileManager : MonoBehaviour
 
         Vector3 prevMousePos = mousePos;
 
-        if(mainCam == null)
+        if (mainCam == null)
             mainCam = Camera.main;
         mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0f;
