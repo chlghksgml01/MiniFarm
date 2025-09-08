@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Pickaxe
   icon: {fileID: 21300000, guid: c2d36c02d8b9f4949b641c97fc3881fa, type: 3}
-  itemType: 3
+  itemType: 1
   buyPrice: 0
   sellPrice: 0
   itemPrefab: {fileID: 66480898167699907, guid: 57d884288901a7040bccb00d238d4639, type: 3}

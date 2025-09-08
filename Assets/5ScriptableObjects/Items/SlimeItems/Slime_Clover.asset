@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Slime_Clover
   icon: {fileID: 8817995161122866843, guid: 2430b0fd50f4c864fafa0440fe1ac31b, type: 3}
-  itemType: 1
+  itemType: 3
   buyPrice: 0
   sellPrice: 30
   itemPrefab: {fileID: 66480898167699907, guid: b9f6af7827fb8324e856bbca01784219, type: 3}

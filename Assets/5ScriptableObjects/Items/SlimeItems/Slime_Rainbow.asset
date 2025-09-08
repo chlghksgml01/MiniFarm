@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Slime_Rainbow
   icon: {fileID: -6839189620729066264, guid: 2430b0fd50f4c864fafa0440fe1ac31b, type: 3}
-  itemType: 1
+  itemType: 3
   buyPrice: 0
   sellPrice: 50
   itemPrefab: {fileID: 66480898167699907, guid: de46189330500ce4f9d7e93e59395e16, type: 3}

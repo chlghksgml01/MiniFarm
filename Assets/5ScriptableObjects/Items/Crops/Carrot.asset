@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Carrot
   icon: {fileID: 6761164967045977113, guid: d283e564552a6b0428b5cfc16c2f763f, type: 3}
-  itemType: 1
+  itemType: 3
   buyPrice: 0
   sellPrice: 35
   itemPrefab: {fileID: 66480898167699907, guid: ffc869238eab78c4e8892c8fb88b2c7c, type: 3}

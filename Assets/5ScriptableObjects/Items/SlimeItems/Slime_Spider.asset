@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Slime_Spider
   icon: {fileID: -3762177782427567702, guid: 2430b0fd50f4c864fafa0440fe1ac31b, type: 3}
-  itemType: 1
+  itemType: 3
   buyPrice: 0
   sellPrice: 0
   itemPrefab: {fileID: 66480898167699907, guid: f20113959546606499c329b0ec340901, type: 3}

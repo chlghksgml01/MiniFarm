@@ -32,6 +32,7 @@ public class DayTimeManager : MonoBehaviour
 
     const int secondsPerHour = 3600;
 
+    bool isPassTime = false;
     bool stopTime = false;
     public GameObject stop;
 
@@ -64,6 +65,12 @@ public class DayTimeManager : MonoBehaviour
                 stop.SetActive(false);
         }
 
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            isPassTime = true;
+            gameTimer += secondsPerHour;
+        }
+
         if (InGameManager.Instance.player.isDead)
             return;
 
@@ -74,8 +81,9 @@ public class DayTimeManager : MonoBehaviour
     private void UpdateTime()
     {
         realTimer += Time.deltaTime;
-        if (realTimer >= timeInterval)
+        if (realTimer >= timeInterval || isPassTime)
         {
+            isPassTime = false;
             realTimer = 0f;
             gameTimer += timeInterval * timeScale;
 

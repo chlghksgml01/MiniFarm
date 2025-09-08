@@ -50,7 +50,12 @@ public class StorePlayerInventory_UI : MonoBehaviour
 
         InGameCanvas.Instance.storeUI.isStoreClicked = false;
 
-        int maxCount = int.Parse(selectedSlot.GetComponentInChildren<TextMeshProUGUI>().text);
+        int maxCount = 1;
+        string textValue = selectedSlot.GetComponentInChildren<TextMeshProUGUI>().text;
+
+        if (!string.IsNullOrEmpty(textValue))
+            int.TryParse(textValue, out maxCount);
+
         InGameCanvas.Instance.storeUI.SetSelectedItemData(itemData, maxCount);
     }
 }

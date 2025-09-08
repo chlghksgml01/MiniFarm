@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Slime_Blueberry
   icon: {fileID: 857342072917021873, guid: 2430b0fd50f4c864fafa0440fe1ac31b, type: 3}
-  itemType: 1
+  itemType: 3
   buyPrice: 0
   sellPrice: 18
   itemPrefab: {fileID: 66480898167699907, guid: 3498ab22416ad764f854b8330b9ea602, type: 3}
