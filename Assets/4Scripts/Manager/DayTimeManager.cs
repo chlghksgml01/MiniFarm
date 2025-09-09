@@ -132,7 +132,7 @@ public class DayTimeManager : MonoBehaviour
         globalLight.color = dayLightColor;
 
         hourUIText.text = string.Format("{00:00}", hour);
-        minuteUIText.text = string.Format("{00:00}", minute);
+        minuteUIText.text = string.Format("{00:00}", 0);
     }
 
     public void UpdateLight()
@@ -147,9 +147,20 @@ public class DayTimeManager : MonoBehaviour
     {
         while (true)
         {
+            while (stopTime)
+                yield return null;
+
             SpawnSlime?.Invoke();
+
             float waitTimeInRealSeconds = spawnInterval * secondsPerHour / timeScale;
-            yield return new WaitForSeconds(waitTimeInRealSeconds);
+            float elapsed = 0f;
+
+            while (elapsed < waitTimeInRealSeconds)
+            {
+                if (!stopTime)
+                    elapsed += Time.deltaTime;
+                yield return null;
+            }
         }
     }
 

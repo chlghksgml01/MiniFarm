@@ -62,6 +62,7 @@ public class StoreUI : MonoBehaviour
         }
 
         itemCountTextUI.text = "";
+        InGameManager.Instance.uiManager.toolBar_UI.CheckSlot();
     }
 
     public void SetSelectedItemData(ItemData itemData, int maxCount = -1)

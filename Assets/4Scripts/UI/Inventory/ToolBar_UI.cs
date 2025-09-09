@@ -48,20 +48,19 @@ public class ToolBar_UI : MonoBehaviour
 
     public void CheckSlot()
     {
+        Player player = InGameManager.Instance.player;
+
         if (selectedSlotIdx < 0)
             selectedSlotIdx = slotCount - 1;
         if (selectedSlotIdx >= slotCount)
             selectedSlotIdx = 0;
 
-        ItemData selectedItemData = InGameManager.Instance.player.playerSaveData.inventory.GetSlotItemData(selectedSlotIdx);
-
-        if (InGameManager.Instance.player.stateMachine.currentState == InGameManager.Instance.player.pickUpState)
-            return;
+        ItemData selectedItemData = player.playerSaveData.inventory.GetSlotItemData(selectedSlotIdx);
 
         if (!selectedItemData.IsEmpty() && selectedItemData.itemType != ItemType.None)
-            InGameManager.Instance.player.SetHoldItem(selectedItemData);
+            player.SetHoldItem(selectedItemData);
         else if (selectedItemData.IsEmpty())
-            InGameManager.Instance.player.SetHoldItem();
+            player.SetHoldItem();
     }
 
     private void DrawSelectedUI()

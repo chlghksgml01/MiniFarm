@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerAnimationTrigger : MonoBehaviour
 {
@@ -7,10 +6,5 @@ public class PlayerAnimationTrigger : MonoBehaviour
     {
         Player player = GetComponentInParent<Player>();
         player.stateMachine.ChangeState(player.idleState);
-
-        if (stateName == "HoldItem")
-        {
-            player.anim.SetBool("isHoldItem", true);
-        }
     }
 }

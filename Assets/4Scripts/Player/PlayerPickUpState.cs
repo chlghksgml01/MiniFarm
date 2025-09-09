@@ -20,6 +20,7 @@ public class PlayerPickUpState : PlayerState
     public override void ExitState()
     {
         base.ExitState();
-        player.anim.SetBool("isHoldItem", true);
+        if (player.holdItem != null && player.holdItem.IsCropSeedHold())
+            player.anim.SetBool("isHoldItem", true);
     }
 }

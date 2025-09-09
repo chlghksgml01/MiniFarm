@@ -91,6 +91,7 @@ public class Player : Entity
         else
             playerSaveData.stamina = maxStamina * 3 / 4;
 
+        OnStatChanged?.Invoke(StatType.Health);
         OnStatChanged?.Invoke(StatType.Stamina);
 
         isDead = false;
@@ -232,12 +233,6 @@ public class Player : Entity
         InGameManager.Instance.itemManager.itemDict.TryGetValue(CropItemData.cropName, out Item item);
 
         playerSaveData.inventory.AddItem(item);
-
-        if (!InGameManager.Instance.player.holdItem.IsEmpty())
-            return;
-
-        holdItem.gameObject.SetActive(true);
-        holdItem.SetHoldItem(item.itemData);
     }
 
     private void SetHoldTool()

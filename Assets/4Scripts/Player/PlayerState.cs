@@ -49,11 +49,11 @@ public class PlayerState
         else if (Input.GetMouseButtonDown(1) && !InGameManager.Instance.uiManager.inventoryPanel.activeSelf
             && InGameManager.Instance.cropManager.CanHarvest())
         {
-            if (player.CanHarvest())
-            {
+            //if (player.CanHarvest())
+            //{
                 player.HarvestCrop();
                 InGameManager.Instance.cropManager.HarvestCrop();
-            }
+            //}
         }
     }
 
