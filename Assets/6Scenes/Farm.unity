@@ -97362,6 +97362,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1986465255}
     - target: {fileID: 3793216011849168464, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
+      propertyPath: timeScale
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 3793216011849168464, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
       propertyPath: hourUIText
       value: 
       objectReference: {fileID: 3585778100912783547}
@@ -97373,6 +97377,10 @@ PrefabInstance:
       propertyPath: minuteUIText
       value: 
       objectReference: {fileID: 3585778100912783546}
+    - target: {fileID: 3793216011849168464, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
+      propertyPath: timeInterval
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3793216011849168464, guid: e899e5b6114f1f3489d8534c1e86516c, type: 3}
       propertyPath: newDayFadeInOutImage
       value: 
