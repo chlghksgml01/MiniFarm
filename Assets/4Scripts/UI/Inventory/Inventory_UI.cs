@@ -38,7 +38,7 @@ public class Inventory_UI : MonoBehaviour
 
         for (int i = 0; i < slotsUIs.Count; i++)
         {
-            slotsUIs[i].InitializeSlot(i); // °¢ ½½·Ô¿¡ ÀÎµ¦½º ¼³Á¤
+            slotsUIs[i].InitializeSlot(i);
         }
     }
 
@@ -46,7 +46,7 @@ public class Inventory_UI : MonoBehaviour
     {
         if (selectedItem == null)
         {
-            Debug.Log("Inventory_UI - selectedItem ¾øÀ½");
+            Debug.Log("Inventory_UI - selectedItem ì—†ìŒ");
             return;
         }
         selectedItem.gameObject.SetActive(false);
@@ -97,26 +97,47 @@ public class Inventory_UI : MonoBehaviour
 
     public void Refresh()
     {
+        slotsUIs.RemoveAll(slot => slot == null);
         inventory = InGameManager.Instance.player.playerSaveData.inventory;
 
         if (slotsUIs.Count != inventory.GetSlotCount())
         {
-            Debug.Log("Inventory_UI - ÀÎº¥UI, ÀÎº¥ °³¼ö ´Ù¸§");
-            return;
+            RebindSlots();
         }
 
-        for (int i = 0; i < slotsUIs.Count; i++)
+        int count = Mathf.Min(slotsUIs.Count, inventory.GetSlotCount());
+        for (int i = 0; i < count; i++)
         {
+            if (slotsUIs[i] == null)
+                continue;
+
             if (!inventory.IsSlotEmpty(i))
                 slotsUIs[i].SetItem(inventory.GetSlot(i));
             else
                 slotsUIs[i].SetEmpty();
         }
 
-        toolBar_UI.SetToolBarInventory();
+        if (toolBar_UI != null)
+            toolBar_UI.SetToolBarInventory();
     }
 
-    // ¹öÆ° ÇÔ¼ö
+    private void RebindSlots()
+    {
+        if (!this)
+            return;
+
+        Slot_UI[] foundSlots = GetComponentsInChildren<Slot_UI>(true);
+        slotsUIs.Clear();
+        slotsUIs.AddRange(foundSlots);
+
+        for (int i = 0; i < slotsUIs.Count; i++)
+            slotsUIs[i].InitializeSlot(i);
+
+        if (slotsUIs.Count != inventory.GetSlotCount())
+            Debug.Log("Inventory_UI - ì¸ë²¤í† ë¦¬UI, ì¸ë²¤í† ë¦¬ ìŠ¬ë¡¯ ìˆ˜ ë‹¤ë¦„");
+    }
+
+    // ì¸ë²¤í† ë¦¬ ì •ë ¬
     public void SortInventory()
     {
         if (IsDragging)

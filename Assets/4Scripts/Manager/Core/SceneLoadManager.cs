@@ -27,7 +27,7 @@ public class SceneLoadManager : MonoBehaviour
                 instance = FindFirstObjectByType<SceneLoadManager>();
                 if (instance == null)
                 {
-                    Debug.Log("æ¿ø° SceneLoadManager æ¯¿Ω");
+                    Debug.Log("SceneLoadManager ÏóÜÏùå");
                 }
             }
             return instance;
@@ -50,7 +50,9 @@ public class SceneLoadManager : MonoBehaviour
     {
         if (sceneLoadCoroutine == null)
             sceneLoadCoroutine = StartCoroutine(LoadScene(sceneName, isGameStart, isNextDay));
-        fadeInOutImage.transform.SetAsLastSibling();
+
+        if (TryEnsureFadeImage())
+            fadeInOutImage.transform.SetAsLastSibling();
     }
 
     private IEnumerator LoadScene(string sceneName, bool isGameStart, bool isNextDay)
@@ -79,8 +81,9 @@ public class SceneLoadManager : MonoBehaviour
         {
             Destroy(InGameManager.Instance.player.gameObject);
             Destroy(InGameManager.Instance.gameObject);
-            Canvas inGameCanvas = FindAnyObjectByType<Canvas>();
-            Destroy(inGameCanvas.gameObject);
+            InGameCanvas inGameCanvas = FindFirstObjectByType<InGameCanvas>(FindObjectsInactive.Include);
+            if (inGameCanvas != null)
+                Destroy(inGameCanvas.gameObject);
         }
 
         if (!isGameStart && isNextDay)
@@ -104,7 +107,7 @@ public class SceneLoadManager : MonoBehaviour
             DataManager.instance.LoadData();
             InGameManager.Instance.player.InitializePlayerData();
             InGameManager.Instance.player.gameObject.SetActive(true);
-            InGameManager.Instance.uiManager.inventory_UI.Refresh();
+            InGameManager.Instance.uiManager.RefreshInventoryUI();
 
         }
         if (InGameManager.Instance != null)
@@ -138,27 +141,24 @@ public class SceneLoadManager : MonoBehaviour
     {
         Player player = InGameManager.Instance.player;
 
-        // ¥Ÿ¿Ω≥Ø -> ƒß¥Îø°º≠ Ω√¿€
+
         if (isNextDay)
         {
             player.transform.position = new Vector3(3.32f, 1.4f);
             player.LookDown();
             InGameManager.Instance.CreateGift();
-        }
-        // ¡˝ -> ≥Û¿Â æ¿ ¿¸»Ø
+        }        
         else if (sceneName == "Farm" && prevSceneName == "House")
         {
             player.transform.position = Vector3.zero;
             player.LookDown();
-        }
-        // ≥Û¿Â -> ¡˝ æ¿ ¿¸»Ø
+        }        
         else if (sceneName == "House" && prevSceneName == "Farm")
         {
             InGameManager.Instance.CreateGift();
             player.transform.position = new Vector3(0.5f, 0f);
             player.LookUp();
         }
-        // ¿Ã¿¸ æ¿¿Ã Title, ¡˝¿Ã∞≈≥™
         else if (sceneName == "House" && (prevSceneName == "Title" || prevSceneName == "House"))
         {
             InGameManager.Instance.CreateGift();
@@ -169,9 +169,15 @@ public class SceneLoadManager : MonoBehaviour
 
     private IEnumerator FadeInOut(float startAlpha, float endAlpha, float fadeInOutDuration)
     {
+        if (!TryEnsureFadeImage())
+            yield break;
+
         float elapsed = 0;
         while (elapsed <= fadeInOutDuration)
         {
+            if (fadeInOutImage == null)
+                yield break;
+
             elapsed += Time.unscaledDeltaTime;
 
             float alpha = Mathf.Lerp(startAlpha, endAlpha, elapsed / fadeInOutDuration);
@@ -182,5 +188,33 @@ public class SceneLoadManager : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    private bool TryEnsureFadeImage()
+    {
+        if (fadeInOutImage != null)
+            return true;
+
+        fadeInOutImage = GetComponentInChildren<Image>(true);
+        if (fadeInOutImage != null)
+            return true;
+
+        Image[] images = FindObjectsByType<Image>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (Image image in images)
+        {
+            if (image != null && image.name.IndexOf("fade", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                fadeInOutImage = image;
+                break;
+            }
+        }
+
+        if (fadeInOutImage == null)
+        {
+            Debug.LogWarning("SceneLoadManager - fadeInOutImage ÏóÜÏùå");
+            return false;
+        }
+
+        return true;
     }
 }

@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 
 public class UI_Manager : MonoBehaviour
 {
@@ -11,34 +11,38 @@ public class UI_Manager : MonoBehaviour
 
     private void Start()
     {
-        inventoryPanel = inventory_UI.gameObject;
-        toolBarPanel = toolBar_UI.gameObject;
-
+        TryEnsureUIReferences();
         InitializeUI();
     }
 
     public void InitializeUI()
     {
-        inventoryPanel.SetActive(false);
-        toolBarPanel.SetActive(true);
-        store.SetActive(false);
-        option.SetActive(false);
+        TryEnsureUIReferences();
+
+        if (inventoryPanel != null)
+            inventoryPanel.SetActive(false);
+        if (toolBarPanel != null)
+            toolBarPanel.SetActive(true);
+        if (store != null)
+            store.SetActive(false);
+        if (option != null)
+            option.SetActive(false);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab) && !store.activeSelf)
+        if (Input.GetKeyDown(KeyCode.Tab) && !IsActive(store))
         {
             ToggleInventoryUI();
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (store.activeSelf)
+            if (IsActive(store))
                 ToggleStore();
-            else if (inventoryPanel.activeSelf)
+            else if (IsActive(inventoryPanel))
                 ToggleInventoryUI();
-            else if (!inventoryPanel.activeSelf && !store.activeSelf)
+            else if (!IsActive(inventoryPanel) && !IsActive(store))
                 ToggleOption();
         }
     }
@@ -47,13 +51,13 @@ public class UI_Manager : MonoBehaviour
     {
         if (inventoryPanel == null)
         {
-            Debug.Log("UI_Manager - ¿Œ∫•∆–≥Œ æ¯¿Ω");
+            Debug.Log("UI_Manager - inventoryPanel ÏóÜÏùå");
             return;
         }
 
         if (toolBarPanel == null)
         {
-            Debug.Log("UI_Manager - ≈¯πŸ∆–≥Œ æ¯¿Ω");
+            Debug.Log("UI_Manager - toolBarPanel ÏóÜÏùå");
             return;
         }
 
@@ -61,7 +65,7 @@ public class UI_Manager : MonoBehaviour
         {
             inventoryPanel.SetActive(true);
             toolBarPanel.SetActive(false);
-            inventory_UI.Refresh();
+            RefreshInventoryUI();
         }
         else
         {
@@ -77,13 +81,26 @@ public class UI_Manager : MonoBehaviour
 
     public void ToggleStore()
     {
-        if (!store.activeSelf)
+        if (store == null)
+        {
+            Debug.Log("UI_Manager - store ÏóÜÏùå");
+            return;
+        }
+
+        if (inventoryPanel == null || toolBarPanel == null)
+        {
+            TryEnsureUIReferences();
+        }
+
+        if (!IsActive(store))
         {
             Time.timeScale = 0f;
             InGameManager.Instance.dayTimeManager.SetTimeStop(true);
             store.SetActive(true);
-            inventoryPanel.SetActive(false);
-            toolBarPanel.SetActive(false);
+            if (inventoryPanel != null)
+                inventoryPanel.SetActive(false);
+            if (toolBarPanel != null)
+                toolBarPanel.SetActive(false);
         }
         else
         {
@@ -91,13 +108,20 @@ public class UI_Manager : MonoBehaviour
             Time.timeScale = 1f;
             InGameManager.Instance.dayTimeManager.SetTimeStop(false);
             store.SetActive(false);
-            toolBarPanel.SetActive(true);
+            if (toolBarPanel != null)
+                toolBarPanel.SetActive(true);
         }
     }
 
     private void ToggleOption()
     {
-        if (option.activeSelf)
+        if (option == null)
+        {
+            Debug.Log("UI_Manager - option ÏóÜÏùå");
+            return;
+        }
+
+        if (IsActive(option))
         {
             option.SetActive(false);
             Time.timeScale = 1f;
@@ -111,6 +135,37 @@ public class UI_Manager : MonoBehaviour
 
     public bool IsUIOpen()
     {
-        return inventoryPanel.activeSelf || store.activeSelf || option.activeSelf;
+        TryEnsureUIReferences();
+
+        return IsActive(inventoryPanel) || IsActive(store) || IsActive(option);
+    }
+
+    public void RefreshInventoryUI()
+    {
+        if (!TryEnsureUIReferences())
+            return;
+
+        if (inventory_UI != null)
+            inventory_UI.Refresh();
+    }
+
+    public bool TryEnsureUIReferences()
+    {
+        if (inventory_UI == null)
+            inventory_UI = FindFirstObjectByType<Inventory_UI>(FindObjectsInactive.Include);
+        if (toolBar_UI == null)
+            toolBar_UI = FindFirstObjectByType<ToolBar_UI>(FindObjectsInactive.Include);
+
+        if (inventoryPanel == null && inventory_UI != null)
+            inventoryPanel = inventory_UI.gameObject;
+        if (toolBarPanel == null && toolBar_UI != null)
+            toolBarPanel = toolBar_UI.gameObject;
+
+        return inventory_UI != null && toolBar_UI != null;
+    }
+
+    private bool IsActive(GameObject target)
+    {
+        return target != null && target.activeSelf;
     }
 }

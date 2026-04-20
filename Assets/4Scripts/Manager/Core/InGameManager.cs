@@ -85,11 +85,6 @@ public class InGameManager : MonoBehaviour
         Vector3 pos = Vector3.zero;
         Quaternion rot = Quaternion.identity;
 
-        if (sceneName == "House")
-            pos = new Vector3(0.5f, 0f, 0f);
-        else if (sceneName == "Farm")
-            pos = Vector3.zero;
-
         player = Instantiate(playerPrefab, pos, rot).GetComponent<Player>();
     }
 

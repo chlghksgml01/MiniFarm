@@ -48,7 +48,7 @@ public class DayTimeManager : MonoBehaviour
     private void Awake()
     {
         gameTimer = dayStartTime * secondsPerHour;
-        if (hourUIText == null || minuteUIText == null)
+        if (!TryEnsureTimeUIReferences())
             return;
         hourUIText.text = string.Format("{00:00}", dayStartTime);
         minuteUIText.text = string.Format("{00:00}", minute);
@@ -110,8 +110,11 @@ public class DayTimeManager : MonoBehaviour
             int hourText = hour;
             if (hourText > 24)
                 hourText -= 24;
-            hourUIText.text = string.Format("{00:00}", hourText);
-            minuteUIText.text = string.Format("{00:00}", minute);
+            if (TryEnsureTimeUIReferences())
+            {
+                hourUIText.text = string.Format("{00:00}", hourText);
+                minuteUIText.text = string.Format("{00:00}", minute);
+            }
 
             UpdateLight();
         }
@@ -131,8 +134,11 @@ public class DayTimeManager : MonoBehaviour
         gameTimer = dayStartTime * secondsPerHour;
         globalLight.color = dayLightColor;
 
-        hourUIText.text = string.Format("{00:00}", hour);
-        minuteUIText.text = string.Format("{00:00}", 0);
+        if (TryEnsureTimeUIReferences())
+        {
+            hourUIText.text = string.Format("{00:00}", hour);
+            minuteUIText.text = string.Format("{00:00}", 0);
+        }
     }
 
     public void UpdateLight()
@@ -166,6 +172,9 @@ public class DayTimeManager : MonoBehaviour
 
     public void SetTimeStop(bool stop)
     {
+        if (!TryEnsureTimeUIReferences())
+            return;
+
         Image image = hourUIText.GetComponentInParent<Image>();
         if (image == null)
         {
@@ -177,6 +186,37 @@ public class DayTimeManager : MonoBehaviour
             image.color = new Color(0.8f, 0.8f, 0.8f);
         else
             image.color = Color.white;
+    }
+
+    private bool TryEnsureTimeUIReferences()
+    {
+        if (hourUIText == null)
+        {
+            TextMeshProUGUI[] texts = FindObjectsByType<TextMeshProUGUI>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (TextMeshProUGUI text in texts)
+            {
+                if (text != null && text.name.IndexOf("hour", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    hourUIText = text;
+                    break;
+                }
+            }
+        }
+
+        if (minuteUIText == null)
+        {
+            TextMeshProUGUI[] texts = FindObjectsByType<TextMeshProUGUI>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (TextMeshProUGUI text in texts)
+            {
+                if (text != null && text.name.IndexOf("minute", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    minuteUIText = text;
+                    break;
+                }
+            }
+        }
+
+        return hourUIText != null && minuteUIText != null;
     }
 
     public void StartOnDayFinishedEvent()
